@@ -1,0 +1,107 @@
+dokoTsubuをクローンした際のエラー対策�@		
+		
+ありがとうございます！おっしゃる通り、別のPCにクローンする際、同じ環境設定の問題に直面する可能性は非常に高いです。		
+最初から対策を施すための手順を、「新しいPC（クローン先）で実施すべきこと」としてまとめます。		
+		
+		
+		
+__ 新しいPCでの「データベース環境構築」チェックリスト		
+		
+この手順を実行することで、Communications link failure（接続エラー）と Unknown database/Access denied（DB/認証エラー）を未然に防ぐことができます。		
+		
+ステップ 1: MySQLサーバーのインストールと起動		
+		
+新しいMac 3台それぞれで、まずMySQLサーバーをインストールし、実行状態にします。		
+		
+アクション	コマンドの例（Homebrewの場合）	目的
+MySQLのインストール	brew install mysql	サーバー本体をインストール
+サーバーの起動	brew services start mysql	MySQLを起動し、バックグラウンドで実行状態にする
+起動状態の確認	mysql.server status または brew services list	Running や SUCCESS と表示されることを確認
+		
+		
+ステップ 2: ネットワーク接続の有効化（最も重要な対策）		
+		
+前回解決した、TCP/IP接続を有効化する設定です。Macのインストーラー版では設定ファイルが自動で作られないことが多いため、手動で作成します。		
+		
+設定ファイル my.cnf を新規作成・編集する		
+		
+以下のコマンドで /etc/my.cnf ファイルを開きます。		
+		
+Bash		
+sudo nano /etc/my.cnf		
+		
+以下の設定内容を貼り付けて保存する		
+		
+[mysqld] セクションを作成し、ポート番号と接続アドレスを明示することで、Javaアプリケーションからのネットワーク接続を許可します。		
+		
+"Ini, TOML"		
+[mysqld]		
+# ポート番号を明示（デフォルトの3306を使用）		
+port = 3306		
+# ローカルホスト（127.0.0.1）からの接続を許可		
+bind-address = 127.0.0.1		
+		
+MySQLサーバーを再起動して設定を適用する		
+		
+Bash		
+sudo /usr/local/mysql/support-files/mysql.server restart		
+# または Homebrewの場合: brew services restart mysql		
+		
+再起動後、SELECT @@port; が 3306 を返すことを確認できればOKです。		
+		
+		
+		
+ステップ 3: データベースとテーブルの作成		
+		
+プロジェクトが依存している dokoTsubu データベースと、その中の USERS / MUTTERS テーブルを新しいPCにも作成します。		
+		
+MySQLにログインする		
+		
+Bash		
+/usr/local/mysql/bin/mysql -u root -p		
+		
+データベースを作成する		
+		
+SQL		
+CREATE DATABASE dokoTsubu;		
+USE dokoTsubu;		
+		
+テーブルを作成する		
+		
+Mac-1の環境からエクスポートした テーブル作成用のSQL（CREATE TABLE ...）を実行し、USERS と MUTTERS テーブルを作成してください。		
+		
+(例: USERS テーブル)		
+		
+SQL		
+CREATE TABLE USERS (		
+"  id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,"		
+"  name VARCHAR(100) NOT NULL,"		
+  pass VARCHAR(100) NOT NULL		
+);		
+#NAME?		
+		
+		
+		
+ステップ 4: Javaコードの認証情報確認		
+		
+最後に、Javaコードと新しいPCのMySQLのパスワードが一致しているか確認します。		
+		
+コードの確認		
+		
+UserDAO.java の設定値を確認します。		
+		
+Java		
+"private final String DB_USER = ""root"";"		
+"private final String DB_PASS = ""7358""; // このパスワード"		
+		
+新しいPCのMySQLパスワードの確認		
+		
+新しいPCのMySQLインストール時、root ユーザーに設定したパスワードと、コードの DB_PASS が完全に一致しているか確認します。		
+		
+不一致の場合の対処		
+		
+"方法A (推奨): コードの DB_PASS = ""7358"" を、新しいPCの root の実際のパスワードに合わせて修正します。"		
+		
+方法B: MySQLにログインし、ALTER USER 'root'@'localhost' IDENTIFIED BY '7358'; を実行して、MySQL側のパスワードをコードに合わせます。		
+		
+これらの手順を完了すれば、3台の新しいPCでスムーズに開発を始めることができるはずです。頑張ってください！		
