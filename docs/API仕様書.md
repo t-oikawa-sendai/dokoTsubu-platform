@@ -12,6 +12,19 @@
 
 ---
 
+## 0. トップ画面（エントリ）
+
+アプリの入口として、コンテキストルート直下の `index.jsp` を表示する。ランディング画面としてアプリ名・説明・ログインフォーム・新規登録導線を配置し、見た目は `css/style.css` で整える。ログイン送信は **POST `/Login`**（パラメーター `name` / `pass`）であり、**API の動作仕様は変更しない**。
+
+| 項目 | 内容 |
+|------|------|
+| リソース (Resource) | `index.jsp` |
+| スタイル (Stylesheet) | `css/style.css`（相対パス） |
+| ログイン送信 (Login Submit) | `POST /Login`（`name`, `pass`）— 変更なし |
+| 新規登録導線 (Registration Link) | `GET /Register`（リンク）— 変更なし |
+
+---
+
 ## 1. ユーザー登録 (User Registration)
 
 ### GET /Register
