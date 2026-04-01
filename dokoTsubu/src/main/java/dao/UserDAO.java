@@ -1,10 +1,11 @@
 /*
- * DATE		: 2024-06-15
- * LASTUPDATE:2025-11-07
- * Author:Takashi Oikawa
- * Function:
- * Memo:mysqlからh2に変更
-*/
+ * プログラム名: UserDAO
+ * 機能概要: ユーザーの登録およびログイン照会のためのデータベースアクセスを提供する。
+ * 動作条件: MySQL に接続可能であること。users テーブルが存在し、NAME に UNIQUE 制約があること。
+ * その他記載事項: registerUser の戻り値は int 定数。1062 かつ NAME 用 UNIQUE キー重複のみ REGISTER_DUPLICATE、それ以外は REGISTER_DB_ERROR。
+ * Date:2026/04/01
+ * Author: Takashi Oikawa
+ */
 
 package dao;
 
@@ -13,6 +14,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Locale;
 
 import model.User;
 
@@ -22,8 +24,13 @@ public class UserDAO {
 	private final String DB_USER = "root";
 	private final String DB_PASS = "7358";
 
+	// registerUser() の結果コード（新規ファイルを増やさず、呼び出し元で分岐できるようにする）
+	public static final int REGISTER_OK = 1;
+	public static final int REGISTER_DUPLICATE = 2;
+	public static final int REGISTER_DB_ERROR = 3;
+
 	// ユーザー登録
-    public boolean registerUser(User user) {
+    public int registerUser(User user) {
     	// JDBCドライバを読み込む
     	try {
     	    Class.forName("com.mysql.cj.jdbc.Driver");   
@@ -59,14 +66,54 @@ public class UserDAO {
             int result = pStmt.executeUpdate();
 //            System.out.println("登録処理結果=" + result);	//Debug
             if (result != 1) {		//INSERTのSQL発行　更新できれば「1」が返る　1以外はエラー
-              return false;
+              return REGISTER_DB_ERROR;
             }
 //            System.out.println(result);	//Debug           
+            return REGISTER_OK;
         } catch (SQLException e) {
             e.printStackTrace();
-            return false;
+            if (isDuplicateNameUniqueViolation(e)) {
+            	return REGISTER_DUPLICATE;
+            }
+            return REGISTER_DB_ERROR;
           }
-          return true;
+    }
+
+    /**
+     * MySQL error code 1062（Duplicate entry）を最優先し、
+     * users.NAME の UNIQUE 違反とみなせる場合のみ true。
+     * 他の制約違反（1062 でも別キー等）は false。
+     */
+    private boolean isDuplicateNameUniqueViolation(SQLException e) {
+    	for (SQLException se = e; se != null; se = se.getNextException()) {
+    		if (matchesMysql1062NameUnique(se)) {
+    			return true;
+    		}
+    	}
+    	Throwable c = e.getCause();
+    	if (c instanceof SQLException) {
+    		return isDuplicateNameUniqueViolation((SQLException) c);
+    	}
+    	return false;
+    }
+
+    private boolean matchesMysql1062NameUnique(SQLException se) {
+    	if (se.getErrorCode() != 1062) {
+    		return false;
+    	}
+    	String msg = se.getMessage();
+    	if (msg == null) {
+    		return false;
+    	}
+    	String lower = msg.toLowerCase(Locale.ROOT);
+    	if (!lower.contains("duplicate entry")) {
+    		return false;
+    	}
+    	// MySQL: Duplicate entry '...' for key '...' — NAME 用 UNIQUE のキー名に name が含まれる想定
+    	if (!lower.contains("for key")) {
+    		return false;
+    	}
+    	return lower.contains("name");
     }
 
     // 引数で受け取ったユーザー情報と一致するユーザーが存在するかチェック

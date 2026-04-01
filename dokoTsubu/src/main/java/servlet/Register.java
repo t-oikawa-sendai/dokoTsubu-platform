@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
+import dao.UserDAO;
 import model.RegisterUserLogic;
 import model.User;
 
@@ -37,16 +38,21 @@ public class Register extends HttpServlet {
         	// ユーザーを作成し、データベースに保存する
             User user = new User(username, password);
             RegisterUserLogic registerUserLogic = new RegisterUserLogic();
-            boolean result = registerUserLogic.execute(user);
+            int result = registerUserLogic.execute(user);
             
             // 登録できた場合
-            if(result) {
+            if(result == UserDAO.REGISTER_OK) {
             	// 登録完了画面にフォワード
             	RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/jsp/registerResult.jsp");
                 dispatcher.forward(request, response);
             } else {
-            	// エラーメッセージをリクエストスコープに保存
-                request.setAttribute("errorMsg", "登録できませんでした。最初からやり直してください。");
+            	// 変更理由: 重複（UNIQUE制約違反）とそれ以外のDBエラーを分岐表示する
+            	if (result == UserDAO.REGISTER_DUPLICATE) {
+            		request.setAttribute("errorMsg", "ユーザー名が既に存在します。");
+            	} else {
+            		// エラーメッセージをリクエストスコープに保存
+            		request.setAttribute("errorMsg", "登録できませんでした。最初からやり直してください。");
+            	}
                 RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/jsp/registerView.jsp");
                 dispatcher.forward(request, response);
             }
