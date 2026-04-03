@@ -35,8 +35,8 @@ public class DeleteMutter extends HttpServlet {
 		//DeleteMutterLogicの処理を実行
 		delMutterLogic.execute(id);
 
-		// リダイレクト
-		response.sendRedirect("/dokoTsubu/Main");
+		// リダイレクト Update:20260403 コンテキスト直書きをやめ、現在のWebアプリの Main へ
+		response.sendRedirect(request.getContextPath() + "/Main");
 
 	}
 
