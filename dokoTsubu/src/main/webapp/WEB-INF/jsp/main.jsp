@@ -8,6 +8,8 @@ User loginUser = (User) session.getAttribute("loginUser");
 List<Mutter> mutterList = (List<Mutter>) request.getAttribute("mutterList");
 // リクエストスコープに保存されたエラーメッセージを取得
 String errorMsg = (String) request.getAttribute("errorMsg");
+// Update:20260403 Main から渡された AI 一言（投稿直後の forward のみ存在）
+String aiMsg = (String) request.getAttribute("aiMsg");
 %>
 <!DOCTYPE html>
 <html>
@@ -67,6 +69,11 @@ String errorMsg = (String) request.getAttribute("errorMsg");
 
       <% if(errorMsg != null){ %>
         <p class="dt-error" role="alert"><%= errorMsg %></p>
+      <% } %>
+
+      <%-- Update:20260403 aiMsg は投稿 POST 後の画面表示時のみセットされる --%>
+      <% if(aiMsg != null){ %>
+        <p class="dt-text dt-text--muted" role="status" aria-live="polite">AI：<%= aiMsg %></p>
       <% } %>
 
       <section class="dt-card" aria-label="投稿一覧">
