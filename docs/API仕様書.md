@@ -3,18 +3,19 @@
 **作成日 (Created):** 2024-06-15  
 **最終更新 (Last Updated):** 2026-04-01  
 **作成者 (Author):** Takashi Oikawa 
-**ベースURL (Base URL):** `http://localhost:8080/dokoTsubu`
+**ベースURL (Base URL):** `http://localhost:8080{contextPath}`
 
 > **注意 (Note)**  
 > ベースURL (Base URL) はローカル実行環境 (Local Runtime Environment) の設定に依存する。  
-> 現行確認時点 (At the Time of Current Verification) では、`http://localhost:8080/dokoTsubu` を基準値 (Default Base URL) とする。  
-> Tomcat のコンテキストルート (Context Root) を変更した場合は、この値も合わせて更新すること。
+> DokoTsubu-platform を正式運用 (Official) の前提とし、コンテキストパス (Context Path) はデプロイ設定に追従する。  
+> 本仕様書では `http://localhost:8080{contextPath}` を基準表記とし、各 URL は `{contextPath}` 配下のパス（例: `{contextPath}/Login`）として解釈する。  
+> JSP では `request.getContextPath()` の利用を推奨する（ハードコードされた `/dokoTsubu/` 前提を避ける）。
 
 ---
 
 ## 0. トップ画面（エントリ）
 
-アプリの入口として、コンテキストルート直下の `index.jsp` を表示する。ランディング画面としてアプリ名・説明・ログインフォーム・新規登録導線を配置し、見た目は `css/style.css` で整える。ログイン送信は **POST `/Login`**（パラメーター `name` / `pass`）であり、**API の動作仕様は変更しない**。
+アプリの入口画面として、コンテキストルート直下の `index.jsp` を表示する。画面上部にはアプリ名表示を配置し、ログイン導線（ログインフォーム）と新規登録導線（リンク）を備える。見た目の統一は `css/style.css` を用いて行う。ログイン送信は **POST `/Login`**（パラメーター `name` / `pass`）であり、**API の動作仕様自体は変更しない**。
 
 | 項目 | 内容 |
 |------|------|
@@ -117,6 +118,12 @@
 | 処理 | セッション破棄（`session.invalidate()`） |
 | フォワード先 | `WEB-INF/jsp/logout.jsp` |
 
+**画面（ログアウト結果）**
+
+- `GET /Logout` 実行後、`WEB-INF/jsp/logout.jsp` がログアウト結果画面として表示される（フォワード）。
+- 画面には共通ヘッダー（アプリ名表示）と、ログアウト完了メッセージを表示する。
+- **API の動作仕様自体は変更しない**（URL/処理/遷移先の仕様は従来どおり）。
+
 ---
 
 ## 4. メイン画面 / つぶやき投稿 (Main / Post Mutter)
@@ -190,7 +197,7 @@
 | 条件 | 遷移先 |
 |------|--------|
 | ログイン済み | `WEB-INF/jsp/main.jsp`（絞り込まれた mutterList をセット） |
-| 未ログイン | `/dokoTsubu/` へリダイレクト |
+| 未ログイン | `{contextPath}/` へリダイレクト |
 
 ---
 
@@ -243,7 +250,7 @@
 
 | 遷移先 |
 |--------|
-| `/dokoTsubu/Main` へリダイレクト |
+| `{contextPath}/Main` へリダイレクト |
 
 > **補足 (Supplement)**  
 > 本機能 (This Function) は仕様上 (By Specification) はログイン必須 (Login Required) とする。  
@@ -271,7 +278,7 @@
 
 | 遷移先 |
 |--------|
-| `/dokoTsubu/Main` へリダイレクト |
+| `{contextPath}/Main` へリダイレクト |
 
 > **補足 (Supplement)**  
 > 本機能 (This Function) は仕様上 (By Specification) はログイン必須 (Login Required) とする。  
