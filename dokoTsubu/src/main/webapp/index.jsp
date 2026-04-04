@@ -26,7 +26,8 @@ Function:ランディング（入口）画面
     <section class="dt-login-card" aria-labelledby="login-heading">
       <h2 id="login-heading" class="dt-login-card__title">ログイン</h2>
 
-      <form class="dt-login-form" action="Login" method="post">
+      <%-- Update:20260404 コンテキスト外へ解決されないよう絶対パス化（例: /dokoTsubu 直下 URL からの相対 Login は /Login になり 404） --%>
+      <form class="dt-login-form" action="<%= request.getContextPath() %>/Login" method="post">
         <div class="dt-field">
           <label class="dt-field__label" for="login-name">ユーザー名</label>
           <input class="dt-field__input" id="login-name" type="text" name="name" autocomplete="username">

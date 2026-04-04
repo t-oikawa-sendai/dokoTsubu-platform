@@ -24,23 +24,32 @@ if (aiMsg != null) {
 <title>どこつぶ</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="<%= request.getContextPath() %>/css/style.css">
+<style>
+/* Update:20260404 main.jsp のみ：ページ背景をやや濃い落ち着いたクリームへ（style.css は未変更） */
+body {
+  background-color: #ebe6dc;
+}
+</style>
 <% if (aiMsg != null) { %>
 <style>
-/* Update:20260404 AI 回答エリア（本 JSP のみ。style.css は未変更） */
+/* Update:20260404 AI 回答エリア（本 JSP のみ。style.css は未変更。背景 #0b1f3a は IDE 濃紺寄り） */
 .dt-ai-comment {
   margin: 0.75rem 0 1rem;
   padding: 0.85rem 1.1rem;
   border-radius: 12px;
-  background: #1c1c1c;
+  background: #0b1f3a;
   color: #fff8e7;
   font-size: 1.15rem;
   line-height: 1.55;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  text-shadow: 0 1px 2px rgba(0, 8, 24, 0.55);
+  box-shadow: 0 2px 14px rgba(4, 18, 48, 0.42);
+  border: 1px solid rgba(255, 248, 231, 0.1);
 }
 .dt-ai-comment__label {
   font-weight: 700;
   color: #fff3d4;
   margin-right: 0.15em;
+  text-shadow: 0 1px 2px rgba(0, 8, 24, 0.6);
 }
 .dt-ai-comment__out {
   word-break: break-word;

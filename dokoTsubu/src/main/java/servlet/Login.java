@@ -17,6 +17,13 @@ import model.User;
 public class Login extends HttpServlet {
   private static final long serialVersionUID = 1L;
 
+  // Update:20260404 GET /Login 直叩き時に 404 相当を避け、ログイン入口へ誘導
+  @Override
+  protected void doGet(HttpServletRequest request, HttpServletResponse response)
+      throws ServletException, IOException {
+    response.sendRedirect(request.getContextPath() + "/index.jsp");
+  }
+
   protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     // リクエストパラメータの取得
     request.setCharacterEncoding("UTF-8");
@@ -44,8 +51,8 @@ public class Login extends HttpServlet {
     	request.setAttribute("errorMsg", "必要項目が未入力です。");
     }
     
-    // ログイン結果画面にフォワード
-    RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/jsp/loginResult.jsp");
+    // Update:20260404 コンテキストルート基準の絶対パス（相対指定の解釈差で forward 失敗しないようにする）
+    RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/loginResult.jsp");
     dispatcher.forward(request, response);
   }
 }

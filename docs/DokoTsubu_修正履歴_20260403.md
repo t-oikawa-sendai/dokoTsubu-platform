@@ -114,9 +114,10 @@ DokoTsubu 改修の内容・原因・対応・確定事項を、後から追跡�
 
 ### Tomcat（Tomcat10_Java21）
 
-- `server.xml` に `path="/dokoTsubu"` の `<Context>` が 2 本あり、公開失敗の原因になっていた。
-- `docBase="dokoTsubu-platform"` 側の `<Context>` を削除し、`docBase="dokoTsubu"` の 1 本にした。
-- Tomcat10_Java21 では新 DokoTsubu を使う方針に固定した。
+server.xml に path="/dokoTsubu" の `<Context>` が 2 本あり、公開失敗の原因になっていた。
+旧 DokoTsubu と新 DokoTsubu が同じ /dokoTsubu で競合していた。
+重複 `<Context>` の解消後も、Tomcat10_Java21 が旧 DokoTsubu 側を参照する状態があり、公開対象の切り分けが必要だった。
+その後、Tomcat10_Java21 は新 DokoTsubu を使う方針に固定した。
 
 ### Eclipse WTP（`org.eclipse.wst.common.component`）
 

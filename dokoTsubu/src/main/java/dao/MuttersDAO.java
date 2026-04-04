@@ -20,7 +20,8 @@ import model.Mutter;
 
 public class MuttersDAO {
     // データベース接続に使用する情報（MySQL）
-    private final String JDBC_URL = "jdbc:mysql://localhost/dokoTsubu";
+    // Update:20260404 useAffectedRows=false で UPDATE の戻りを「一致行数」に寄せる（内容未変更で affected 0 になり result==1 を満たさない事象の抑制）
+    private final String JDBC_URL = "jdbc:mysql://localhost/dokoTsubu?useAffectedRows=false";
     private final String DB_USER = "root";
     private final String DB_PASS = "7358";
 
@@ -149,6 +150,7 @@ public class MuttersDAO {
 
             // UPDATE文を実行
             int result = pStmt.executeUpdate();
+            // Update:20260404 WHERE ID=? で 1 行のみ想定。一致 1 件なら成功（上記 URL で一致行ベースの戻り値）
             return result == 1;
         } catch (SQLException e) {
             e.printStackTrace();

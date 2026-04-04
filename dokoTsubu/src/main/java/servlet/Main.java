@@ -4,6 +4,7 @@
  * 動作条件	: セッションに loginUser が存在すること。投稿時は text パラメータが非空であること。AI 設定は /Users/takashioikawa/Dev/ai-config.json（AiConfigLoader 経由）。Java 21 / Tomcat 10 想定。
  * その他記載事項	: ai-config 読込・HTTP 通信は AiConfigLoader / GeminiApiClient に委譲し、本クラスには直書きしない。AI 失敗時も DB 投稿は成功のまま failureMessage 相当を aiMsg に載せる。
  * Update:20260403	doPost に loginUser == null の防御（未ログイン時は index.jsp へリダイレクトして終了）。ヘッダ Date/Author 表記を整理。
+ * Update:20260404	@WebServlet を外し WEB-INF/web.xml で /Main を明示マッピング。forward／redirect をコンテキストルート基準に統一。
  * Date		: 2026/04/03
  * Author	: Takashi Oikawa
  */
@@ -14,7 +15,6 @@ import java.util.List;
 
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -27,7 +27,6 @@ import model.Mutter;
 import model.PostMutterLogic;
 import model.User;
 
-@WebServlet("/Main")
 public class Main extends HttpServlet {
   private static final long serialVersionUID = 1L;
 
@@ -43,11 +42,11 @@ public class Main extends HttpServlet {
     User loginUser = (User) session.getAttribute("loginUser");
 
     if (loginUser == null) { // ログインしていない
-    // リダイレクト
-      response.sendRedirect("index.jsp");
+      // Update:20260404 コンテキスト付きで index へ（相対 index.jsp が /Main 基準で誤解決しないようにする）
+      response.sendRedirect(request.getContextPath() + "/index.jsp");
     } else { // ログイン済み
-    // フォワード
-      RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/jsp/main.jsp");
+      // Update:20260404 コンテキストルート基準の絶対パス
+      RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/main.jsp");
       dispatcher.forward(request, response);
     }
   }
@@ -64,7 +63,7 @@ public class Main extends HttpServlet {
 
       // Update:20260403 未ログイン（セッション切れ等）の場合は投稿・AI 呼び出しを行わずログイン画面へ
       if (loginUser == null) {
-        response.sendRedirect("index.jsp");
+        response.sendRedirect(request.getContextPath() + "/index.jsp");
         return;
       }
 
@@ -96,8 +95,8 @@ public class Main extends HttpServlet {
     List<Mutter> mutterList = getMutterListLogic.execute();
     request.setAttribute("mutterList", mutterList);
 
-    // フォワード
-    RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/jsp/main.jsp");
+    // Update:20260404 コンテキストルート基準の絶対パス
+    RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/main.jsp");
     dispatcher.forward(request, response);
   }
 }
