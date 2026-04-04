@@ -99,3 +99,40 @@ DokoTsubu 改修の内容・原因・対応・確定事項を、後から追跡�
 
 - Gemini 連携一式（`Main.java` / `main.jsp` / `AiConfigLoader.java` / `GeminiApiClient.java` / `gson-2.11.0.jar` 等）の `main` へのマージ・プッシュは、2026/04/03 時点では未完了（ローカル作業ツリーの状態に基づく）。
 - `api-context-path` ブランチ上の履歴と `main` の関係、今後のマージ方針の詳細は未確認。
+
+---
+
+## 追記（2026/04/04）— 配備・コンテキスト・ビルドに関する事実
+
+**記録日:** 2026/04/04
+
+### 環境・パス
+
+- Eclipse 上に、旧 DokoTsubu と、新 DokoTsubu（`DokoTsubu-platform` 配下の `dokoTsubu`）が共存していた。
+- 新 DokoTsubu の実体のフルパス: `/Users/takashioikawa/Dev/dokoTsubu-platform/dokoTsubu`
+- 旧 DokoTsubu の実体のフルパス: `/Users/takashioikawa/Dev/dokoTsubu/dokoTsubu`
+
+### Tomcat（Tomcat10_Java21）
+
+- `server.xml` に `path="/dokoTsubu"` の `<Context>` が 2 本あり、公開失敗の原因になっていた。
+- `docBase="dokoTsubu-platform"` 側の `<Context>` を削除し、`docBase="dokoTsubu"` の 1 本にした。
+- Tomcat10_Java21 では新 DokoTsubu を使う方針に固定した。
+
+### Eclipse WTP（`org.eclipse.wst.common.component`）
+
+- `deploy-name=dokoTsubu` と `context-root=dokoTsubu-platform` の不一致があった。
+- `context-root` を `dokoTsubu` に変更し、`deploy-name` と一致させた。
+
+### LOGIN 404 と復旧
+
+- ログイン後の 404 の直接原因は、`/Users/takashioikawa/Dev/dokoTsubu-platform/dokoTsubu/build/classes/servlet/Login.class` が存在しなかったことであった。
+- Eclipse の **Project > Clean** で `dokoTsubu-platform` を Clean した後、`Login.class` が生成され、正常動作に復旧した。
+
+### 教訓（確認項目）
+
+コード改修前に、次を確認する必要がある。
+
+- 配備先
+- Context Root
+- モジュール重複
+- `build/classes` の生成状態

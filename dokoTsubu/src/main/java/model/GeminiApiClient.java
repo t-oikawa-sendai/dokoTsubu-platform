@@ -25,7 +25,7 @@ import com.google.gson.JsonParser;
  */
 public class GeminiApiClient {
 
-  private static final int MAX_COMMENT_CHARS = 30;
+  private static final int MAX_COMMENT_CHARS = 50; // Update:20260404 表示上限を50文字へ
   private static final Duration HTTP_TIMEOUT = Duration.ofSeconds(30);
 
   private final HttpClient httpClient =
@@ -36,7 +36,7 @@ public class GeminiApiClient {
    *
    * @param mutterText 投稿本文（null の場合は空文字として扱う）
    * @param config     {@link AiConfigLoader} で読み込んだ設定（null の場合は {@link AiConfigLoader#DEFAULT_FAILURE_MESSAGE}）
-   * @return 30文字以内程度に切り詰めた返答、または失敗メッセージ
+   * @return 50文字以内程度に切り詰めた返答、または失敗メッセージ
    */
   public String generateShortComment(String mutterText, AiConfigLoader.AiConfig config) {
     String safeText = mutterText == null ? "" : mutterText;
@@ -102,11 +102,12 @@ public class GeminiApiClient {
     JsonObject content = new JsonObject();
     JsonArray parts = new JsonArray();
     JsonObject part = new JsonObject();
-    // 30文字程度の返答を期待するプロンプト（厳密な文字数制約はAPI側ではなくここで指示）
+    // Update:20260404 50文字以内・多様な一言を期待するプロンプト（文字数の最終調整は limitApproxChars）
     part.addProperty(
         "text",
-        "次のつぶやきに対して、日本語で30文字以内の一言だけ返してください。"
-            + "余計な説明や引用符は付けないでください。\n\n"
+        "次のつぶやきを読み、内容に合わせて自然に反応する日本語の一言だけを返してください。"
+            + "共感・励まし・軽いツッコミのいずれか一種類を選び、毎回同じ言い回しや型にはめ込まないでください。"
+            + "50文字以内。余計な説明・引用符・箇条書きは付けないでください。\n\n"
             + userText);
     parts.add(part);
     content.add("parts", parts);

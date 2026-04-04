@@ -10,6 +10,12 @@ List<Mutter> mutterList = (List<Mutter>) request.getAttribute("mutterList");
 String errorMsg = (String) request.getAttribute("errorMsg");
 // Update:20260403 Main から渡された AI 一言（投稿直後の forward のみ存在）
 String aiMsg = (String) request.getAttribute("aiMsg");
+// Update:20260404 タイプライター表示用（隠し要素内のテキストノード向け HTML エスケープ）
+String aiMsgHtmlSafe = null;
+if (aiMsg != null) {
+  aiMsgHtmlSafe =
+      aiMsg.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;");
+}
 %>
 <!DOCTYPE html>
 <html>
@@ -18,6 +24,40 @@ String aiMsg = (String) request.getAttribute("aiMsg");
 <title>どこつぶ</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="<%= request.getContextPath() %>/css/style.css">
+<% if (aiMsg != null) { %>
+<style>
+/* Update:20260404 AI 回答エリア（本 JSP のみ。style.css は未変更） */
+.dt-ai-comment {
+  margin: 0.75rem 0 1rem;
+  padding: 0.85rem 1.1rem;
+  border-radius: 12px;
+  background: #1c1c1c;
+  color: #fff8e7;
+  font-size: 1.15rem;
+  line-height: 1.55;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+.dt-ai-comment__label {
+  font-weight: 700;
+  color: #fff3d4;
+  margin-right: 0.15em;
+}
+.dt-ai-comment__out {
+  word-break: break-word;
+}
+.dt-ai-comment__src {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+</style>
+<% } %>
 </head>
 <body>
   <div class="dt-page">
@@ -71,9 +111,32 @@ String aiMsg = (String) request.getAttribute("aiMsg");
         <p class="dt-error" role="alert"><%= errorMsg %></p>
       <% } %>
 
-      <%-- Update:20260403 aiMsg は投稿 POST 後の画面表示時のみセットされる --%>
+      <%-- Update:20260404 aiMsg は投稿 POST 後の画面表示時のみ。見た目・1文字ずつ表示のみ本段で変更 --%>
       <% if(aiMsg != null){ %>
-        <p class="dt-text dt-text--muted" role="status" aria-live="polite">AI：<%= aiMsg %></p>
+      <div class="dt-ai-comment" role="status" aria-live="polite" aria-atomic="true">
+        <span class="dt-ai-comment__label">AI：</span><span id="dt-ai-msg-out" class="dt-ai-comment__out"></span>
+      </div>
+      <span id="dt-ai-msg-full" class="dt-ai-comment__src" aria-hidden="true"><%= aiMsgHtmlSafe %></span>
+      <script>
+      /* Update:20260404 1 文字ずつ表示（style.css・Java サーブレットは未変更） */
+      (function () {
+        var fullEl = document.getElementById("dt-ai-msg-full");
+        var outEl = document.getElementById("dt-ai-msg-out");
+        if (!fullEl || !outEl) return;
+        var full = fullEl.textContent || "";
+        var i = 0;
+        var delayMs = 42;
+        function tick() {
+          if (i > full.length) return;
+          outEl.textContent = full.substring(0, i);
+          i++;
+          if (i <= full.length) {
+            window.setTimeout(tick, delayMs);
+          }
+        }
+        tick();
+      })();
+      </script>
       <% } %>
 
       <section class="dt-card" aria-label="投稿一覧">
