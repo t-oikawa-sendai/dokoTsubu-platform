@@ -16,3 +16,6 @@ dokoTsubu/build/
 dokoTsubu/target/
 dokoTsubu/out/
 dokoTsubu/*.class
+
+.metadata/
+Servers/
