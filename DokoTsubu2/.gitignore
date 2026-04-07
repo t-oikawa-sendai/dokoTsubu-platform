@@ -1,1 +1,23 @@
-# コンパイルされたクラスファイル*.class# パッケージごとのビルドフォルダ（環境に合わせて調整してください）# Eclipseの場合bin/# IntelliJの場合out/# Maven/Gradleの場合target/build/# OSが自動生成するファイル.DS_StoreThumbs.db# IDE（開発ツール）の設定ファイル（チーム開発で共有しない場合）.idea/.vscode/.settings/.classpath.project
+# OS
+.DS_Store
+
+# Build outputs
+/build/classes/
+/build/tools/
+/build/tmp/
+/build/*.class
+
+# Eclipse local files
+/.project
+/.classpath
+
+# Eclipse settings (keep WTP shared config only)
+# ignore local-only prefs
+/.settings/.jsdtscope
+/.settings/org.eclipse.core.resources.prefs
+/.settings/org.eclipse.jdt.core.prefs
+/.settings/org.eclipse.wst.jsdt.ui.superType.container
+/.settings/org.eclipse.wst.jsdt.ui.superType.name
+
+# Optional logs
+*.log
