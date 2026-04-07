@@ -16,6 +16,6 @@ dokoTsubu/build/
 dokoTsubu/target/
 dokoTsubu/out/
 dokoTsubu/*.class
-
+localhost.session.sql
 .metadata/
 Servers/
