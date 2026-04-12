@@ -105,7 +105,7 @@ public class GeminiApiClient {
     // Update:20260404 50文字以内・多様な一言を期待するプロンプト（文字数の最終調整は limitApproxChars）
     part.addProperty(
         "text",
-        "次のつぶやきを読み、内容に合わせて自然に反応する日本語の一言だけを返してください。"
+        "次のつぶやきを読み、内容に合わせて自然に反応する日本語の言葉を返してください。"
             + "共感・励まし・軽いツッコ等を組み合わせてください。毎回同じ言い回しや型にはめ込まないでください。"
             + "50文字以内。余計な説明・引用符・箇条書きは付けないでください。\n\n"
             + userText);
@@ -116,7 +116,7 @@ public class GeminiApiClient {
 
     JsonObject gen = new JsonObject();
     gen.addProperty("maxOutputTokens", 64);
-    gen.addProperty("temperature", 0.7);
+    gen.addProperty("temperature", 1.5);	// Update:20260404 設定値0.0-2.0 defort:1.0 試験的に1.5
     root.add("generationConfig", gen);
 
     return root.toString();
