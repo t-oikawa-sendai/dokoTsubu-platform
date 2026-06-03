@@ -1,0 +1,56 @@
+@startuml dokoTsubu_platform_database_er
+' DokoTsubu2 が JDBC で参照する MySQL スキーマ（DAO の SQL から抽出）
+' プレビュー: PlantUML 拡張 / plantuml.jar
+title dokoTsubu-platform — DokoTsubu2 データベース ER 図（実装ベース）
+
+skinparam linetype ortho
+skinparam roundcorner 8
+hide circle
+skinparam entity {
+  BackgroundColor White
+  BorderColor #335577
+}
+skinparam arrow {
+  Color #335577
+}
+
+legend right
+  |= 凡例 |
+  | PK | 主キー（自動採番想定） |
+  | FK | 外部キー（論理参照） |
+  | 表名 | UserDAO は **users**、MuttersDAO は **USERS** / **MUTTERS**。MySQL の lower_case_table_names により同一物理表の可能性あり。 |
+endlegend
+
+entity users {
+  * id : INT <<PK>>
+  --
+  * name : VARCHAR(100) <<unique>>
+  * pass : VARCHAR(255)
+}
+
+entity mutters {
+  * id : INT <<PK>>
+  --
+  * user_id : INT <<FK>>
+  * text : VARCHAR / TEXT
+}
+
+users ||--o{ mutters : "USER_ID → users.id"
+
+note right of users
+  **UserDAO**
+  INSERT INTO users (name, pass)
+  SELECT * FROM users WHERE name AND pass
+  --
+  Memo.java の CREATE 案（E_MAIL 等）は
+  現行 DAO 未使用のため本図に未記載
+end note
+
+note bottom of mutters
+  **MuttersDAO（表名 MUTTERS）**
+  JOIN USERS ON USER_ID = ID
+  INSERT (USER_ID, TEXT)
+  UPDATE TEXT / DELETE BY ID
+end note
+
+@enduml

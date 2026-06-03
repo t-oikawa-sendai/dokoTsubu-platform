@@ -1,0 +1,205 @@
+@startuml dokoTsubu_platform_class_diagram
+' 学習・設計理解用: dokoTsubu-platform / DokoTsubu2 の Java 主要構造
+' プレビュー: PlantUML 拡張または plantuml.jar
+title dokoTsubu-platform (DokoTsubu2) — 主要クラスと依存関係（概略）
+
+skinparam classAttributeIconSize 0
+skinparam packageStyle rectangle
+skinparam linetype ortho
+left to right direction
+
+legend right
+  |= ステレオタイプ |
+  | <<Servlet>> | Jakarta HttpServlet（画面遷移・パラメータ受付） |
+  | <<Logic>> | ユースケース単位の業務ロジック（DAO 呼び出し） |
+  | <<Model>> | ドメインオブジェクト・設定DTO（Serializable 等） |
+  | <<DAO>> | JDBC によるデータアクセス |
+  | <<Integration>> | 外部API・ファイル設定の呼び出し |
+  **注** | `Main` は web.xml でマッピング（@WebServlet なし）。他サーブレットは @WebServlet。 |
+  **注** | ルートの `Memo.java` は SQL コメント用メモであり実行クラスではない。 |
+endlegend
+
+package "servlet" as PKG_SVLET #Wheat {
+
+  class Main <<Servlet>> {
+    + doGet(request, response)
+    + doPost(request, response)
+  }
+
+  class Login <<Servlet>> {
+    + doGet(..)
+    + doPost(..)
+  }
+
+  class Logout <<Servlet>> {
+    + doGet(..)
+  }
+
+  class Register <<Servlet>> {
+    + doGet(..)
+    + doPost(..)
+  }
+
+  class UpdateMutter <<Servlet>> {
+    + doGet(..)
+    + doPost(..)
+  }
+
+  class DeleteMutter <<Servlet>> {
+    + doGet(..)
+  }
+
+  class SearchMutter <<Servlet>> {
+    + doGet(..)
+  }
+}
+
+package "model" as PKG_MODEL #AliceBlue {
+
+  class User <<Model>> {
+    - id : int
+    - name : String
+    - pass : String
+    + User()
+    + User(name, pass)
+    + User(id, name, pass)
+    .. getters and setters ..
+  }
+
+  class Mutter <<Model>> {
+    - id : int
+    - userId : int
+    - userName : String
+    - text : String
+    + Mutter()
+    + Mutter(userId, text)
+    + Mutter(id, userName, text)
+    getters
+  }
+
+  class LoginLogic <<Logic>> {
+    + find(user) : User
+  }
+
+  class RegisterUserLogic <<Logic>> {
+    + execute(user) : int
+  }
+
+  class GetMutterListLogic <<Logic>> {
+    + execute() : List~Mutter~
+  }
+
+  class PostMutterLogic <<Logic>> {
+    + execute(mutter)
+  }
+
+  class UpdateMutterLogic <<Logic>> {
+    + execute(strId, text) : boolean
+  }
+
+  class SearchMutterLogic <<Logic>> {
+    + execute(keyword) : List~Mutter~
+  }
+
+  class DeleteMutterLogic <<Logic>> {
+    + execute(strId)
+  }
+
+  class AiConfigLoader <<Integration>> {
+    + {static} DEFAULT_CONFIG_PATH : Path
+    + {static} DEFAULT_FAILURE_MESSAGE : String
+    - gson : Gson
+    + load() : AiConfig
+    + load(path) : AiConfig
+    + loadOrFallback(path) : AiConfig
+    + fallbackConfig() : AiConfig
+  }
+
+  class AiConfig <<Model>> {
+    __ nested in AiConfigLoader __
+    - apiKey : String
+    - model : String
+    - failureMessage : String
+    + getApiKey()
+    + getModel()
+    + getFailureMessage()
+  }
+
+  class GeminiApiClient <<Integration>> {
+    - httpClient : HttpClient
+    + generateShortComment(mutterText, config) : String
+  }
+}
+
+package "dao" as PKG_DAO #HoneyDew {
+
+  class UserDAO <<DAO>> {
+    + {static} REGISTER_OK : int
+    + {static} REGISTER_DUPLICATE : int
+    + {static} REGISTER_DB_ERROR : int
+    - JDBC_URL / DB_USER / DB_PASS
+    + registerUser(user) : int
+    + findUser(user) : User
+  }
+
+  class MuttersDAO <<DAO>> {
+    - JDBC_URL / DB_USER / DB_PASS
+    + findAll() : List~Mutter~
+    + create(mutter) : boolean
+    + search(keyword) : List~Mutter~
+    + update(id, text) : boolean
+    + delete(id) : boolean
+  }
+}
+
+' --- Servlet → Logic / Model ---
+Main ..> GetMutterListLogic
+Main ..> PostMutterLogic
+Main ..> Mutter
+Main ..> User
+Main ..> AiConfigLoader
+Main ..> GeminiApiClient
+
+Login ..> LoginLogic
+Login ..> User
+
+Register ..> RegisterUserLogic
+Register ..> User
+Register ..> UserDAO
+
+UpdateMutter ..> UpdateMutterLogic
+
+DeleteMutter ..> DeleteMutterLogic
+
+SearchMutter ..> SearchMutterLogic
+SearchMutter ..> Mutter
+SearchMutter ..> User
+
+' --- Logic → DAO ---
+LoginLogic ..> UserDAO
+RegisterUserLogic ..> UserDAO
+GetMutterListLogic ..> MuttersDAO
+PostMutterLogic ..> MuttersDAO
+UpdateMutterLogic ..> MuttersDAO
+SearchMutterLogic ..> MuttersDAO
+DeleteMutterLogic ..> MuttersDAO
+
+' --- DAO → Model ---
+UserDAO ..> User
+MuttersDAO ..> Mutter
+
+' --- AI 連携 ---
+GeminiApiClient ..> AiConfig : uses
+AiConfigLoader +-- AiConfig : nested
+
+note bottom of PKG_SVLET
+  **画面**: JSP は `/WEB-INF/jsp/` 配下。セッション属性 `loginUser`（User）。
+  **Main**: 投稿成功後に Gemini 短コメントを `aiMsg` に格納（失敗時は既定メッセージ）。
+end note
+
+note bottom of PKG_DAO
+  **永続化**: MySQL（`MuttersDAO` は `useAffectedRows=false` を URL に付与）。
+  **UserDAO.registerUser**: 戻り値は REGISTER_OK / DUPLICATE / DB_ERROR。
+end note
+
+@enduml
