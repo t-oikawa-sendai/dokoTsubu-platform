@@ -19,3 +19,10 @@ dokoTsubu/*.class
 localhost.session.sql
 .metadata/
 Servers/
+# --- Specifian Local-Only Defense ---
+.specs/
+node_modules/
+package.json
+package-lock.json
+scripts/setup-specs-to-dev-repos.sh
+# ------------------------------------
