@@ -116,11 +116,7 @@ public class GeminiApiClient {
 
     JsonObject gen = new JsonObject();
     gen.addProperty("maxOutputTokens", 64);
-<<<<<<< Updated upstream:DokoTsubu2/src/main/java/model/GeminiApiClient.java
     gen.addProperty("temperature", 1.5);	// Update:20260404 設定値0.0-2.0 defort:1.0 試験的に1.5
-=======
-    gen.addProperty("temperature", 1.2);   // Update:20260404 反応の多様性を上げるため温度を1.2へ（ただし高すぎると意味不明な返答が増える可能性もあるため様子見）
->>>>>>> Stashed changes:dokoTsubu/src/main/java/model/GeminiApiClient.java
     root.add("generationConfig", gen);
 
     return root.toString();
