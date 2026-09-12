@@ -1,7 +1,7 @@
 <!--
 STANDARD_ID: SCAO-AI-GOVERNANCE-AGENTS
-STANDARD_VERSION: 1.0
-SOURCE: solacom_main/docs/standards/project-bootstrap/AGENTS.md
+STANDARD_VERSION: 1.2
+SOURCE: solacom_main/docs/standards/project-bootstrap/AGENTS_SOURCE.md
 DISTRIBUTION_MODE: COPY_FROM_CENTRAL_SSOT
 LOCAL_EDIT_POLICY: PROHIBITED
 -->
@@ -26,6 +26,44 @@ LOCAL_EDIT_POLICY: PROHIBITED
 12. 関連テスト
 
 存在しない文書がある場合、標準導入ゲート違反として停止する。
+
+## 必須Governance文書の存在確認
+
+作業開始前に、必須Governance文書 10 件の存在を確認する。
+
+```text
+/CONSTITUTION.md
+/AGENTS.md
+/CHANGELOG.md
+/docs/design/README.md
+/docs/design/01_REQUEST_DEFINITION.md
+/docs/design/02_REQUIREMENTS_DEFINITION.md
+/docs/design/03_DATA_AND_SECURITY_DESIGN.md
+/docs/design/04_UI_AND_FLOW_DESIGN.md
+/docs/design/05_ARCHITECTURE_DESIGN.md
+/docs/design/06_OPERATION_AND_HANDOFF.md
+```
+
+1 件でも不足している場合は停止する。
+
+CHANGELOG 本文を全作業で読む必要はない。
+CHANGELOG を Required Reading Order へ無条件追加しない。
+
+## 管理対象Markdown変更時の確認
+
+以下を変更する場合:
+
+- 内容
+- Version
+- Status
+- Last Updated
+
+編集前に次を確認する。
+
+- `/CHANGELOG.md`
+- 対象文書 Version
+- 対象文書 Last Updated
+- 必要な Git 履歴
 
 ## 文書優先順位
 
@@ -105,9 +143,10 @@ LOCAL_EDIT_POLICY: PROHIBITED
 
 ## commit 前レビュー
 
-- 実装担当 AI は commit しない
-- 設計担当が `git diff`、F/O/R 全件照合、対象外差分非接触を確認する
-- 1 件でも FAIL があれば commit 不可
+- 実装完了を理由に、実装担当 AI が自動的に commit / push してはならない
+- commit / push は、利用者または設計担当から明示指示がある場合のみ実施できる
+- 明示指示前に、設計担当による git diff、F/O/R照合、対象外差分非接触のレビューを必須とする
+- レビューで1件でもFAILがある場合はcommit不可
 
 ## 応答生成と送信前ゲート
 

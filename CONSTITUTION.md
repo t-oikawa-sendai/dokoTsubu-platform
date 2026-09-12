@@ -1,6 +1,6 @@
 <!--
 STANDARD_ID: SCAO-AI-GOVERNANCE-CONSTITUTION
-STANDARD_VERSION: 1.0
+STANDARD_VERSION: 1.3
 SOURCE: solacom_main/docs/standards/project-bootstrap/CONSTITUTION.md
 DISTRIBUTION_MODE: COPY_FROM_CENTRAL_SSOT
 LOCAL_EDIT_POLICY: PROHIBITED
@@ -58,8 +58,19 @@ LOCAL_EDIT_POLICY: PROHIBITED
 
 ## 4. 正本管理
 
-- 中央標準の正本は `solacom_main/docs/standards/project-bootstrap/` とする
-- 各リポジトリへは、完成配置をディレクトリ構造維持のままコピーする
+- 中央標準の Canonical Source は `solacom_main/docs/standards/project-bootstrap/` とする
+- 各リポジトリへは、定義済み Distribution Mapping により Runtime Artifact を配置する
+- 配布は次の原則に従う
+  - 中央 Canonical Source
+  - 定義済み Distribution Mapping
+  - Repository Runtime Artifact
+- `AGENTS_SOURCE.md` は `/AGENTS.md` として配布する
+- `CHANGELOG_TEMPLATE.md` は `/CHANGELOG.md` として配布する。Runtime 側に `CHANGELOG_TEMPLATE.md` を作成してはならない
+- `scripts/validate-docs.py` は `/scripts/validate-docs.py` として配布する
+- `.github/workflows/validate-docs.yml` は `/.github/workflows/validate-docs.yml` として配布する
+- 通常 Repository では `/CHANGELOG.md` は Repository 固有履歴正本である
+- `project-bootstrap` の `/CHANGELOG.md` は明示的例外であり、Distribution Template Artifact である。`project-bootstrap` 自身の変更履歴正本ではない
+- Governance / Distribution Source 側の変更履歴正本は `solacom_main/CHANGELOG.md` とする
 - ファイルごとの配置先を AI または作業者が判断してはならない
 - 機能固有仕様の正本は、作業指示書で指定された `SPECIFICATION.md` のみとする
 - 複数の正本が存在する場合、実装担当 AI は編集を停止し報告する
@@ -125,12 +136,18 @@ LOCAL_EDIT_POLICY: PROHIBITED
 
 ## 6. 標準文書導入ゲート
 
-新規リポジトリまたは標準未導入リポジトリでは、設計、仕様変更、実装、commit、push、deploy を開始する前に、中央標準の `project-bootstrap/` の中身をリポジトリ直下へそのまま配置しなければならない。
+新規リポジトリまたは標準未導入リポジトリでは、設計、仕様変更、実装、commit、push、deploy を開始する前に、中央標準の Canonical Source を定義済み Distribution Mapping に従ってリポジトリ直下へ配置しなければならない。
 
-配置対象は次の 9 ファイルとする。
+必須Governance文書は次の 10 文書とする。
+
+中央管理コピー 2:
 
 - `/CONSTITUTION.md`
 - `/AGENTS.md`
+
+Repository固有文書 8:
+
+- `/CHANGELOG.md`
 - `/docs/design/README.md`
 - `/docs/design/01_REQUEST_DEFINITION.md`
 - `/docs/design/02_REQUIREMENTS_DEFINITION.md`
@@ -139,24 +156,125 @@ LOCAL_EDIT_POLICY: PROHIBITED
 - `/docs/design/05_ARCHITECTURE_DESIGN.md`
 - `/docs/design/06_OPERATION_AND_HANDOFF.md`
 
-1 ファイルでも不足している場合、設計、仕様変更、実装、commit、push、deploy を開始してはならない。
+Governance検証資産は必須Governance文書に含めない。別分類とする。Governance適用Repositoryでは必須とする。
+
+```text
+Governance適用Repository
+├─ 必須Governance文書10
+└─ 必須Governance検証資産2
+   ├─ /scripts/validate-docs.py
+   └─ /.github/workflows/validate-docs.yml
+```
+
+必須Governance文書10のうち 1 文書でも不足している場合、設計、仕様変更、実装、commit、push、deploy を開始してはならない。
+必須Governance検証資産2のうち 1 件でも不足している場合も、Governance適用状態としては未完了であり、設計、仕様変更、実装、commit、push、deploy を開始してはならない。
 
 初回導入時に既存ファイルを上書きしてはならない。
 
-対象 9 ファイルのうち 1 件でも存在する場合、部分導入や不足分だけのコピーを行わず停止する。
-
 ファイルごとの配置先を判断してはならない。
 
-`project-bootstrap/` の中身を、ディレクトリ構造を維持したままリポジトリ直下へコピーする。
+定義済み Distribution Mapping に従って配置する。`AGENTS_SOURCE.md` は `/AGENTS.md` として配布する。`CHANGELOG_TEMPLATE.md` は通常の新規導入時のみ `/CHANGELOG.md` として配布する。`scripts/validate-docs.py` と `.github/workflows/validate-docs.yml` は Runtime 同パスへ配布する。中央 Canonical Source のファイル名を、判断で配布先へ持ち越してはならない。
 
-### 6.1 初回導入後の更新
+初回未導入 Repository では `install-project-standards.sh` が次を一導入単位として扱う。
+
+```text
+必須Governance文書10
++
+validator
++
+workflow
+```
+
+### 6.1 初回導入 Preflight
+
+コピー前にすべて判定する。Governance 9 文書をコピーした後に CHANGELOG または Validation Assets を判定してはならない。部分導入を発生させない。
+
+判定順序を固定する。
+
+```text
+Preflight
+│
+├─ 1. 既存Governance 9文書のいずれかが存在
+│    → 何も変更せず停止
+│
+└─ 既存Governance 9文書なし
+     ↓
+   2. /CHANGELOG.md確認
+     │
+     ├─ 不存在
+     │    → 通常導入の候補
+     │
+     └─ 存在
+          → 何も変更せず停止
+          → Migration承認を要求
+     ↓
+   3. Validation Assets確認
+     │
+     ├─ validator または workflow が1件でも存在
+     │    → 何も変更せず停止
+     │
+     └─ 両方とも不存在
+          → 全条件PASS後のみコピー開始
+```
+
+通常実行で既存 `/CHANGELOG.md` を検出した場合は必ず停止する。installer は既存 CHANGELOG の意味を判定しない。Validation Assets が 1 件でも既存なら無変更停止する。
+
+### 6.2 Existing CHANGELOG 承認後の再実行
+
+Migration承認後のみ、既存 `/CHANGELOG.md` を利用者が再利用承認済みである明示的再実行経路を使用する。
+
+このモードでも、既存Governance 9文書が 1 件でも存在すれば停止する。Validation Assets の衝突確認もコピー開始前に行う。validator または workflow が 1 件でも存在すれば無変更停止する。
+
+9 文書が存在せず、Validation Assets が不存在で、既存 CHANGELOG のみ存在する場合:
+
+- 既存 CHANGELOG → 上書き禁止、編集禁止
+- Governance 9 文書 → コピー
+- Validation Assets 2 件 → コピー
+- installer は CHANGELOG 本文を編集しない
+- 導入前 hash と導入後 hash が一致することを確認する
+- `CHANGELOG_TEMPLATE.md` と existing `/CHANGELOG.md` の `cmp` は行わない
+
+通常新規導入時のみ、`CHANGELOG_TEMPLATE.md` と `/CHANGELOG.md` の一致を確認する。
+
+### 6.3 project-bootstrap の CHANGELOG 例外
+
+通常 Repository では `/CHANGELOG.md` は Repository 固有履歴正本である。
+
+`project-bootstrap` は明示的例外とする。`project-bootstrap` の `/CHANGELOG.md` は Distribution Template Artifact であり、`project-bootstrap` 自身の変更履歴正本ではない。
+
+Governance / Distribution Source 側の変更履歴正本は `solacom_main/CHANGELOG.md` とする。
+
+### 6.4 Planned Migration Drift
+
+中央SSOT更新直後は、中央の `CONSTITUTION.md` / `AGENTS.md` / Governance Validation Assets と既存 Repository の配布コピーに一時的差分が発生する。
+
+これは Planned Migration Drift として扱う。異常Driftとして自動修正・一括更新してはならない。Repository単位Migration完了まで許容する。
+
+許容対象:
+
+```text
+CONSTITUTION
+AGENTS
+Governance Validation Assets
+```
+
+`update-ai-governance.sh --all` を中央更新直後に実行してはならない。Validation Assets の一括更新も行ってはならない。
+
+### 6.5 初回導入後の更新
 
 - `CONSTITUTION.md` と `AGENTS.md` は中央正本から配布される管理コピー
+- `/scripts/validate-docs.py` と `/.github/workflows/validate-docs.yml` は中央正本から配布される管理コピーである
 - 各リポジトリ側で独自編集しない
 - 7 文書は初回導入後にプロジェクト固有の設計正本となる
+- `/CHANGELOG.md` は Repository 固有履歴正本である（`project-bootstrap` を除く）
 - 既存 7 文書を中央テンプレートで上書きしない
+- 既存 CHANGELOG を中央テンプレートで上書きしない
 - 機能別仕様書を中央テンプレートで上書きしない
 - 中央ルール更新は専用の更新工程で行う
+- `CONSTITUTION.md` / `AGENTS.md` の更新は `update-ai-governance.sh` を用いる
+- 既導入 Repository への Validation Assets 導入は `migrate-governance-validation.sh` を用いる
+- 既導入 Validation Assets の更新は `update-governance-validation.sh` を用いる
+- `project-bootstrap` への Validation Assets 同期は `sync-project-bootstrap-validation.sh` を用いる
 - 更新時も実差分確認と承認を必須とする
 
 ## 7. 作業前確認
@@ -165,7 +283,8 @@ LOCAL_EDIT_POLICY: PROHIBITED
 
 - リポジトリルート、ブランチ、HEAD、`origin/main` の一致
 - 未コミット差分の有無と対象外差分への非接触
-- 標準 9 ファイルの存在（初回導入済みか）
+- 必須Governance文書 10 件の存在（初回導入済みか）
+- 必須Governance検証資産 2 件の存在（Governance適用済みか）
 - 作業対象機能の仕様正本パス
 - 承認済み作業指示書の範囲
 
@@ -211,18 +330,21 @@ LOCAL_EDIT_POLICY: PROHIBITED
 4. 中央 7 文書テンプレートが不足している
 5. 原本と配布用コピーに差異がある
 6. `project-bootstrap/` の構成を判断で変更する必要がある
-7. 対象リポジトリに必須 9 ファイルの一部が存在する（初回導入時）
-8. 初回導入で上書きが必要になる
-9. 部分導入が必要になる
-10. 対象外差分へ触れる必要がある
-11. 確定・未決・却下の分類変更が必要になる
-12. 指定外の未決事項追加が必要になる
-13. 指定外の確定仕様追加が必要になる
-14. 指定外の却下仕様追加が必要になる
-15. 複数の正本が存在する
-16. GitHub 正本と GAS 実体の一致を前提にしないと進められない
-17. Git 操作または clasp 操作が必要になる
-18. 個人情報または秘密情報を記載する必要がある
+7. 対象リポジトリに既存Governance 9 文書の一部が存在する（初回導入時）
+8. 通常導入で既存 `/CHANGELOG.md` が存在する（Migration承認前）
+9. 初回導入で既存 Validation Assets が 1 件でも存在する
+10. 初回導入で上書きが必要になる
+11. 部分導入が必要になる
+12. 対象外差分へ触れる必要がある
+13. 確定・未決・却下の分類変更が必要になる
+14. 指定外の未決事項追加が必要になる
+15. 指定外の確定仕様追加が必要になる
+16. 指定外の却下仕様追加が必要になる
+17. 複数の正本が存在する
+18. GitHub 正本と GAS 実体の一致を前提にしないと進められない
+19. Git 操作または clasp 操作が必要になる
+20. 個人情報または秘密情報を記載する必要がある
+21. Planned Migration Drift を異常として一括更新しようとしている
 
 停止時は、該当条件、変更済み範囲、未実施範囲を報告する。
 

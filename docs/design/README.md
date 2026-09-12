@@ -16,14 +16,14 @@ README Writing Policy（README作成方針）
 | Item（項目） | Value（値） |
 |---|---|
 | Document ID（文書ID） | README-001 |
-| Version（バージョン） | 0.3 |
+| Version（バージョン） | 0.4 |
 | Status（ステータス） | Draft |
 | Created Date（作成日） | 2026-06-21 |
-| Last Updated（最終更新日） | 2026-07-15 |
+| Last Updated（最終更新日） | 2026-09-11 |
 | Owner（管理者） | Takashi Oikawa |
-| Related Documents（関連文書） | docs/standards/DESIGN_DOCUMENT_STANDARD.md / [CHANGELOG.md](../../../CHANGELOG.md)（リポジトリルート） |
+| Related Documents（関連文書） | docs/standards/DESIGN_DOCUMENT_STANDARD.md / [CHANGELOG.md](../../CHANGELOG.md)（リポジトリルート） |
 
-> 詳細な変更履歴はリポジトリルートの [CHANGELOG.md](../../../CHANGELOG.md) を参照。
+> 詳細な変更履歴はリポジトリルートの [CHANGELOG.md](../../CHANGELOG.md) を参照。
 
 ---
 

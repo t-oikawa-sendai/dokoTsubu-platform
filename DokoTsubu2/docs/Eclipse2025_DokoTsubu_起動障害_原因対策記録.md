@@ -1,5 +1,16 @@
 # Eclipse2025環境における DokoTsubu 起動障害 原因・対策記録
 
+<!-- Document Info（文書情報） -->
+| Item（項目） | Value（値） |
+|---|---|
+| Document ID（文書ID） | LEGACY-004 |
+| Version（バージョン） | 0.1 |
+| Status（ステータス） | Draft |
+| Created Date（作成日） | 2026-04-07 |
+| Last Updated（最終更新日） | 2026-09-12 |
+| Owner（管理者） | Takashi Oikawa |
+| Related Documents（関連文書） | None |
+
 ## 最終結論（先に結論）
 今回の障害の主因は、dokoTsubu-platform（DokoTsubu2）の Java Build Path に Tomcat Server Runtime が正しく入っておらず、Servlet API を解決できない状態だったことである。  
 その結果、Tomcat10_Java21 起動時に NoClassDefFoundError: HttpServletRequest / ClassNotFoundException: HttpServletRequest が発生した。  

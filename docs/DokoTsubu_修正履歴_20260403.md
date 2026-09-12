@@ -1,5 +1,16 @@
 # DokoTsubu 修正履歴（2026/04/03）
 
+<!-- Document Info（文書情報） -->
+| Item（項目） | Value（値） |
+|---|---|
+| Document ID（文書ID） | LEGACY-007 |
+| Version（バージョン） | 0.1 |
+| Status（ステータス） | Draft |
+| Created Date（作成日） | 2026-04-03 |
+| Last Updated（最終更新日） | 2026-09-12 |
+| Owner（管理者） | Takashi Oikawa |
+| Related Documents（関連文書） | None |
+
 ## 文書名
 
 DokoTsubu 修正履歴（2026/04/03）

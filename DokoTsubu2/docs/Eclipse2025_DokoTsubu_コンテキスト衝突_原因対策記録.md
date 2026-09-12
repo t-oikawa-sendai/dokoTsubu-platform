@@ -1,5 +1,16 @@
 # Eclipse2025環境における DokoTsubu コンテキスト衝突 原因・対策記録
 
+<!-- Document Info（文書情報） -->
+| Item（項目） | Value（値） |
+|---|---|
+| Document ID（文書ID） | LEGACY-003 |
+| Version（バージョン） | 0.1 |
+| Status（ステータス） | Draft |
+| Created Date（作成日） | 2026-04-07 |
+| Last Updated（最終更新日） | 2026-09-12 |
+| Owner（管理者） | Takashi Oikawa |
+| Related Documents（関連文書） | None |
+
 ## 最終結論（先に結論）
 今回の問題は、旧 `DokoTsubu` と新 `DokoTsubu2` を同一 Eclipse2025 ワークスペース内で共存させた際に、Tomcat 上で **`/dokoTsubu` のコンテキストが衝突し得る状態**になっていたことである。  
 新 `DokoTsubu2` 側の WTP 設定 `.settings/org.eclipse.wst.common.component` において、`context-root` / `deploy-name` が `dokoTsubu` のままだったため、旧 `DokoTsubu` と同一コンテキストとして公開され得た。  

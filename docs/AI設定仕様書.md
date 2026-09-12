@@ -1,5 +1,16 @@
 # AI設定仕様書（DokoTsubu2 / Gemini API）
 
+<!-- Document Info（文書情報） -->
+| Item（項目） | Value（値） |
+|---|---|
+| Document ID（文書ID） | LEGACY-005 |
+| Version（バージョン） | 0.1 |
+| Status（ステータス） | Draft |
+| Created Date（作成日） | 2026-04-12 |
+| Last Updated（最終更新日） | 2026-09-12 |
+| Owner（管理者） | Takashi Oikawa |
+| Related Documents（関連文書） | None |
+
 ## 1. 目的
 
 `DokoTsubu2` の AI 連携（Gemini API 呼び出し）について、**現行ソースおよび実在設定ファイル**から確認できる範囲で、設定値・表示仕様・エラー時挙動・未対応事項を整理する。
