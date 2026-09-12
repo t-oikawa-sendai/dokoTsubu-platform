@@ -57,6 +57,20 @@ Governance導入Baselineは、Governance導入成功後に記録する。
 
 | Version | Date | Document | Category | Changes | Author |
 |---|---|---|---|---|---|
+| 1.0 | 2026-09-12 | `/docs/design/README.md` | Changed | Spring Boot Phase 1 設計7文書を初回 Approved 版 1.0 として確定。一覧 Status / Version / Owner を実ファイルと一致させた | Takashi Oikawa |
+| 1.0 | 2026-09-12 | `/docs/design/01_REQUEST_DEFINITION.md` | Changed | 初回 Approved 1.0。重複 TBD-001 を除去し、DB 実体確認は 03 / 06 参照へ委譲 | Takashi Oikawa |
+| 1.0 | 2026-09-12 | `/docs/design/02_REQUIREMENTS_DEFINITION.md` | Changed | 初回 Approved 1.0。重複 TBD-001 を除去し、DB 詳細確認は 03 / 06 へ委譲 | Takashi Oikawa |
+| 1.0 | 2026-09-12 | `/docs/design/03_DATA_AND_SECURITY_DESIGN.md` | Changed | 初回 Approved 1.0。認証・認可・BCrypt・secret 外部化の設計確定。TBD-001 は未解決のまま維持 | Takashi Oikawa |
+| 1.0 | 2026-09-12 | `/docs/design/04_UI_AND_FLOW_DESIGN.md` | Changed | 初回 Approved 1.0 | Takashi Oikawa |
+| 1.0 | 2026-09-12 | `/docs/design/05_ARCHITECTURE_DESIGN.md` | Changed | 初回 Approved 1.0。Spring MVC / JSP / JDBC / MySQL / WAR の設計確定 | Takashi Oikawa |
+| 1.0 | 2026-09-12 | `/docs/design/06_OPERATION_AND_HANDOFF.md` | Changed | 初回 Approved 1.0。TBD-001 を実装開始前確認事項として未解決のまま維持 | Takashi Oikawa |
+| 0.5 | 2026-09-12 | `/docs/design/README.md` | Changed | Phase 1 Spring Boot 設計の表紙・方針・用語を正本化し、一覧 Version を各実ファイルと一致させた | Takashi Oikawa |
+| 0.3 | 2026-09-12 | `/docs/design/01_REQUEST_DEFINITION.md` | Changed | Phase 1 要求定義を正本化。現行機能維持、対象外、成功条件を記録 | Takashi Oikawa |
+| 0.3 | 2026-09-12 | `/docs/design/02_REQUIREMENTS_DEFINITION.md` | Changed | Phase 1 機能要件とセキュリティ要求を正本化。Gemini を機能として記録 | Takashi Oikawa |
+| 0.3 | 2026-09-12 | `/docs/design/03_DATA_AND_SECURITY_DESIGN.md` | Security | users / mutters、BCrypt、session から password 除外、編集削除の本人限定、秘密情報の外部設定を確定 | Takashi Oikawa |
+| 0.3 | 2026-09-12 | `/docs/design/04_UI_AND_FLOW_DESIGN.md` | Fixed | 現行実装の遷移を正とした。GET /Login、Update 失敗時の編集画面復帰、本人以外の操作非表示を記録 | Takashi Oikawa |
+| 0.3 | 2026-09-12 | `/docs/design/05_ARCHITECTURE_DESIGN.md` | Changed | Spring MVC / Service / JDBC / JSP / WAR / embedded Tomcat / Gemini 構成を正本化。temperature 1.5 を正とした | Takashi Oikawa |
+| 0.3 | 2026-09-12 | `/docs/design/06_OPERATION_AND_HANDOFF.md` | Changed | 実装制約を正本化。Legacy 不整合の非実装、secrets 禁止、実装前 DB 確認を記録 | Takashi Oikawa |
 | 0.1 | 2026-09-11 | `/CHANGELOG.md` | Added | D-013: Repository固有履歴正本を新設 | Takashi Oikawa |
 | 1.3 | 2026-09-11 | `/CONSTITUTION.md` | Changed | D-013: 中央Canonical Source STANDARD_VERSION 1.3 へ同期 | Takashi Oikawa |
 | 1.2 | 2026-09-11 | `/AGENTS.md` | Changed | D-013: 中央Canonical Source `AGENTS_SOURCE.md` STANDARD_VERSION 1.2 へ同期 | Takashi Oikawa |

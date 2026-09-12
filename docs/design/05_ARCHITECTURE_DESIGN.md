@@ -4,10 +4,10 @@
 | Item（項目） | Value（値） |
 |---|---|
 | Document ID（文書ID） | ARCH-001 |
-| Version（バージョン） | 0.2 |
-| Status（ステータス） | Draft |
+| Version（バージョン） | 1.0 |
+| Status（ステータス） | Approved |
 | Created Date（作成日） | 2026-06-21 |
-| Last Updated（最終更新日） | 2026-07-15 |
+| Last Updated（最終更新日） | 2026-09-12 |
 | Owner（管理者） | Takashi Oikawa |
 | Related Documents（関連文書） | README.md / 02_REQUIREMENTS_DEFINITION.md / 03_DATA_AND_SECURITY_DESIGN.md / 06_OPERATION_AND_HANDOFF.md |
 
@@ -27,31 +27,40 @@
 
 ## 1. Purpose（目的）
 
-<!-- この文書が何を定義し、誰に向けて書かれているかを記述する -->
-<!-- 例: 本文書は、○○機能におけるシステム全体の構造・技術選定・連携方式を定義し、
-        実装フェーズの基準とすることを目的とする -->
-
-（記入欄）
+本文書は、Phase 1 のシステム構造、技術方針、外部連携を定義し、実装の基準とする。
 
 ---
 
 ## 2. Scope（対象範囲）
 
-（記入欄）
+- Servlet から Spring MVC Controller への移行
+- 現行 Logic 責務の Service 化
+- JDBC DAO と JSP の維持
+- Gemini API 連携
+- WAR packaging と embedded Tomcat
+- Spring 外部設定への秘密情報移設
 
 ---
 
 ## 3. Out of Scope（対象外範囲）
 
-<!-- 該当内容がない場合: 「本文書では対象外。理由: ○○」と記載する -->
+Phase 1 対象外として次を導入しない。
 
-（記入欄）
+- Spring Security による認証基盤
+- JPA / Hibernate
+- Spring Data
+- Thymeleaf
+- 外部 Tomcat 必須構成
+- `/Users/takashioikawa/Dev/ai-config.json` への絶対パス依存
 
 ---
 
 ## 4. Assumptions（前提条件）
 
-（記入欄）
+- 現行アプリ正本は `DokoTsubu2/`
+- 機能の基準は現行実装事実である
+- context path は `/dokoTsubu` とするが、コードへ固定文字列として書かない
+- 現行ライブ DB 実体は UNVERIFIED である
 
 ---
 
@@ -59,78 +68,121 @@
 
 ### 5.1 System Architecture Diagram（システム構成図）
 
-<!-- コンポーネント構成・デプロイ構成を記述する -->
-<!-- Mermaid / 画像 / リンクのいずれかで添付する -->
+```text
+Browser
+  ↓
+Spring MVC Controller
+  ↓
+Service
+  ↓
+DAO (JDBC)
+  ↓
+MySQL
 
+Post Service
+  ↓
+Gemini Client
+  ↓
+Gemini API
 ```
-（システム構成図を記述、または画像リンクを貼る）
+
+```mermaid
+flowchart TB
+  BR[Browser]
+  C[Spring MVC Controller]
+  S[Service]
+  D[DAO JDBC]
+  DB[(MySQL)]
+  PS[Post Service]
+  G[Gemini Client]
+  API[Gemini API]
+
+  BR --> C
+  C --> S
+  S --> D
+  D --> DB
+  C --> PS
+  PS --> G
+  G --> API
 ```
+
+現行 Servlet 対応:
+
+| 現行 Servlet | Phase 1 | URL |
+|---|---|---|
+| `servlet.Register` | Controller | `/Register` |
+| `servlet.Login` | Controller | `/Login` |
+| `servlet.Logout` | Controller | `/Logout` |
+| `servlet.Main` | Controller | `/Main` |
+| `servlet.SearchMutter` | Controller | `/SearchMutter` |
+| `servlet.UpdateMutter` | Controller | `/UpdateMutter` |
+| `servlet.DeleteMutter` | Controller | `/DeleteMutter` |
+
+現行 `*Logic` の責務は Service へ移す。DAO は JDBC を維持する。
+
+ログイン必須判定は Controller に複製せず、Spring MVC の共通機構で一元化する。
 
 ### 5.2 Technology Stack and Rationale（技術スタック・採用理由）
 
-<!-- 使用する言語・フレームワーク・ミドルウェア・クラウドサービス等とその採用理由を記述する -->
-
 | Type（種別） | Technology（採用技術） | Version（バージョン） | Rationale（採用理由） |
 |---|---|---|---|
-| Language（言語） | （記入欄） | （記入欄） | （記入欄） |
-| Framework（フレームワーク） | （記入欄） | （記入欄） | （記入欄） |
-| Database（DB） | （記入欄） | （記入欄） | （記入欄） |
-| Infrastructure（インフラ） | （記入欄） | （記入欄） | （記入欄） |
-| Other（その他） | （記入欄） | （記入欄） | （記入欄） |
+| Language（言語） | Java | 21 | 現行 `DokoTsubu2` の言語水準を維持する |
+| Framework（フレームワーク） | Spring Boot / Spring MVC | Phase 1 で採用する Spring Boot 世代 | 確定方針。JSP を維持するため WAR とする |
+| View | JSP | 現行 JSP を移行 | Thymeleaf は対象外 |
+| Persistence | JDBC | - | JPA / Spring Data は対象外 |
+| Database（DB） | MySQL | 現行利用の 8.x 系 | 確定方針 |
+| Runtime | embedded Tomcat（executable WAR） | Spring Boot 同梱 | 外部 Tomcat 必須にはしない |
+| External API | Gemini API | 初期 model `gemini-2.5-flash-lite` | 現行連携を維持する |
+| Other（その他） | BCrypt | - | password hash のみ。Spring Security 認証基盤は導入しない |
 
 ### 5.3 Module Structure and Layer Design（モジュール構成・レイヤー設計）
 
-<!-- アプリケーションのレイヤー・モジュール構成を記述する -->
-<!-- 例: プレゼンテーション層 / アプリケーション層 / ドメイン層 / インフラ層 -->
+- Presentation: Spring MVC Controller + JSP
+- Application: Service（現行 Logic の責務）
+- Persistence: DAO（JDBC）
+- External: Gemini Client（投稿成功後に Post Service から同期呼び出し）
 
-（記入欄）
+固定絶対パス JSON 設定は廃止し、Spring external configuration へ移す。
 
 ### 5.4 External Integration and API Design（外部システム連携・API設計方針）
 
-<!-- 外部システムとの連携方式・API の設計方針を記述する -->
-<!-- API 詳細仕様（エンドポイント・リクエスト・レスポンス）もここに記載する -->
-<!-- 該当内容がない場合: 「本文書では対象外。理由: ○○」と記載する -->
-
 | Integration Target / API Name（連携先 / API名） | Method（連携方式） | Purpose / Overview（用途・概要） |
 |---|---|---|
-| （記入欄） | （記入欄） | （記入欄） |
+| Gemini generateContent | HTTPS REST 同期呼び出し | 投稿成功後の短文コメント。初期 model は `gemini-2.5-flash-lite`。temperature は `1.5`。失敗しても投稿は rollback しない |
+| MySQL | JDBC | `users` / `mutters` への永続化 |
+
+Gemini API key は環境変数等の Spring 外部設定から取得する。ソースおよび Git 管理ファイルへ実値を書かない。
+
+アプリケーションエンドポイントは [02_REQUIREMENTS_DEFINITION.md](./02_REQUIREMENTS_DEFINITION.md) の API-001〜007 を正とする。公開 REST API は設けない。
 
 ### 5.5 Scalability and Fault Tolerance（スケーラビリティ方針・障害対策）
 
-<!-- 冗長化・フェイルオーバー・構成上の耐障害設計を記述する -->
-<!-- 障害発生後の確認・通知・復旧手順は 06_OPERATION_AND_HANDOFF.md に記載する -->
-<!-- 該当内容がない場合: 「本文書では対象外。理由: ○○」と記載する -->
-
 | Aspect（観点） | Design Details（設計内容） |
 |---|---|
-| Scaling Policy（スケーリング方針） | （記入欄） |
-| Redundancy（冗長化） | （記入欄） |
-| Failover（フェイルオーバー） | （記入欄） |
-| Other Fault Tolerance（その他耐障害設計） | （記入欄） |
+| Scaling Policy（スケーリング方針） | 本文書では対象外。理由: Phase 1 は現行機能のローカル移行である |
+| Redundancy（冗長化） | 本文書では対象外。理由: Phase 1 対象外 |
+| Failover（フェイルオーバー） | 本文書では対象外。理由: Phase 1 対象外 |
+| Other Fault Tolerance（その他耐障害設計） | Gemini 失敗時も投稿を残し、失敗文を画面へ返す |
 
 ### 5.6 Infrastructure and Environment（インフラ・環境構成）
 
-<!-- 環境（開発・ステージング・本番）の構成を記述する -->
-
 | Environment（環境） | Configuration / Resources（構成・リソース概要） |
 |---|---|
-| Development（開発） | （記入欄） |
-| Staging（ステージング） | （記入欄） |
-| Production（本番） | （記入欄） |
+| Development（開発） | ローカル executable WAR。embedded Tomcat。context path `/dokoTsubu`。MySQL と Gemini は外部設定。秘密情報がファイル必要な場合のみ `.local-secrets/`（Git 管理外） |
+| Staging（ステージング） | 本文書では対象外。理由: Phase 1 対象外 |
+| Production（本番） | 本文書では対象外。理由: Phase 1 対象外 |
 
 ---
 
 ## 6. Open Issues（未決事項）
 
-| ID | Open Issue（未決事項） | Owner（担当者） | Due Date（期限） | Status（ステータス） |
-|---|---|---|---|---|
-| TBD-001 | （記入欄） | （記入欄） | （記入欄） | Open |
+本文書では対象外。理由: 構成の確定事項は本文に記載済み。残件はライブ DB 実テーブル名確認のみであり、[03_DATA_AND_SECURITY_DESIGN.md](./03_DATA_AND_SECURITY_DESIGN.md) と [06_OPERATION_AND_HANDOFF.md](./06_OPERATION_AND_HANDOFF.md) で管理する。
 
 ---
 
 ## 7. Handoff to Detail Design（詳細設計への引き継ぎ）
 
-<!-- 実装フェーズに伝えるべき設計意図・判断経緯・注意事項を記述する -->
-<!-- 該当内容がない場合: 「本文書では対象外。理由: ○○」と記載する -->
-
-（記入欄）
+- Spring Security / JPA / Spring Data / Thymeleaf を追加しない
+- 絶対パスの `ai-config.json` を復活させない
+- context path は設定で `/dokoTsubu` とし、Controller / JSP に直書きしない
+- temperature の正は `1.5` である。Legacy 文書の `0.7` は持ち込まない

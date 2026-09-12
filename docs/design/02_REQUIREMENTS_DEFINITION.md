@@ -4,10 +4,10 @@
 | Item（項目） | Value（値） |
 |---|---|
 | Document ID（文書ID） | REQS-001 |
-| Version（バージョン） | 0.2 |
-| Status（ステータス） | Draft |
+| Version（バージョン） | 1.0 |
+| Status（ステータス） | Approved |
 | Created Date（作成日） | 2026-06-21 |
-| Last Updated（最終更新日） | 2026-07-15 |
+| Last Updated（最終更新日） | 2026-09-12 |
 | Owner（管理者） | Takashi Oikawa |
 | Related Documents（関連文書） | README.md / 01_REQUEST_DEFINITION.md / 03_DATA_AND_SECURITY_DESIGN.md / 04_UI_AND_FLOW_DESIGN.md / 05_ARCHITECTURE_DESIGN.md |
 
@@ -27,36 +27,36 @@
 
 ## 1. Purpose（目的）
 
-<!-- この文書が何を定義し、誰に向けて書かれているかを記述する -->
-<!-- 例: 本文書は、○○機能においてシステムが満たすべき機能要件・非機能要件を定義し、
-        各種設計書の基準とすることを目的とする -->
-
-（記入欄）
+本文書は、Phase 1 でシステムが満たすべき機能要件・非機能要件を定義し、データ / UI / アーキテクチャ設計の基準とする。
 
 ---
 
 ## 2. Scope（対象範囲）
 
-<!-- この文書がカバーする機能・システム・フェーズを記述する -->
+現行 `DokoTsubu2` が提供する次の機能と、Phase 1 で確定したセキュリティ要求。
 
-（記入欄）
+- ユーザー登録、ログイン、ログアウト
+- つぶやき一覧、投稿、検索、編集、削除
+- 投稿成功後の Gemini コメント生成
 
 ---
 
 ## 3. Out of Scope（対象外範囲）
 
-<!-- 明示的にスコープ外とするものを記述する -->
-<!-- 該当内容がない場合: 「本文書では対象外。理由: ○○」と記載する -->
-
-（記入欄）
+- Spring Security による認証基盤
+- JPA / Hibernate / Spring Data
+- Thymeleaf
+- 現行に無い機能追加
+- 公開 REST API の新設
 
 ---
 
 ## 4. Assumptions（前提条件）
 
-<!-- この文書の内容が成立するために必要な前提を記述する -->
-
-（記入欄）
+- 画面遷移の正は現行実装事実とする。Legacy API 文書の誤記は引き継がない
+- 登録とログインのリクエストパラメーター名は現行どおり異なる
+- テーブル名の Phase 1 設計値は `users` / `mutters`（lower-case）である
+- 現行ライブ DB の実テーブル名は UNVERIFIED である
 
 ---
 
@@ -64,75 +64,96 @@
 
 ### 5.1 Functional Requirements（機能要件一覧）
 
-<!-- システムが提供すべき機能を記述する -->
-<!-- ID・優先度（High / Medium / Low）・詳細を記載する -->
-
 | ID | Feature Name（機能名） | Priority（優先度） | Details（詳細） |
 |---|---|---|---|
-| FR-001 | （記入欄） | High | （記入欄） |
+| FR-001 | ユーザー登録 | High | `GET /Register` でフォーム表示。`POST /Register` のパラメーターは `username` / `password`。成功時は登録完了画面。未入力・重複・その他 DB エラーは登録画面へ戻す |
+| FR-002 | ログイン | High | `GET /Login` はログイン入口へ戻す。`POST /Login` のパラメーターは `name` / `pass`。成功時はセッションへ `loginUser`（user id / user name のみ）を保存し、ログイン結果画面を表示する |
+| FR-003 | ログアウト | High | `GET /Logout` でセッションを破棄し、ログアウト画面を表示する |
+| FR-004 | つぶやき一覧 | High | `GET /Main`。要ログイン。全件を ID 降順で表示する |
+| FR-005 | つぶやき投稿 | High | `POST /Main`。要ログイン。パラメーター `text`。未入力時は一覧画面にエラーを出す。投稿成功後に Gemini を同期呼び出し、`aiMsg` を一覧画面へ渡す |
+| FR-006 | つぶやき検索 | High | `GET /SearchMutter`。要ログイン。パラメーター `keyword`。`mutters.text` を `LIKE` で絞り込み、ID 降順で一覧表示する |
+| FR-007 | つぶやき編集 | High | `GET /UpdateMutter` と `POST /UpdateMutter`。要ログインかつ投稿者本人。対象は `id`。`POST` の本文は `text`。成功時は一覧へ戻る。失敗時は編集画面へ戻す |
+| FR-008 | つぶやき削除 | High | `GET /DeleteMutter`。要ログインかつ投稿者本人。対象は `id`。処理後は一覧へ戻る |
+| FR-009 | Gemini コメント生成 | High | 投稿成功後に同期呼び出し。初期 model は `gemini-2.5-flash-lite`。temperature は `1.5`。失敗しても投稿は rollback しない。失敗時も `aiMsg` に失敗文を載せて表示する |
+
+既存仕様として維持するもの:
+
+- 登録パラメーター名: `username` / `password`
+- ログインパラメーター名: `name` / `pass`
+- 一覧は ID 降順
+- 検索は `TEXT LIKE`（Phase 1 テーブルでは `mutters.text LIKE`）
 
 ### 5.2 Non-Functional Requirements（非機能要件）
 
-<!-- セキュリティ要求レベルはここに記載する -->
-<!-- セキュリティの設計仕様（認証・認可・通信・保存・個人情報保護の実装方針）は 03_DATA_AND_SECURITY_DESIGN.md に記載する -->
-
 | Type（種別） | Requirement（要件内容） |
 |---|---|
-| Performance（性能） | （記入欄） |
-| Availability（可用性） | （記入欄） |
-| Security Requirement Level（セキュリティ要求レベル） | （記入欄） |
-| Maintainability（保守性） | （記入欄） |
-| Other（その他） | （記入欄） |
+| Performance（性能） | Gemini は投稿後の同期呼び出しとする。タイムアウト等の新規性能目標は設けない |
+| Availability（可用性） | Gemini 失敗時も投稿を残す。可用性目標値は設けない |
+| Security Requirement Level（セキュリティ要求レベル） | password 平文保存禁止。session への password 保持禁止。Update / Delete は認証必須かつ投稿者本人限定。API key / DB password の source・Git 保存禁止 |
+| Maintainability（保守性） | ログイン必須判定は Controller ごとの重複実装を避け、Spring MVC 側で一元化する |
+| Other（その他） | context path は `/dokoTsubu`。Controller / JSP に `/dokoTsubu` を固定文字列として書かない |
 
 ### 5.3 Screen List（画面一覧）
 
-<!-- 画面名・利用目的の概要まで記載する -->
-<!-- 画面項目・レイアウト・操作・遷移の詳細は 04_UI_AND_FLOW_DESIGN.md に記載する -->
-
 | Screen ID（画面ID） | Screen Name（画面名） | Purpose / Overview（利用目的・概要） |
 |---|---|---|
-| SCR-001 | （記入欄） | （記入欄） |
+| SCR-001 | ログイン入口 | アプリ入口。ログインフォームと新規登録導線 |
+| SCR-002 | ユーザー登録 | 登録フォーム |
+| SCR-003 | ユーザー登録完了 | 登録成功の表示 |
+| SCR-004 | ログイン結果 | ログイン成功 / 失敗の表示 |
+| SCR-005 | メイン | 一覧・投稿・検索・Gemini 一言 |
+| SCR-006 | つぶやき編集 | 自分の投稿本文の編集 |
+| SCR-007 | ログアウト | ログアウト完了の表示 |
+
+画面項目と遷移の詳細は [04_UI_AND_FLOW_DESIGN.md](./04_UI_AND_FLOW_DESIGN.md) を正とする。
 
 ### 5.4 API Overview（API一覧の概要）
 
-<!-- 外部公開・内部利用 API の概要を記載する -->
-<!-- API 詳細仕様は 05_ARCHITECTURE_DESIGN.md に記載する -->
+Phase 1 の外部公開 REST API は無い。次は Spring MVC のアプリケーションエンドポイントである。
 
 | API ID | API Name / Endpoint Overview（API名 / エンドポイント概要） | Purpose（用途） |
 |---|---|---|
-| API-001 | （記入欄） | （記入欄） |
+| API-001 | `GET/POST /Register` | ユーザー登録 |
+| API-002 | `GET/POST /Login` | ログイン入口誘導 / ログイン処理 |
+| API-003 | `GET /Logout` | ログアウト |
+| API-004 | `GET/POST /Main` | 一覧表示 / 投稿 + Gemini |
+| API-005 | `GET /SearchMutter` | 検索 |
+| API-006 | `GET/POST /UpdateMutter` | 編集画面 / 更新 |
+| API-007 | `GET /DeleteMutter` | 削除 |
+
+詳細は [05_ARCHITECTURE_DESIGN.md](./05_ARCHITECTURE_DESIGN.md) および [04_UI_AND_FLOW_DESIGN.md](./04_UI_AND_FLOW_DESIGN.md) を正とする。
 
 ### 5.5 Data Overview（データ種別・件数規模の概要）
 
-<!-- 扱うデータの種別・想定件数・規模感を記述する -->
-<!-- 詳細なデータ設計は 03_DATA_AND_SECURITY_DESIGN.md に記載する -->
-
 | Data Type（データ種別） | Estimated Volume（想定件数・規模） | Notes（備考） |
 |---|---|---|
-| （記入欄） | （記入欄） | （記入欄） |
+| users | ローカル学習利用。上限未指定 | password 列には hash のみ保存する |
+| mutters | ローカル学習利用。上限未指定 | `user_id` で投稿者に関連付ける |
+
+詳細は [03_DATA_AND_SECURITY_DESIGN.md](./03_DATA_AND_SECURITY_DESIGN.md) を正とする。
 
 ### 5.6 Mapping to Request Definition（要求定義との対応マッピング）
 
-<!-- 01_REQUEST_DEFINITION.md のユーザーストーリー ID と機能要件 ID を対応付ける -->
-<!-- 例: US-001 → FR-001, FR-002 -->
-
 | User Story ID（ユーザーストーリー ID） | Functional Requirement ID（対応する機能要件 ID） |
 |---|---|
-| （記入欄） | （記入欄） |
+| US-001 | FR-001 |
+| US-002 | FR-002 |
+| US-003 | FR-003 |
+| US-004 | FR-004 |
+| US-005 | FR-005 |
+| US-006 | FR-006 |
+| US-007 | FR-007 |
+| US-008 | FR-008 |
+| US-009 | FR-009 |
 
 ---
 
 ## 6. Open Issues（未決事項）
 
-| ID | Open Issue（未決事項） | Owner（担当者） | Due Date（期限） | Status（ステータス） |
-|---|---|---|---|---|
-| TBD-001 | （記入欄） | （記入欄） | （記入欄） | Open |
+本文書では Open Issue を保持しない。DB 詳細確認は [03_DATA_AND_SECURITY_DESIGN.md](./03_DATA_AND_SECURITY_DESIGN.md) と [06_OPERATION_AND_HANDOFF.md](./06_OPERATION_AND_HANDOFF.md) へ委譲する。
 
 ---
 
 ## 7. Handoff to Detail Design（詳細設計への引き継ぎ）
 
-<!-- 実装フェーズに伝えるべき設計意図・判断経緯・注意事項を記述する -->
-<!-- 該当内容がない場合: 「本文書では対象外。理由: ○○」と記載する -->
-
-（記入欄）
+セキュリティ設計は [03_DATA_AND_SECURITY_DESIGN.md](./03_DATA_AND_SECURITY_DESIGN.md)、画面遷移は [04_UI_AND_FLOW_DESIGN.md](./04_UI_AND_FLOW_DESIGN.md)、構成は [05_ARCHITECTURE_DESIGN.md](./05_ARCHITECTURE_DESIGN.md) へ引き継ぐ。
