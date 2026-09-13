@@ -15,13 +15,13 @@ Memo: Phase 1 DokoTsubu3 GET /Login view only
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>DokoTsubu Ver.2.0（Platform Version)</title>
+<title>DokoTsubu Ver.3.0（Springboot Version)</title>
 <link rel="stylesheet" href="<%= request.getContextPath() %>/css/style.css">
 </head>
 <body>
 <div class="dt-page">
   <header class="dt-hero">
-    <h1 class="dt-hero__title">DokoTsubu Ver.2.0（Platform Version)</h1>
+    <h1 class="dt-hero__title">DokoTsubu Ver.3.0（Springboot Version)</h1>
     <p class="dt-hero__lead">学習用DokoTsubu機能拡張版</p>
   </header>
 

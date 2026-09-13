@@ -1,12 +1,12 @@
 /*
  * Program Name: style.css
  * Language: CSS
- * Function: Styles used by the SCR-001 login entry screen
+ * Function: Styles used by SCR-001 login entry and SCR-002 registration
  * Created: 2026-09-13
  * Last Updated: 2026-09-13
  * Author: Takashi Oikawa
  * AI: Cursor Grok 4.6
- * Memo: Phase 1 DokoTsubu3. SCR-001 selectors only.
+ * Memo: Phase 1 DokoTsubu3. SCR-001 and SCR-002 selectors only.
  */
 
 *,
@@ -178,4 +178,61 @@ body {
   outline: 2px solid #c4b8a4;
   outline-offset: 2px;
   border-radius: 2px;
+}
+
+.dt-main--wide {
+  max-width: 32rem;
+}
+
+.dt-card {
+  width: 100%;
+  background: #fff;
+  border: 1px solid #e8e2d6;
+  border-radius: 10px;
+  box-shadow: 0 4px 18px rgba(44, 42, 38, 0.06);
+  padding: 1.25rem 1.15rem 1.3rem;
+}
+
+.dt-card__title {
+  margin: 0 0 0.9rem;
+  font-size: 1.05rem;
+  font-weight: 650;
+  color: #1f1d1a;
+}
+
+.dt-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.95rem;
+}
+
+.dt-help-links {
+  margin: 1rem 0 0;
+  text-align: center;
+}
+
+.dt-link {
+  color: #3d5a80;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.dt-link:hover {
+  color: #2c4766;
+}
+
+.dt-link:focus {
+  outline: 2px solid #c4b8a4;
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+.dt-error {
+  margin: 0 0 1rem;
+  padding: 0.55rem 0.65rem;
+  font-size: 0.875rem;
+  color: #8b1c1c;
+  background: #fdeff0;
+  border: 1px solid #e8c2c5;
+  border-radius: 6px;
 }
