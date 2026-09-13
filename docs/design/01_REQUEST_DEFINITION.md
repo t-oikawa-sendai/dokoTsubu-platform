@@ -4,12 +4,12 @@
 | Item（項目） | Value（値） |
 |---|---|
 | Document ID（文書ID） | REQ-001 |
-| Version（バージョン） | 1.0 |
+| Version（バージョン） | 1.1 |
 | Status（ステータス） | Approved |
 | Created Date（作成日） | 2026-06-21 |
 | Last Updated（最終更新日） | 2026-09-12 |
 | Owner（管理者） | Takashi Oikawa |
-| Related Documents（関連文書） | README.md / 02_REQUIREMENTS_DEFINITION.md / 06_OPERATION_AND_HANDOFF.md |
+| Related Documents（関連文書） | README.md / 02_REQUIREMENTS_DEFINITION.md / 03_DATA_AND_SECURITY_DESIGN.md / 06_OPERATION_AND_HANDOFF.md |
 
 ---
 
@@ -54,7 +54,6 @@ Phase 1 では次を対象外とする。
 - Docker / Cloud Run
 - 外部 Tomcat 必須構成
 - Legacy 文書（`docs/設計書.md` 等）の改訂
-- 現行ライブ MySQL 実体の推測確定
 
 ---
 
@@ -63,7 +62,7 @@ Phase 1 では次を対象外とする。
 - 機能の基準は現行 `DokoTsubu2` 実装事実とする
 - Legacy 文書と実装の不整合は、Phase 1 正本では実装事実と確定設計を優先する
 - ローカルで MySQL および Gemini API を利用できる
-- 現行ライブ MySQL の実テーブル名は UNVERIFIED である
+- データ構造の詳細は [03_DATA_AND_SECURITY_DESIGN.md](./03_DATA_AND_SECURITY_DESIGN.md) を参照する
 
 ---
 
@@ -122,7 +121,7 @@ Phase 1 の目的は、現行機能を維持したまま Spring Boot 構成へ�
 
 ## 6. Open Issues（未決事項）
 
-本文書では Open Issue を保持しない。ライブ MySQL の実テーブル名確認は [03_DATA_AND_SECURITY_DESIGN.md](./03_DATA_AND_SECURITY_DESIGN.md) と [06_OPERATION_AND_HANDOFF.md](./06_OPERATION_AND_HANDOFF.md) を参照する。
+本文書では Open Issue を保持しない。データ構造の詳細は [03_DATA_AND_SECURITY_DESIGN.md](./03_DATA_AND_SECURITY_DESIGN.md) を参照する。
 
 ---
 

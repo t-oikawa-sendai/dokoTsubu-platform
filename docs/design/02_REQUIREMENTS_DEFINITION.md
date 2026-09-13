@@ -4,7 +4,7 @@
 | Item（項目） | Value（値） |
 |---|---|
 | Document ID（文書ID） | REQS-001 |
-| Version（バージョン） | 1.0 |
+| Version（バージョン） | 1.1 |
 | Status（ステータス） | Approved |
 | Created Date（作成日） | 2026-06-21 |
 | Last Updated（最終更新日） | 2026-09-12 |
@@ -55,8 +55,7 @@
 
 - 画面遷移の正は現行実装事実とする。Legacy API 文書の誤記は引き継がない
 - 登録とログインのリクエストパラメーター名は現行どおり異なる
-- テーブル名の Phase 1 設計値は `users` / `mutters`（lower-case）である
-- 現行ライブ DB の実テーブル名は UNVERIFIED である
+- データ構造の詳細は [03_DATA_AND_SECURITY_DESIGN.md](./03_DATA_AND_SECURITY_DESIGN.md) を正とする
 
 ---
 
@@ -71,7 +70,7 @@
 | FR-003 | ログアウト | High | `GET /Logout` でセッションを破棄し、ログアウト画面を表示する |
 | FR-004 | つぶやき一覧 | High | `GET /Main`。要ログイン。全件を ID 降順で表示する |
 | FR-005 | つぶやき投稿 | High | `POST /Main`。要ログイン。パラメーター `text`。未入力時は一覧画面にエラーを出す。投稿成功後に Gemini を同期呼び出し、`aiMsg` を一覧画面へ渡す |
-| FR-006 | つぶやき検索 | High | `GET /SearchMutter`。要ログイン。パラメーター `keyword`。`mutters.text` を `LIKE` で絞り込み、ID 降順で一覧表示する |
+| FR-006 | つぶやき検索 | High | `GET /SearchMutter`。要ログイン。パラメーター `keyword`。`MUTTERS` の本文を `LIKE` で絞り込み、ID 降順で一覧表示する |
 | FR-007 | つぶやき編集 | High | `GET /UpdateMutter` と `POST /UpdateMutter`。要ログインかつ投稿者本人。対象は `id`。`POST` の本文は `text`。成功時は一覧へ戻る。失敗時は編集画面へ戻す |
 | FR-008 | つぶやき削除 | High | `GET /DeleteMutter`。要ログインかつ投稿者本人。対象は `id`。処理後は一覧へ戻る |
 | FR-009 | Gemini コメント生成 | High | 投稿成功後に同期呼び出し。初期 model は `gemini-2.5-flash-lite`。temperature は `1.5`。失敗しても投稿は rollback しない。失敗時も `aiMsg` に失敗文を載せて表示する |
@@ -81,7 +80,7 @@
 - 登録パラメーター名: `username` / `password`
 - ログインパラメーター名: `name` / `pass`
 - 一覧は ID 降順
-- 検索は `TEXT LIKE`（Phase 1 テーブルでは `mutters.text LIKE`）
+- 検索は `TEXT LIKE`
 
 ### 5.2 Non-Functional Requirements（非機能要件）
 
@@ -127,8 +126,8 @@ Phase 1 の外部公開 REST API は無い。次は Spring MVC のアプリケ�
 
 | Data Type（データ種別） | Estimated Volume（想定件数・規模） | Notes（備考） |
 |---|---|---|
-| users | ローカル学習利用。上限未指定 | password 列には hash のみ保存する |
-| mutters | ローカル学習利用。上限未指定 | `user_id` で投稿者に関連付ける |
+| USERS | ローカル学習利用。上限未指定 | password は hash のみ保存する |
+| MUTTERS | ローカル学習利用。上限未指定 | 投稿者との関連付けを持つ |
 
 詳細は [03_DATA_AND_SECURITY_DESIGN.md](./03_DATA_AND_SECURITY_DESIGN.md) を正とする。
 
@@ -150,7 +149,7 @@ Phase 1 の外部公開 REST API は無い。次は Spring MVC のアプリケ�
 
 ## 6. Open Issues（未決事項）
 
-本文書では Open Issue を保持しない。DB 詳細確認は [03_DATA_AND_SECURITY_DESIGN.md](./03_DATA_AND_SECURITY_DESIGN.md) と [06_OPERATION_AND_HANDOFF.md](./06_OPERATION_AND_HANDOFF.md) へ委譲する。
+本文書では Open Issue を保持しない。データ構造の詳細は [03_DATA_AND_SECURITY_DESIGN.md](./03_DATA_AND_SECURITY_DESIGN.md) を正とする。
 
 ---
 

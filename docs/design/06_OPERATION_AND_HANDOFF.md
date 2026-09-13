@@ -4,7 +4,7 @@
 | Item（項目） | Value（値） |
 |---|---|
 | Document ID（文書ID） | OPS-001 |
-| Version（バージョン） | 1.0 |
+| Version（バージョン） | 1.1 |
 | Status（ステータス） | Approved |
 | Created Date（作成日） | 2026-06-21 |
 | Last Updated（最終更新日） | 2026-09-12 |
@@ -35,7 +35,7 @@
 
 - 実装時の遵守事項
 - 秘密情報の置き方
-- 実装前の DB 最小確認
+- 確認済み DB 実体の引き継ぎ
 - ローカル executable WAR の起動前提
 
 ---
@@ -68,7 +68,7 @@
 | HO-002 | Legacy 不整合 | Legacy 文書の不整合をそのまま実装しない。正本は `docs/design/` |
 | HO-003 | 秘密情報 | secrets を Git へ入れない。実値を source に書かない |
 | HO-004 | 外部設定 | DB 接続情報と Gemini API key を Spring 外部設定へ移す。絶対パス JSON は使わない |
-| HO-005 | DB 確認 | 実 DB の table case は実装前に最小確認する。未確認状態を推測して確定しない |
+| HO-005 | DB 実体 | 2026-09-12 ライブ MySQL 実測で確認済み。Schema `dokotsubu`、Tables `USERS` / `MUTTERS`、`MUTTERS.TEXT VARCHAR(255)`、FK なし。DB 構造変更は今回の Spring Boot 移行に含めない |
 | HO-006 | 認証基盤 | Spring Security を Phase 1 で追加しない |
 | HO-007 | 永続化 | JPA / Hibernate / Spring Data へ置換しない。JDBC を維持する |
 
@@ -76,13 +76,19 @@
 
 - 現行機能（登録・ログイン・ログアウト・一覧・投稿・検索・編集・削除・Gemini）を維持する
 - 登録は `username` / `password`、ログインは `name` / `pass` を維持する
-- 一覧は ID 降順、検索は `text LIKE` を維持する
+- 一覧は ID 降順、検索は `MUTTERS.TEXT LIKE` を維持する
 - `GET /Login` を実装する（ログイン入口へ戻す）
 - Update 失敗時は編集画面へ戻す
-- 編集・削除はログイン済みかつ `mutters.user_id == loginUser.id` のときだけ許可する
+- 編集・削除はログイン済みかつ `MUTTERS.USER_ID == loginUser.id` のときだけ許可する
 - ID だけの UPDATE / DELETE は禁止する
+- 投稿者認可は DB FK に依存させない
 - `loginUser` に password を入れない
 - password は BCrypt hash で保存し、平文保存・平文比較を廃止する
+- Phase 1 では既存ユーザーを維持する。Spring Boot 切替前に既存の平文 password を BCrypt hash へ一度だけ移行する
+- Application に平文 / BCrypt の恒久的な二重認証ロジックを持たせない
+- 実 DB への password 更新は今回実施しない。実際の移行実行時は、対象・影響・復旧手段を確認してから実施する
+- DB アクセス対象は Schema `dokotsubu`、Tables `USERS` / `MUTTERS`。`MUTTERS.TEXT` は `VARCHAR(255)`。FK はない
+- table rename / schema rename / `TEXT` 長変更 / FK 追加は、今回の Spring Boot 移行に含めない
 - Gemini は投稿成功後に同期呼び出しする。失敗しても投稿は rollback しない
 - model 初期値は `gemini-2.5-flash-lite`、temperature は `1.5`
 - context path は `/dokoTsubu`。Controller / JSP に固定文字列として書かない
@@ -124,9 +130,7 @@
 
 ## 6. Open Issues（未決事項）
 
-| ID | Open Issue（未決事項） | Owner（担当者） | Due Date（期限） | Status（ステータス） |
-|---|---|---|---|---|
-| TBD-001 | 実装開始前確認事項。現行ライブ MySQL の実テーブル名は UNVERIFIED。既存 DB 移行要否は実装前に最小確認する | Takashi Oikawa | 実装前 | Open |
+本文書では Open Issue を保持しない。
 
 ---
 
@@ -136,5 +140,6 @@
 
 1. `DokoTsubu2` を機能基準とし、Legacy 不整合を実装しない
 2. secrets を Git / source に入れず、DB / Gemini 設定を外部化する
-3. 実 DB table case は実装前に最小確認する
+3. Schema `dokotsubu`、Tables `USERS` / `MUTTERS`、`TEXT VARCHAR(255)`、FK なしを前提とする。DB 構造変更は今回の Spring Boot 移行に含めない
 4. Spring Security と JPA 系を追加しない
+5. 既存ユーザーは維持する。平文 password は Spring Boot 切替前に BCrypt へ一度だけ移行し、Application に二重認証ロジックを持たせない。実 DB への password 更新は今回実施しない

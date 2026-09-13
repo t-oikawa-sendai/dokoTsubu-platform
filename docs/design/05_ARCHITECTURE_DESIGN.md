@@ -4,7 +4,7 @@
 | Item（項目） | Value（値） |
 |---|---|
 | Document ID（文書ID） | ARCH-001 |
-| Version（バージョン） | 1.0 |
+| Version（バージョン） | 1.1 |
 | Status（ステータス） | Approved |
 | Created Date（作成日） | 2026-06-21 |
 | Last Updated（最終更新日） | 2026-09-12 |
@@ -60,7 +60,8 @@ Phase 1 対象外として次を導入しない。
 - 現行アプリ正本は `DokoTsubu2/`
 - 機能の基準は現行実装事実である
 - context path は `/dokoTsubu` とするが、コードへ固定文字列として書かない
-- 現行ライブ DB 実体は UNVERIFIED である
+- 現行ライブ DB 実体は 2026-09-12 実測で確認済みである。Schema は `dokotsubu`、Tables は `USERS` / `MUTTERS` である
+- Phase 1 は現行 DB を維持し、不要な schema migration を行わない
 
 ---
 
@@ -127,11 +128,13 @@ flowchart TB
 | Type（種別） | Technology（採用技術） | Version（バージョン） | Rationale（採用理由） |
 |---|---|---|---|
 | Language（言語） | Java | 21 | 現行 `DokoTsubu2` の言語水準を維持する |
-| Framework（フレームワーク） | Spring Boot / Spring MVC | Phase 1 で採用する Spring Boot 世代 | 確定方針。JSP を維持するため WAR とする |
+| Framework（フレームワーク） | Spring Boot / Spring MVC | 4.1.1 | 確定方針。JSP を維持するため WAR とする |
+| Build Tool | Maven | - | Phase 1 のビルド手段 |
+| Packaging | WAR | - | JSP を維持する |
 | View | JSP | 現行 JSP を移行 | Thymeleaf は対象外 |
-| Persistence | JDBC | - | JPA / Spring Data は対象外 |
-| Database（DB） | MySQL | 現行利用の 8.x 系 | 確定方針 |
-| Runtime | embedded Tomcat（executable WAR） | Spring Boot 同梱 | 外部 Tomcat 必須にはしない |
+| Persistence | JDBC | - | Spring Data / JPA は使用しない |
+| Database（DB） | MySQL | 9.6.0（2026-09-12 ローカル実測） | 現行ローカル実体 |
+| Runtime | embedded Tomcat（Spring Boot 管理） | 11.0.x | 外部 Tomcat 必須にはしない |
 | External API | Gemini API | 初期 model `gemini-2.5-flash-lite` | 現行連携を維持する |
 | Other（その他） | BCrypt | - | password hash のみ。Spring Security 認証基盤は導入しない |
 
@@ -149,7 +152,7 @@ flowchart TB
 | Integration Target / API Name（連携先 / API名） | Method（連携方式） | Purpose / Overview（用途・概要） |
 |---|---|---|
 | Gemini generateContent | HTTPS REST 同期呼び出し | 投稿成功後の短文コメント。初期 model は `gemini-2.5-flash-lite`。temperature は `1.5`。失敗しても投稿は rollback しない |
-| MySQL | JDBC | `users` / `mutters` への永続化 |
+| MySQL | JDBC | Schema `dokotsubu` の `USERS` / `MUTTERS` への永続化。Phase 1 で不要な schema migration は行わない |
 
 Gemini API key は環境変数等の Spring 外部設定から取得する。ソースおよび Git 管理ファイルへ実値を書かない。
 
@@ -176,7 +179,7 @@ Gemini API key は環境変数等の Spring 外部設定から取得する。ソ
 
 ## 6. Open Issues（未決事項）
 
-本文書では対象外。理由: 構成の確定事項は本文に記載済み。残件はライブ DB 実テーブル名確認のみであり、[03_DATA_AND_SECURITY_DESIGN.md](./03_DATA_AND_SECURITY_DESIGN.md) と [06_OPERATION_AND_HANDOFF.md](./06_OPERATION_AND_HANDOFF.md) で管理する。
+本文書では対象外。理由: 構成の確定事項は本文に記載済み。
 
 ---
 
@@ -186,3 +189,4 @@ Gemini API key は環境変数等の Spring 外部設定から取得する。ソ
 - 絶対パスの `ai-config.json` を復活させない
 - context path は設定で `/dokoTsubu` とし、Controller / JSP に直書きしない
 - temperature の正は `1.5` である。Legacy 文書の `0.7` は持ち込まない
+- MySQL は Schema `dokotsubu` の `USERS` / `MUTTERS` を対象とする。Phase 1 で不要な schema migration は行わない

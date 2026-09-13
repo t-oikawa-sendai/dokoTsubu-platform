@@ -57,6 +57,14 @@ Governance導入Baselineは、Governance導入成功後に記録する。
 
 | Version | Date | Document | Category | Changes | Author |
 |---|---|---|---|---|---|
+| 1.1 | 2026-09-12 | `/docs/design/01_REQUEST_DEFINITION.md` | Changed | 旧未確認 DB 記述を正本事実へ整合 | Takashi Oikawa |
+| 1.1 | 2026-09-12 | `/docs/design/02_REQUIREMENTS_DEFINITION.md` | Changed | 旧未確認 DB 記述を正本事実へ整合 | Takashi Oikawa |
+| 1.1 | 2026-09-12 | `/docs/design/04_UI_AND_FLOW_DESIGN.md` | Changed | 旧未確認 DB 記述を正本事実へ整合 | Takashi Oikawa |
+| 1.1 | 2026-09-12 | `/docs/design/03_DATA_AND_SECURITY_DESIGN.md` | Changed | ライブ MySQL 実体を確認し TBD-001 を解消。Schema `dokotsubu`、Tables `USERS` / `MUTTERS`、`TEXT VARCHAR(255)`、FK なしを設計へ反映。Phase 1 は現行 DB を維持する。既存平文 password は Spring Boot 切替前に BCrypt へ一度だけ移行し、Application に二重認証ロジックを持たせない | Takashi Oikawa |
+| 1.1 | 2026-09-12 | `/docs/design/05_ARCHITECTURE_DESIGN.md` | Changed | MySQL 記載を実 DB 事実へ合わせ、Phase 1 で不要な schema migration を行わない旨を記録。技術スタックを Java 21 / Spring Boot 4.1.1 / Maven / WAR / embedded Tomcat 11.0.x / MySQL 9.6.0 として確定 | Takashi Oikawa |
+| 1.1 | 2026-09-12 | `/docs/design/06_OPERATION_AND_HANDOFF.md` | Changed | TBD-001 を解消し、実測済み DB 前提を実装担当へ引き継ぐ。password 移行方針を確定 | Takashi Oikawa |
+| 1.1 | 2026-09-12 | `/docs/design/README.md` | Changed | TBD-001 解消後の現在状態を反映。01 / 02 / 04 の旧未確認表記を正本事実へ整合 | Takashi Oikawa |
+| - | 2026-09-12 | `/.gitignore` | Added | `.local-secrets/` を Git 管理対象外として追加 | Takashi Oikawa |
 | 1.0 | 2026-09-12 | `/docs/design/README.md` | Changed | Spring Boot Phase 1 設計7文書を初回 Approved 版 1.0 として確定。一覧 Status / Version / Owner を実ファイルと一致させた | Takashi Oikawa |
 | 1.0 | 2026-09-12 | `/docs/design/01_REQUEST_DEFINITION.md` | Changed | 初回 Approved 1.0。重複 TBD-001 を除去し、DB 実体確認は 03 / 06 参照へ委譲 | Takashi Oikawa |
 | 1.0 | 2026-09-12 | `/docs/design/02_REQUIREMENTS_DEFINITION.md` | Changed | 初回 Approved 1.0。重複 TBD-001 を除去し、DB 詳細確認は 03 / 06 へ委譲 | Takashi Oikawa |

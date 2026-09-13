@@ -4,7 +4,7 @@
 | Item（項目） | Value（値） |
 |---|---|
 | Document ID（文書ID） | UI-001 |
-| Version（バージョン） | 1.0 |
+| Version（バージョン） | 1.1 |
 | Status（ステータス） | Approved |
 | Created Date（作成日） | 2026-06-21 |
 | Last Updated（最終更新日） | 2026-09-12 |
@@ -161,7 +161,7 @@ flowchart TD
 
 ## 6. Open Issues（未決事項）
 
-本文書では対象外。理由: 画面遷移の確定事項は本文に記載済み。残件はライブ DB 実テーブル名確認のみであり、[03_DATA_AND_SECURITY_DESIGN.md](./03_DATA_AND_SECURITY_DESIGN.md) と [06_OPERATION_AND_HANDOFF.md](./06_OPERATION_AND_HANDOFF.md) で管理する。
+本文書では対象外。理由: 画面遷移の確定事項は本文に記載済み。
 
 ---
 
