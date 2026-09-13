@@ -4,10 +4,10 @@
 | Item（項目） | Value（値） |
 |---|---|
 | Document ID（文書ID） | OPS-001 |
-| Version（バージョン） | 1.1 |
+| Version（バージョン） | 1.2 |
 | Status（ステータス） | Approved |
 | Created Date（作成日） | 2026-06-21 |
-| Last Updated（最終更新日） | 2026-09-12 |
+| Last Updated（最終更新日） | 2026-09-13 |
 | Owner（管理者） | Takashi Oikawa |
 | Related Documents（関連文書） | README.md / 01_REQUEST_DEFINITION.md / 03_DATA_AND_SECURITY_DESIGN.md / 05_ARCHITECTURE_DESIGN.md |
 
@@ -54,7 +54,8 @@
 
 - 設計正本は `docs/design/` の 7 文書である
 - Legacy 文書は参照用であり、不整合をそのまま実装してはならない
-- 現行アプリ正本は `DokoTsubu2/`
+- 現行アプリ正本は `DokoTsubu2/`。Phase 1 実装では変更せず、機能確認・挙動比較の参照元とする
+- Spring Boot Application は `DokoTsubu3/` に新規作成する
 
 ---
 
@@ -64,7 +65,7 @@
 
 | ID | Handoff Item（引き継ぎ事項） | Details / Background（詳細・背景） |
 |---|---|---|
-| HO-001 | 機能基準 | `DokoTsubu2` の現行機能を基準とする |
+| HO-001 | 機能基準 | `DokoTsubu2` の現行機能を基準とする。`DokoTsubu2/` は Phase 1 実装で変更せず、機能確認・挙動比較の参照元として使用する。Spring Boot Application は `DokoTsubu3/` に新規作成する |
 | HO-002 | Legacy 不整合 | Legacy 文書の不整合をそのまま実装しない。正本は `docs/design/` |
 | HO-003 | 秘密情報 | secrets を Git へ入れない。実値を source に書かない |
 | HO-004 | 外部設定 | DB 接続情報と Gemini API key を Spring 外部設定へ移す。絶対パス JSON は使わない |
@@ -74,6 +75,11 @@
 
 ### 5.2 Implementation Constraints and Notes（実装時の注意点・制約）
 
+- `DokoTsubu2/` は Phase 1 実装で変更しない
+- 現行機能確認・挙動比較の参照元として `DokoTsubu2/` を使用する
+- Spring Boot Application は `DokoTsubu3/` に新規作成する
+- `DokoTsubu2` のソースを一括コピーして開始しない
+- 必要な機能を設計正本に従い段階的に `DokoTsubu3` へ実装する
 - 現行機能（登録・ログイン・ログアウト・一覧・投稿・検索・編集・削除・Gemini）を維持する
 - 登録は `username` / `password`、ログインは `name` / `pass` を維持する
 - 一覧は ID 降順、検索は `MUTTERS.TEXT LIKE` を維持する
@@ -138,7 +144,7 @@
 
 実装担当が最初に守る要点:
 
-1. `DokoTsubu2` を機能基準とし、Legacy 不整合を実装しない
+1. `DokoTsubu2` を機能基準とし、Legacy 不整合を実装しない。`DokoTsubu2/` は Phase 1 実装で変更しない。Spring Boot Application は `DokoTsubu3/` に新規作成し、`DokoTsubu2` のソースを一括コピーして開始しない。必要な機能を設計正本に従い段階的に `DokoTsubu3` へ実装する
 2. secrets を Git / source に入れず、DB / Gemini 設定を外部化する
 3. Schema `dokotsubu`、Tables `USERS` / `MUTTERS`、`TEXT VARCHAR(255)`、FK なしを前提とする。DB 構造変更は今回の Spring Boot 移行に含めない
 4. Spring Security と JPA 系を追加しない

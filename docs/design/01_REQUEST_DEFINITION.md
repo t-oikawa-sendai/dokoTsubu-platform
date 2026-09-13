@@ -4,10 +4,10 @@
 | Item（項目） | Value（値） |
 |---|---|
 | Document ID（文書ID） | REQ-001 |
-| Version（バージョン） | 1.1 |
+| Version（バージョン） | 1.2 |
 | Status（ステータス） | Approved |
 | Created Date（作成日） | 2026-06-21 |
-| Last Updated（最終更新日） | 2026-09-12 |
+| Last Updated（最終更新日） | 2026-09-13 |
 | Owner（管理者） | Takashi Oikawa |
 | Related Documents（関連文書） | README.md / 02_REQUIREMENTS_DEFINITION.md / 03_DATA_AND_SECURITY_DESIGN.md / 06_OPERATION_AND_HANDOFF.md |
 
@@ -27,7 +27,7 @@
 
 ## 1. Purpose（目的）
 
-本文書は、現行 `DokoTsubu2` を Spring Boot へ移行する Phase 1 の背景・対象・成功条件を定義し、要件定義および設計の前提とする。
+本文書は、現行 `DokoTsubu2` の機能を基準として、新規 `DokoTsubu3/` に Spring Boot 版を構築する Phase 1 の背景・対象・成功条件を定義し、要件定義および設計の前提とする。現行 `DokoTsubu2` 自体は保持する。Phase 1 の機能要件・成功条件自体は変更しない。
 
 ---
 
@@ -35,8 +35,8 @@
 
 Phase 1 は次を対象とする。
 
-- 現行アプリ正本 `DokoTsubu2/` の機能維持
-- Spring Boot / Spring MVC / JSP / JDBC / MySQL への移行
+- 現行アプリ正本 `DokoTsubu2/` の保持と、その現行機能の維持
+- `DokoTsubu2` の現行機能を基準とした、新規 `DokoTsubu3/` への Spring Boot / Spring MVC / JSP / JDBC / MySQL 版の構築
 - Gemini API 連携の維持
 - 認証・認可・password・秘密情報配置を本文書群の確定設計へ合わせること
 - 後続の外部公開へ接続できる構成（PF としての土台）
@@ -72,14 +72,14 @@ Phase 1 では次を対象外とする。
 
 現行 `DokoTsubu2` は Eclipse Dynamic Web Project と Jakarta Servlet で動作するつぶやき共有アプリである。Servlet / Eclipse 依存、秘密情報のソース直書き、固定絶対パスの AI 設定、編集・削除の認可欠落が、後続の PF 化と外部公開の障害になる。
 
-Phase 1 の目的は、現行機能を維持したまま Spring Boot 構成へ移し、秘密値を Git / source から排除し、他人の投稿を操作できない状態にすることである。
+Phase 1 の目的は、現行 `DokoTsubu2` を保持したまま、その現行機能を基準として新規 `DokoTsubu3/` に Spring Boot 構成を構築し、秘密値を Git / source から排除し、他人の投稿を操作できない状態にすることである。新機能追加としては扱わない。
 
 ### 5.2 Stakeholders（ステークホルダー一覧と関心事）
 
 | Stakeholder（ステークホルダー） | Interests and Requests（関心事・要求） |
 |---|---|
 | 利用者（投稿者） | 登録・ログイン・投稿・検索・自分の投稿の編集削除、Gemini 一言の表示 |
-| 開発者 / 実装担当 | `DokoTsubu2` を基準に、確定設計だけを実装する |
+| 開発者 / 実装担当 | `DokoTsubu2` を基準に、確定設計だけを `DokoTsubu3` へ実装する |
 | 設計担当 | Phase 1 正本の維持。Legacy 不整合を正本へ持ち込まない |
 | 運用担当 | 秘密値を Git に置かない。ローカル起動設定を外部化する |
 

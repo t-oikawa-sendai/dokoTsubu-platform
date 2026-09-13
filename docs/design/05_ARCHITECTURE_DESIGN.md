@@ -4,10 +4,10 @@
 | Item（項目） | Value（値） |
 |---|---|
 | Document ID（文書ID） | ARCH-001 |
-| Version（バージョン） | 1.1 |
+| Version（バージョン） | 1.2 |
 | Status（ステータス） | Approved |
 | Created Date（作成日） | 2026-06-21 |
-| Last Updated（最終更新日） | 2026-09-12 |
+| Last Updated（最終更新日） | 2026-09-13 |
 | Owner（管理者） | Takashi Oikawa |
 | Related Documents（関連文書） | README.md / 02_REQUIREMENTS_DEFINITION.md / 03_DATA_AND_SECURITY_DESIGN.md / 06_OPERATION_AND_HANDOFF.md |
 
@@ -57,8 +57,10 @@ Phase 1 対象外として次を導入しない。
 
 ## 4. Assumptions（前提条件）
 
-- 現行アプリ正本は `DokoTsubu2/`
-- 機能の基準は現行実装事実である
+- `DokoTsubu2/` は現行 Servlet / JSP / JDBC 版として保持する。機能・挙動の比較基準とする
+- Phase 1 の実装先は新規 `DokoTsubu3/`。`DokoTsubu2/` を Spring Boot プロジェクトへ直接変換しない
+- `DokoTsubu3/` は独立した Maven Application とする
+- 機能の基準は現行 `DokoTsubu2` 実装事実である
 - context path は `/dokoTsubu` とするが、コードへ固定文字列として書かない
 - 現行ライブ DB 実体は 2026-09-12 実測で確認済みである。Schema は `dokotsubu`、Tables は `USERS` / `MUTTERS` である
 - Phase 1 は現行 DB を維持し、不要な schema migration を行わない
@@ -140,6 +142,18 @@ flowchart TB
 
 ### 5.3 Module Structure and Layer Design（モジュール構成・レイヤー設計）
 
+```text
+dokoTsubu-platform/
+├── DokoTsubu2/   現行 Servlet / JSP / JDBC 版
+└── DokoTsubu3/   Phase 1 Spring Boot / Spring MVC / JSP / JDBC 版
+```
+
+- Phase 1 の実装先は `DokoTsubu3/`
+- `DokoTsubu2/` は機能・挙動の比較基準として保持する
+- `DokoTsubu2/` を Spring Boot プロジェクトへ直接変換しない
+- `DokoTsubu3/` は独立した Maven Application とする
+- Controller → Service → DAO(JDBC) → MySQL の既存確定 Architecture は変更しない
+- JSP、WAR、embedded Tomcat 等の確定技術構成も変更しない
 - Presentation: Spring MVC Controller + JSP
 - Application: Service（現行 Logic の責務）
 - Persistence: DAO（JDBC）

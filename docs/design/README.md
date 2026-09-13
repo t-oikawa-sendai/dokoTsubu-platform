@@ -17,10 +17,10 @@ README Writing Policy（README作成方針）
 | Item（項目） | Value（値） |
 |---|---|
 | Document ID（文書ID） | README-001 |
-| Version（バージョン） | 1.1 |
+| Version（バージョン） | 1.2 |
 | Status（ステータス） | Approved |
 | Created Date（作成日） | 2026-06-21 |
-| Last Updated（最終更新日） | 2026-09-12 |
+| Last Updated（最終更新日） | 2026-09-13 |
 | Owner（管理者） | Takashi Oikawa |
 | Related Documents（関連文書） | docs/standards/DESIGN_DOCUMENT_STANDARD.md / [CHANGELOG.md](../../CHANGELOG.md)（リポジトリルート） |
 
@@ -42,9 +42,9 @@ README Writing Policy（README作成方針）
 
 ## 1. Project Overview（プロジェクト・機能の概要）
 
-`dokoTsubu-platform` は、つぶやき共有アプリ「どこつぶ」のリポジトリである。現行実装の正本は `DokoTsubu2/` である。
+`dokoTsubu-platform` は、つぶやき共有アプリ「どこつぶ」のリポジトリである。`DokoTsubu2/` は現行 Application の正本であり、Phase 1 の機能・挙動比較基準として保持する。
 
-Phase 1 は、登録・ログイン・ログアウト・一覧・投稿・検索・編集・削除・Gemini コメント生成を維持したまま、Spring Boot / Spring MVC / JSP / JDBC / MySQL へ移行する。
+Phase 1 では `DokoTsubu2/` を直接 Spring Boot 化しない。新規 `DokoTsubu3/` を Spring Boot 版 Application の実装先とし、`DokoTsubu2` の現行機能・挙動を基準として移行する。登録・ログイン・ログアウト・一覧・投稿・検索・編集・削除・Gemini コメント生成は維持する。
 
 ---
 
@@ -53,7 +53,7 @@ Phase 1 は、登録・ログイン・ログアウト・一覧・投稿・検索
 | Item（項目） | Summary（概要） | Detail Document（詳細文書） |
 |---|---|---|
 | Current Problems（現在の問題点） | Servlet / Eclipse 依存、秘密情報のソース配置、編集削除の認可欠落 | [01_REQUEST_DEFINITION.md](./01_REQUEST_DEFINITION.md) |
-| Development Purpose（開発目的） | 現行機能を維持して Spring Boot 化し、後続の外部公開へ接続できる構成にする | [01_REQUEST_DEFINITION.md](./01_REQUEST_DEFINITION.md) |
+| Development Purpose（開発目的） | `DokoTsubu2` の現行機能を維持し、新規 `DokoTsubu3` として Spring Boot 化し、後続の外部公開へ接続できる構成にする | [01_REQUEST_DEFINITION.md](./01_REQUEST_DEFINITION.md) |
 | Solution Approach（解決方針） | Spring MVC + JSP + JDBC。秘密情報は外部設定。編集削除は投稿者本人限定 | [01_REQUEST_DEFINITION.md](./01_REQUEST_DEFINITION.md) |
 | System Functions（システム機能） | 登録、ログイン、ログアウト、一覧、投稿、検索、編集、削除、Gemini コメント | [02_REQUIREMENTS_DEFINITION.md](./02_REQUIREMENTS_DEFINITION.md) |
 | Expected Benefits（期待効果） | 現行機能を保ちつつ、秘密値排除と本人以外の更新削除防止ができる | [01_REQUEST_DEFINITION.md](./01_REQUEST_DEFINITION.md) |
@@ -75,18 +75,19 @@ Phase 1 は、登録・ログイン・ログアウト・一覧・投稿・検索
 
 | File（ファイル名） | Document Name（文書名） | Status（ステータス） | Version（バージョン） | Owner（担当者） |
 |---|---|---|---|---|
-| [01_REQUEST_DEFINITION.md](./01_REQUEST_DEFINITION.md) | Request Definition（要求定義） | Approved | 1.1 | Takashi Oikawa |
+| [01_REQUEST_DEFINITION.md](./01_REQUEST_DEFINITION.md) | Request Definition（要求定義） | Approved | 1.2 | Takashi Oikawa |
 | [02_REQUIREMENTS_DEFINITION.md](./02_REQUIREMENTS_DEFINITION.md) | Requirements Definition（要件定義） | Approved | 1.1 | Takashi Oikawa |
 | [03_DATA_AND_SECURITY_DESIGN.md](./03_DATA_AND_SECURITY_DESIGN.md) | Data and Security Design（データ・セキュリティ設計） | Approved | 1.1 | Takashi Oikawa |
 | [04_UI_AND_FLOW_DESIGN.md](./04_UI_AND_FLOW_DESIGN.md) | UI and Flow Design（UI・フロー設計） | Approved | 1.1 | Takashi Oikawa |
-| [05_ARCHITECTURE_DESIGN.md](./05_ARCHITECTURE_DESIGN.md) | Architecture Design（アーキテクチャ設計） | Approved | 1.1 | Takashi Oikawa |
-| [06_OPERATION_AND_HANDOFF.md](./06_OPERATION_AND_HANDOFF.md) | Operation and Handoff Design（運用・詳細設計引き継ぎ） | Approved | 1.1 | Takashi Oikawa |
+| [05_ARCHITECTURE_DESIGN.md](./05_ARCHITECTURE_DESIGN.md) | Architecture Design（アーキテクチャ設計） | Approved | 1.2 | Takashi Oikawa |
+| [06_OPERATION_AND_HANDOFF.md](./06_OPERATION_AND_HANDOFF.md) | Operation and Handoff Design（運用・詳細設計引き継ぎ） | Approved | 1.2 | Takashi Oikawa |
 
 ---
 
 ## 5. Overall Design Policy（設計上の全体方針・前提）
 
-- 現行アプリ正本は `DokoTsubu2/`。Phase 1 は現行機能維持
+- `DokoTsubu2/` は現行 Application の正本・機能比較基準として保持する。Phase 1 では直接 Spring Boot 化しない
+- Phase 1 の Spring Boot 版実装先は新規 `DokoTsubu3/`。`DokoTsubu2` の現行機能・挙動を基準として移行する
 - Spring Boot / Spring MVC / JSP / JDBC / MySQL / Gemini API
 - WAR + embedded Tomcat。外部 Tomcat 必須にはしない
 - Spring Security 認証基盤、JPA / Hibernate、Spring Data、Thymeleaf は導入しない
@@ -106,7 +107,8 @@ Phase 1 は、登録・ログイン・ログアウト・一覧・投稿・検索
 | Term / Abbreviation（用語・略語） | Definition（定義） |
 |---|---|
 | dokoTsubu-platform | 本リポジトリ名 |
-| DokoTsubu2 | 現行実装の正本ディレクトリ |
+| DokoTsubu2 | 現行 Servlet版。Phase 1 の機能・挙動比較基準 |
+| DokoTsubu3 | Phase 1 で新規作成する Spring Boot 版 |
 | どこつぶ / DokoTsubu | アプリ名。外部 URL の context path は `/dokoTsubu` |
 | Phase 1 | Spring Boot 移行フェーズ |
 | Legacy 文書 | `docs/設計書.md` / `docs/API仕様書.md` / `docs/AI設定仕様書.md` / `docs/環境構築手順書.md` 等。参照のみ |

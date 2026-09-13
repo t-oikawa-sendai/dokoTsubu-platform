@@ -3,7 +3,7 @@ Program Name: dokoTsubu-platform CHANGELOG
 Language: Markdown
 Function: dokoTsubu-platformの変更履歴正本
 Created: 2026-09-11
-Last Updated: 2026-09-12
+Last Updated: 2026-09-13
 Author: Takashi Oikawa
 AI: Cursor Grok 4.6
 Memo: Canonical Templateから新設したRepository固有履歴正本。過去Application履歴は推測して追加しない。Runtime側に CHANGELOG_TEMPLATE.md は作成しない。
@@ -18,7 +18,7 @@ Memo: Canonical Templateから新設したRepository固有履歴正本。過去A
 | Version（バージョン） | 0.1 |
 | Status（ステータス） | Draft |
 | Created Date（作成日） | 2026-09-11 |
-| Last Updated（最終更新日） | 2026-09-12 |
+| Last Updated（最終更新日） | 2026-09-13 |
 | Owner（管理者） | Takashi Oikawa |
 | Related Documents（関連文書） | /CONSTITUTION.md / /AGENTS.md / /docs/design/README.md |
 
@@ -57,6 +57,10 @@ Governance導入Baselineは、Governance導入成功後に記録する。
 
 | Version | Date | Document | Category | Changes | Author |
 |---|---|---|---|---|---|
+| 1.2 | 2026-09-13 | `/docs/design/README.md` | Changed | 現行 `DokoTsubu2` を保持し、Phase 1 Spring Boot版を新規 `DokoTsubu3` として構築する実装配置方針を確定 | Takashi Oikawa |
+| 1.2 | 2026-09-13 | `/docs/design/01_REQUEST_DEFINITION.md` | Changed | 現行 `DokoTsubu2` を保持し、Phase 1 Spring Boot版を新規 `DokoTsubu3` として構築する実装配置方針を確定 | Takashi Oikawa |
+| 1.2 | 2026-09-13 | `/docs/design/05_ARCHITECTURE_DESIGN.md` | Changed | 現行 `DokoTsubu2` を保持し、Phase 1 Spring Boot版を新規 `DokoTsubu3` として構築する実装配置方針を確定 | Takashi Oikawa |
+| 1.2 | 2026-09-13 | `/docs/design/06_OPERATION_AND_HANDOFF.md` | Changed | 現行 `DokoTsubu2` を保持し、Phase 1 Spring Boot版を新規 `DokoTsubu3` として構築する実装配置方針を確定 | Takashi Oikawa |
 | 1.1 | 2026-09-12 | `/docs/design/01_REQUEST_DEFINITION.md` | Changed | 旧未確認 DB 記述を正本事実へ整合 | Takashi Oikawa |
 | 1.1 | 2026-09-12 | `/docs/design/02_REQUIREMENTS_DEFINITION.md` | Changed | 旧未確認 DB 記述を正本事実へ整合 | Takashi Oikawa |
 | 1.1 | 2026-09-12 | `/docs/design/04_UI_AND_FLOW_DESIGN.md` | Changed | 旧未確認 DB 記述を正本事実へ整合 | Takashi Oikawa |
