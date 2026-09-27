@@ -6,7 +6,7 @@ Created: 2026-09-27
 Last Updated: 2026-09-27
 Author: Takashi Oikawa
 AI: Cursor Grok 4.7
-Memo: 初回記録。Git commit、実ファイル、既存設計書、GitHub Actionsの確認結果だけを記載する。
+Memo: FR-002ログイン認証の完了Evidenceを追記。Commit SHAはSELF（このマイルストーン記録を含むcommit）。
 -->
 
 # Milestones（マイルストーン）
@@ -20,7 +20,7 @@ Memo: 初回記録。Git commit、実ファイル、既存設計書、GitHub Act
 | Created Date（作成日） | 2026-09-27 |
 | Last Updated（最終更新日） | 2026-09-27 |
 | Owner（管理者） | Takashi Oikawa |
-| Related Documents（関連文書） | [02_REQUIREMENTS_DEFINITION.md](../docs/design/02_REQUIREMENTS_DEFINITION.md) / [2026-09-27-milestones-initial-record.md](./meetings/2026-09-27-milestones-initial-record.md) |
+| Related Documents（関連文書） | [02_REQUIREMENTS_DEFINITION.md](../docs/design/02_REQUIREMENTS_DEFINITION.md) / [2026-09-27-milestones-initial-record.md](./meetings/2026-09-27-milestones-initial-record.md) / [2026-09-27-fr002-login-completion.md](./meetings/2026-09-27-fr002-login-completion.md) |
 
 ---
 
@@ -87,14 +87,14 @@ Memo: 初回記録。Git commit、実ファイル、既存設計書、GitHub Act
 | Item（項目） | Value（値） |
 |---|---|
 | Milestone（マイルストーン名） | ログイン認証 |
-| Status（状態） | `IN_PROGRESS` |
-| Current State（現在状態） | 2026-09-27 の作業ツリーに未commitのログイン認証差分がある。commit SHA は未確定 |
-| Commit SHA（関連commit SHA） | 未確定。ログイン入口の既存 commit は `8e909e52b4ce136b56964289cf00ec6c1b9aa3e3` |
-| Completion Criteria（完了条件） | `GET /Login` はログイン入口へ戻す。`POST /Login` のパラメーターは `name` / `pass`。成功時はセッションへ `loginUser`（user id と user name のみ）を保存し、ログイン結果画面を表示する |
-| Detail Record（詳細記録） | [02_REQUIREMENTS_DEFINITION.md](../docs/design/02_REQUIREMENTS_DEFINITION.md) の FR-002 / [2026-09-27-milestones-initial-record.md](./meetings/2026-09-27-milestones-initial-record.md) |
+| Status（状態） | `COMPLETED` |
+| Completed Date（完了日） | 2026-09-27 |
+| Commit SHA（関連commit SHA） | `SELF（このマイルストーン記録を含むcommit）` |
+| Completion Criteria（完了条件） | 正常ログインPASS。同一Sessionで未入力時に失敗表示。同一Sessionで誤password時に失敗表示。build SUCCESS。`git diff --check` PASS |
+| Detail Record（詳細記録） | [2026-09-27-fr002-login-completion.md](./meetings/2026-09-27-fr002-login-completion.md) |
 | GitHub Actions（GitHub Actions結果） | 未commitのため、この作業を対象にした Workflow 実行は無い |
 
-`8e909e52b4ce136b56964289cf00ec6c1b9aa3e3` の `LoginController` は `GET /Login` のみである。2026-09-27 時点の未commit差分は `LoginController.java`、`UserDAO.java`、`style.css` の変更と、`LoginUser.java`、`UserCredential.java`、`LoginService.java`、`loginResult.jsp` の追加である。
+完了Evidenceは [2026-09-27-fr002-login-completion.md](./meetings/2026-09-27-fr002-login-completion.md) に残す。Commit SHA は `SELF（このマイルストーン記録を含むcommit）` である。実際の commit SHA は Git 履歴を Evidence とする。
 
 ### ログアウト機能
 

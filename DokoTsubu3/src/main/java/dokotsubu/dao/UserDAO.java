@@ -1,12 +1,12 @@
 /*
  * Program Name: UserDAO
  * Language: Java
- * Function: Insert a user name and BCrypt hash into USERS
+ * Function: Insert a user into USERS and select one user by NAME
  * Created: 2026-09-13
  * Last Updated: 2026-09-13
  * Author: Takashi Oikawa
  * AI: Cursor Grok 4.6
- * Memo: Phase 1 DokoTsubu3. JDBC DriverManager only. Connects on register.
+ * Memo: Phase 1 DokoTsubu3. Register INSERT unchanged. Login SELECT by NAME only.
  */
 
 package dokotsubu.dao;
@@ -14,6 +14,7 @@ package dokotsubu.dao;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Locale;
 
@@ -21,6 +22,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
 import dokotsubu.model.RegisterResult;
+import dokotsubu.model.UserCredential;
 
 @Repository
 public class UserDAO {
@@ -54,6 +56,25 @@ public class UserDAO {
                 return RegisterResult.DUPLICATE;
             }
             return RegisterResult.DB_ERROR;
+        }
+    }
+
+    public UserCredential findByName(String name) {
+        String sql = "SELECT ID, NAME, PASS FROM USERS WHERE NAME = ?";
+        try (Connection conn = DriverManager.getConnection(jdbcUrl, dbUsername, dbPassword);
+                PreparedStatement pStmt = conn.prepareStatement(sql)) {
+            pStmt.setString(1, name);
+            try (ResultSet rs = pStmt.executeQuery()) {
+                if (!rs.next()) {
+                    return null;
+                }
+                return new UserCredential(
+                        rs.getInt("ID"),
+                        rs.getString("NAME"),
+                        rs.getString("PASS"));
+            }
+        } catch (SQLException e) {
+            return null;
         }
     }
 

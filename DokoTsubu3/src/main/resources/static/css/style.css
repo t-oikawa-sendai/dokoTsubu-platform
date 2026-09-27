@@ -1,12 +1,12 @@
 /*
  * Program Name: style.css
  * Language: CSS
- * Function: Styles used by SCR-001 login entry and SCR-002 registration
+ * Function: Styles used by SCR-001, SCR-002, and SCR-004
  * Created: 2026-09-13
  * Last Updated: 2026-09-13
  * Author: Takashi Oikawa
  * AI: Cursor Grok 4.6
- * Memo: Phase 1 DokoTsubu3. SCR-001 and SCR-002 selectors only.
+ * Memo: Phase 1 DokoTsubu3. SCR-004 selectors added for loginResult.jsp.
  */
 
 *,
@@ -235,4 +235,38 @@ body {
   background: #fdeff0;
   border: 1px solid #e8c2c5;
   border-radius: 6px;
+}
+
+.dt-btn--link {
+  text-align: center;
+  text-decoration: none;
+}
+
+.dt-text {
+  margin: 0.35rem 0;
+  color: #2c2a26;
+}
+
+.dt-message {
+  margin: 0 0 0.6rem;
+  padding: 0.6rem 0.7rem;
+  font-size: 0.95rem;
+  border-radius: 8px;
+  border: 1px solid transparent;
+}
+
+.dt-message--success {
+  color: #1f5a2a;
+  background: #eef8f0;
+  border-color: #cfe7d3;
+}
+
+.dt-message--error {
+  color: #8b1c1c;
+  background: #fdeff0;
+  border-color: #e8c2c5;
+}
+
+.dt-error--inline {
+  margin: 0.25rem 0 0;
 }
