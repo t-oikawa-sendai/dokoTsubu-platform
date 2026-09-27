@@ -6,7 +6,7 @@ Created: 2026-09-27
 Last Updated: 2026-09-27
 Author: Takashi Oikawa
 AI: Cursor Grok 4.7
-Memo: FR-002ログイン認証の完了Evidenceを追記。Commit SHAはSELF（このマイルストーン記録を含むcommit）。
+Memo: FR-003ログアウト機能の完了Evidenceを追記。Commit SHAはSELF（このマイルストーン記録を含むcommit）。
 -->
 
 # Milestones（マイルストーン）
@@ -20,7 +20,7 @@ Memo: FR-002ログイン認証の完了Evidenceを追記。Commit SHAはSELF（�
 | Created Date（作成日） | 2026-09-27 |
 | Last Updated（最終更新日） | 2026-09-27 |
 | Owner（管理者） | Takashi Oikawa |
-| Related Documents（関連文書） | [02_REQUIREMENTS_DEFINITION.md](../docs/design/02_REQUIREMENTS_DEFINITION.md) / [2026-09-27-milestones-initial-record.md](./meetings/2026-09-27-milestones-initial-record.md) / [2026-09-27-fr002-login-completion.md](./meetings/2026-09-27-fr002-login-completion.md) |
+| Related Documents（関連文書） | [02_REQUIREMENTS_DEFINITION.md](../docs/design/02_REQUIREMENTS_DEFINITION.md) / [2026-09-27-milestones-initial-record.md](./meetings/2026-09-27-milestones-initial-record.md) / [2026-09-27-fr002-login-completion.md](./meetings/2026-09-27-fr002-login-completion.md) / [2026-09-27-fr003-logout-completion.md](./meetings/2026-09-27-fr003-logout-completion.md) |
 
 ---
 
@@ -101,9 +101,11 @@ Memo: FR-002ログイン認証の完了Evidenceを追記。Commit SHAはSELF（�
 | Item（項目） | Value（値） |
 |---|---|
 | Milestone（マイルストーン名） | ログアウト機能 |
-| Status（状態） | `NOT_STARTED` |
-| Current State（現在状態） | `DokoTsubu3` にログアウト実装ファイルは無い |
-| Commit SHA（関連commit SHA） | なし |
-| Completion Criteria（完了条件） | `GET /Logout` でセッションを破棄し、ログアウト画面を表示する |
-| Detail Record（詳細記録） | [02_REQUIREMENTS_DEFINITION.md](../docs/design/02_REQUIREMENTS_DEFINITION.md) の FR-003 / [2026-09-27-milestones-initial-record.md](./meetings/2026-09-27-milestones-initial-record.md) |
-| GitHub Actions（GitHub Actions結果） | 実装 commit が無いため、対象 Workflow 実行は無い |
+| Status（状態） | `COMPLETED` |
+| Completed Date（完了日） | 2026-09-27 |
+| Commit SHA（関連commit SHA） | `SELF（このマイルストーン記録を含むcommit）` |
+| Completion Criteria（完了条件） | `GET /Logout` で現在の Session を破棄し、ログアウト画面に「ログアウトしました」を表示する。TOP リンクからログイン入口へ戻れる。build SUCCESS。`git diff --check` PASS |
+| Detail Record（詳細記録） | [2026-09-27-fr003-logout-completion.md](./meetings/2026-09-27-fr003-logout-completion.md) |
+| GitHub Actions（GitHub Actions結果） | 未commitのため、この作業を対象にした Workflow 実行は無い |
+
+完了Evidenceは [2026-09-27-fr003-logout-completion.md](./meetings/2026-09-27-fr003-logout-completion.md) に残す。Commit SHA は `SELF（このマイルストーン記録を含むcommit）` である。実際の commit SHA は Git 履歴を Evidence とする。
