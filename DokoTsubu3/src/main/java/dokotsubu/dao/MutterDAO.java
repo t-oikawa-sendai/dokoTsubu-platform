@@ -1,12 +1,12 @@
 /*
  * Program Name: MutterDAO
  * Language: Java
- * Function: Select mutters in ID descending order, search mutter text, and insert one mutter
+ * Function: Select mutters in ID descending order, search mutter text, insert one mutter, and select or update one owned mutter
  * Created: 2026-09-29
  * Last Updated: 2026-09-29
  * Author: Takashi Oikawa
- * AI: Cursor Grok 4.7
- * Memo: Phase 1 DokoTsubu3 FR-004, FR-005, and FR-006. List and insert queries unchanged. Search uses LIKE and the same DB settings.
+ * AI: Cursor
+ * Memo: Phase 1 DokoTsubu3 FR-004, FR-005, FR-006, and FR-007. List and search also return USER_ID. Owned select and UPDATE always use ID and USER_ID.
  */
 
 package dokotsubu.dao;
@@ -42,7 +42,7 @@ public class MutterDAO {
 
     public List<Mutter> findAll() {
         List<Mutter> mutterList = new ArrayList<>();
-        String sql = "SELECT m.ID, u.NAME, m.TEXT "
+        String sql = "SELECT m.ID, m.USER_ID, u.NAME, m.TEXT "
                 + "FROM MUTTERS m "
                 + "JOIN USERS u ON m.USER_ID = u.ID "
                 + "ORDER BY m.ID DESC";
@@ -52,6 +52,7 @@ public class MutterDAO {
             while (rs.next()) {
                 mutterList.add(new Mutter(
                         rs.getInt("ID"),
+                        rs.getInt("USER_ID"),
                         rs.getString("NAME"),
                         rs.getString("TEXT")));
             }
@@ -63,7 +64,7 @@ public class MutterDAO {
 
     public List<Mutter> search(String keyword) {
         List<Mutter> mutterList = new ArrayList<>();
-        String sql = "SELECT m.ID, u.NAME, m.TEXT "
+        String sql = "SELECT m.ID, m.USER_ID, u.NAME, m.TEXT "
                 + "FROM MUTTERS m "
                 + "JOIN USERS u ON m.USER_ID = u.ID "
                 + "WHERE m.TEXT LIKE ? "
@@ -75,6 +76,7 @@ public class MutterDAO {
                 while (rs.next()) {
                     mutterList.add(new Mutter(
                             rs.getInt("ID"),
+                            rs.getInt("USER_ID"),
                             rs.getString("NAME"),
                             rs.getString("TEXT")));
                 }
@@ -91,6 +93,43 @@ public class MutterDAO {
                 PreparedStatement pStmt = conn.prepareStatement(sql)) {
             pStmt.setInt(1, userId);
             pStmt.setString(2, text);
+            return pStmt.executeUpdate() == 1;
+        } catch (SQLException e) {
+            return false;
+        }
+    }
+
+    public Mutter findByIdAndUserId(int id, int userId) {
+        String sql = "SELECT m.ID, m.USER_ID, u.NAME, m.TEXT "
+                + "FROM MUTTERS m "
+                + "JOIN USERS u ON m.USER_ID = u.ID "
+                + "WHERE m.ID = ? AND m.USER_ID = ?";
+        try (Connection conn = DriverManager.getConnection(jdbcUrl, dbUsername, dbPassword);
+                PreparedStatement pStmt = conn.prepareStatement(sql)) {
+            pStmt.setInt(1, id);
+            pStmt.setInt(2, userId);
+            try (ResultSet rs = pStmt.executeQuery()) {
+                if (!rs.next()) {
+                    return null;
+                }
+                return new Mutter(
+                        rs.getInt("ID"),
+                        rs.getInt("USER_ID"),
+                        rs.getString("NAME"),
+                        rs.getString("TEXT"));
+            }
+        } catch (SQLException e) {
+            return null;
+        }
+    }
+
+    public boolean update(int id, int userId, String text) {
+        String sql = "UPDATE MUTTERS SET TEXT = ? WHERE ID = ? AND USER_ID = ?";
+        try (Connection conn = DriverManager.getConnection(jdbcUrl, dbUsername, dbPassword);
+                PreparedStatement pStmt = conn.prepareStatement(sql)) {
+            pStmt.setString(1, text);
+            pStmt.setInt(2, id);
+            pStmt.setInt(3, userId);
             return pStmt.executeUpdate() == 1;
         } catch (SQLException e) {
             return false;

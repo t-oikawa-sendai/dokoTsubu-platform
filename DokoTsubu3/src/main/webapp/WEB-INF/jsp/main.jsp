@@ -5,8 +5,8 @@ Function: Mutter list, post, and search screen (SCR-005)
 Created: 2026-09-29
 Last Updated: 2026-09-29
 Author: Takashi Oikawa
-AI: Cursor Grok 4.7
-Memo: Phase 1 DokoTsubu3 FR-004, FR-005, FR-006, and FR-009. Dynamic text is HTML-escaped. No edit or delete.
+AI: Cursor
+Memo: Phase 1 DokoTsubu3 FR-004, FR-005, FR-006, FR-007, and FR-009. Dynamic text is HTML-escaped. Edit link only when mutter.userId equals loginUser.id. No delete.
 --%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8" %>
@@ -77,7 +77,11 @@ String aiMsg = (String) request.getAttribute("aiMsg");
       <section class="dt-card" aria-label="投稿一覧">
         <h2 class="dt-card__title">投稿一覧</h2>
         <% for (Mutter mutter : mutterList) { %>
-          <p class="dt-text"><%= HtmlUtils.htmlEscape(mutter.getUserName() == null ? "" : mutter.getUserName()) %>：<%= HtmlUtils.htmlEscape(mutter.getText() == null ? "" : mutter.getText()) %></p>
+          <p class="dt-text"><%= HtmlUtils.htmlEscape(mutter.getUserName() == null ? "" : mutter.getUserName()) %>：<%= HtmlUtils.htmlEscape(mutter.getText() == null ? "" : mutter.getText()) %>
+            <% if (mutter.getUserId() == loginUser.getId()) { %>
+              <a class="dt-link" href="<%= request.getContextPath() %>/UpdateMutter?id=<%= mutter.getId() %>">編集</a>
+            <% } %>
+          </p>
         <% } %>
       </section>
     </main>
