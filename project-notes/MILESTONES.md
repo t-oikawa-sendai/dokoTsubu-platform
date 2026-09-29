@@ -3,10 +3,10 @@ Program Name: MILESTONES.md
 Language: Markdown
 Function: DokoTsubu3開発の主要マイルストーン状態を記録する
 Created: 2026-09-27
-Last Updated: 2026-09-27
+Last Updated: 2026-09-29
 Author: Takashi Oikawa
 AI: Cursor Grok 4.7
-Memo: FR-003ログアウト機能の完了Evidenceを追記。Commit SHAはSELF（このマイルストーン記録を含むcommit）。
+Memo: FR-004つぶやき一覧の完了Evidenceを追記。Commit SHAはSELF（このマイルストーン記録を含むcommit）。
 -->
 
 # Milestones（マイルストーン）
@@ -18,9 +18,9 @@ Memo: FR-003ログアウト機能の完了Evidenceを追記。Commit SHAはSELF�
 | Version（バージョン） | 0.1 |
 | Status（ステータス） | Draft |
 | Created Date（作成日） | 2026-09-27 |
-| Last Updated（最終更新日） | 2026-09-27 |
+| Last Updated（最終更新日） | 2026-09-29 |
 | Owner（管理者） | Takashi Oikawa |
-| Related Documents（関連文書） | [02_REQUIREMENTS_DEFINITION.md](../docs/design/02_REQUIREMENTS_DEFINITION.md) / [2026-09-27-milestones-initial-record.md](./meetings/2026-09-27-milestones-initial-record.md) / [2026-09-27-fr002-login-completion.md](./meetings/2026-09-27-fr002-login-completion.md) / [2026-09-27-fr003-logout-completion.md](./meetings/2026-09-27-fr003-logout-completion.md) |
+| Related Documents（関連文書） | [02_REQUIREMENTS_DEFINITION.md](../docs/design/02_REQUIREMENTS_DEFINITION.md) / [2026-09-27-milestones-initial-record.md](./meetings/2026-09-27-milestones-initial-record.md) / [2026-09-27-fr002-login-completion.md](./meetings/2026-09-27-fr002-login-completion.md) / [2026-09-27-fr003-logout-completion.md](./meetings/2026-09-27-fr003-logout-completion.md) / [2026-09-29-fr004-mutter-list-completion.md](./meetings/2026-09-29-fr004-mutter-list-completion.md) |
 
 ---
 
@@ -109,3 +109,17 @@ Memo: FR-003ログアウト機能の完了Evidenceを追記。Commit SHAはSELF�
 | GitHub Actions（GitHub Actions結果） | 未commitのため、この作業を対象にした Workflow 実行は無い |
 
 完了Evidenceは [2026-09-27-fr003-logout-completion.md](./meetings/2026-09-27-fr003-logout-completion.md) に残す。Commit SHA は `SELF（このマイルストーン記録を含むcommit）` である。実際の commit SHA は Git 履歴を Evidence とする。
+
+### つぶやき一覧
+
+| Item（項目） | Value（値） |
+|---|---|
+| Milestone（マイルストーン名） | つぶやき一覧 |
+| Status（状態） | `COMPLETED` |
+| Completed Date（完了日） | 2026-09-29 |
+| Commit SHA（関連commit SHA） | `SELF（このマイルストーン記録を含むcommit）` |
+| Completion Criteria（完了条件） | `GET /Main` を実装した。未ログイン時は `/Login` へ誘導する。ログイン済みで一覧画面を表示する。`MUTTERS` 全件を ID 降順で表示する。構成は Controller → Service → DAO(JDBC)。build SUCCESS。実機確認で 146 件を表示し、先頭 ID は 165、末尾 ID は 1。staged 対象の `git diff --cached --check` は PASS |
+| Detail Record（詳細記録） | [2026-09-29-fr004-mutter-list-completion.md](./meetings/2026-09-29-fr004-mutter-list-completion.md) |
+| GitHub Actions（GitHub Actions結果） | 未commitのため、この作業を対象にした Workflow 実行は無い |
+
+完了Evidenceは [2026-09-29-fr004-mutter-list-completion.md](./meetings/2026-09-29-fr004-mutter-list-completion.md) に残す。Commit SHA は `SELF（このマイルストーン記録を含むcommit）` である。実際の commit SHA は Git 履歴を Evidence とする。
