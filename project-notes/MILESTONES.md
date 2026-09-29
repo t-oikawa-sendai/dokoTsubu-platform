@@ -6,7 +6,7 @@ Created: 2026-09-27
 Last Updated: 2026-09-29
 Author: Takashi Oikawa
 AI: Cursor Grok 4.7
-Memo: FR-004つぶやき一覧の完了Evidenceを追記。Commit SHAはSELF（このマイルストーン記録を含むcommit）。
+Memo: FR-005つぶやき投稿とFR-009 Geminiコメント生成の完了Evidenceを追記。Commit SHAはSELF（このマイルストーン記録を含むcommit）。
 -->
 
 # Milestones（マイルストーン）
@@ -20,7 +20,7 @@ Memo: FR-004つぶやき一覧の完了Evidenceを追記。Commit SHAはSELF（�
 | Created Date（作成日） | 2026-09-27 |
 | Last Updated（最終更新日） | 2026-09-29 |
 | Owner（管理者） | Takashi Oikawa |
-| Related Documents（関連文書） | [02_REQUIREMENTS_DEFINITION.md](../docs/design/02_REQUIREMENTS_DEFINITION.md) / [2026-09-27-milestones-initial-record.md](./meetings/2026-09-27-milestones-initial-record.md) / [2026-09-27-fr002-login-completion.md](./meetings/2026-09-27-fr002-login-completion.md) / [2026-09-27-fr003-logout-completion.md](./meetings/2026-09-27-fr003-logout-completion.md) / [2026-09-29-fr004-mutter-list-completion.md](./meetings/2026-09-29-fr004-mutter-list-completion.md) |
+| Related Documents（関連文書） | [02_REQUIREMENTS_DEFINITION.md](../docs/design/02_REQUIREMENTS_DEFINITION.md) / [2026-09-27-milestones-initial-record.md](./meetings/2026-09-27-milestones-initial-record.md) / [2026-09-27-fr002-login-completion.md](./meetings/2026-09-27-fr002-login-completion.md) / [2026-09-27-fr003-logout-completion.md](./meetings/2026-09-27-fr003-logout-completion.md) / [2026-09-29-fr004-mutter-list-completion.md](./meetings/2026-09-29-fr004-mutter-list-completion.md) / [2026-09-29-fr005-fr009-mutter-post-gemini-completion.md](./meetings/2026-09-29-fr005-fr009-mutter-post-gemini-completion.md) |
 
 ---
 
@@ -123,3 +123,31 @@ Memo: FR-004つぶやき一覧の完了Evidenceを追記。Commit SHAはSELF（�
 | GitHub Actions（GitHub Actions結果） | 未commitのため、この作業を対象にした Workflow 実行は無い |
 
 完了Evidenceは [2026-09-29-fr004-mutter-list-completion.md](./meetings/2026-09-29-fr004-mutter-list-completion.md) に残す。Commit SHA は `SELF（このマイルストーン記録を含むcommit）` である。実際の commit SHA は Git 履歴を Evidence とする。
+
+### つぶやき投稿
+
+| Item（項目） | Value（値） |
+|---|---|
+| Milestone（マイルストーン名） | つぶやき投稿 |
+| Status（状態） | `COMPLETED` |
+| Completed Date（完了日） | 2026-09-29 |
+| Commit SHA（関連commit SHA） | `SELF（このマイルストーン記録を含むcommit）` |
+| Completion Criteria（完了条件） | `POST /Main` を実装した。空文字は投稿しない。ログインユーザー ID と text を `MUTTERS` へ INSERT する。INSERT 成功後に一覧を再取得する。未ログイン POST は `/Login` へ誘導する。build SUCCESS。実機確認 PASS |
+| Detail Record（詳細記録） | [2026-09-29-fr005-fr009-mutter-post-gemini-completion.md](./meetings/2026-09-29-fr005-fr009-mutter-post-gemini-completion.md) |
+| GitHub Actions（GitHub Actions結果） | 未commitのため、この作業を対象にした Workflow 実行は無い |
+
+完了Evidenceは [2026-09-29-fr005-fr009-mutter-post-gemini-completion.md](./meetings/2026-09-29-fr005-fr009-mutter-post-gemini-completion.md) に残す。Commit SHA は `SELF（このマイルストーン記録を含むcommit）` である。実際の commit SHA は Git 履歴を Evidence とする。
+
+### Geminiコメント生成
+
+| Item（項目） | Value（値） |
+|---|---|
+| Milestone（マイルストーン名） | Geminiコメント生成 |
+| Status（状態） | `COMPLETED` |
+| Completed Date（完了日） | 2026-09-29 |
+| Commit SHA（関連commit SHA） | `SELF（このマイルストーン記録を含むcommit）` |
+| Completion Criteria（完了条件） | 投稿成功後だけ Gemini API を同期呼び出しする。model は `gemini-3.5-flash-lite`。`x-goog-api-key` header を使う。`temperature` / `top_p` / `top_k` は送信しない。成功時は `aiMsg` を表示する。Gemini 失敗時も投稿を rollback しない。失敗文を `aiMsg` へ表示する。HTML エスケープを確認した。build SUCCESS。実機確認 PASS |
+| Detail Record（詳細記録） | [2026-09-29-fr005-fr009-mutter-post-gemini-completion.md](./meetings/2026-09-29-fr005-fr009-mutter-post-gemini-completion.md) |
+| GitHub Actions（GitHub Actions結果） | 未commitのため、この作業を対象にした Workflow 実行は無い |
+
+完了Evidenceは [2026-09-29-fr005-fr009-mutter-post-gemini-completion.md](./meetings/2026-09-29-fr005-fr009-mutter-post-gemini-completion.md) に残す。Commit SHA は `SELF（このマイルストーン記録を含むcommit）` である。実際の commit SHA は Git 履歴を Evidence とする。

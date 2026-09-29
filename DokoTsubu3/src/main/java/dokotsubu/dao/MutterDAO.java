@@ -1,12 +1,12 @@
 /*
  * Program Name: MutterDAO
  * Language: Java
- * Function: Select all mutters joined to user names in ID descending order
+ * Function: Select mutters in ID descending order and insert one mutter
  * Created: 2026-09-29
  * Last Updated: 2026-09-29
  * Author: Takashi Oikawa
  * AI: Cursor Grok 4.7
- * Memo: Phase 1 DokoTsubu3 FR-004. List query only. DB settings match UserDAO.
+ * Memo: Phase 1 DokoTsubu3 FR-004 and FR-005. List query unchanged. Insert uses the same DB settings.
  */
 
 package dokotsubu.dao;
@@ -58,6 +58,18 @@ public class MutterDAO {
             return mutterList;
         } catch (SQLException e) {
             return new ArrayList<>();
+        }
+    }
+
+    public boolean create(int userId, String text) {
+        String sql = "INSERT INTO MUTTERS(USER_ID, TEXT) VALUES(?, ?)";
+        try (Connection conn = DriverManager.getConnection(jdbcUrl, dbUsername, dbPassword);
+                PreparedStatement pStmt = conn.prepareStatement(sql)) {
+            pStmt.setInt(1, userId);
+            pStmt.setString(2, text);
+            return pStmt.executeUpdate() == 1;
+        } catch (SQLException e) {
+            return false;
         }
     }
 }
