@@ -4,10 +4,10 @@
 | Item（項目） | Value（値） |
 |---|---|
 | Document ID（文書ID） | REQS-001 |
-| Version（バージョン） | 1.1 |
+| Version（バージョン） | 1.2 |
 | Status（ステータス） | Approved |
 | Created Date（作成日） | 2026-06-21 |
-| Last Updated（最終更新日） | 2026-09-12 |
+| Last Updated（最終更新日） | 2026-09-28 |
 | Owner（管理者） | Takashi Oikawa |
 | Related Documents（関連文書） | README.md / 01_REQUEST_DEFINITION.md / 03_DATA_AND_SECURITY_DESIGN.md / 04_UI_AND_FLOW_DESIGN.md / 05_ARCHITECTURE_DESIGN.md |
 
@@ -91,6 +91,10 @@
 | Security Requirement Level（セキュリティ要求レベル） | password 平文保存禁止。session への password 保持禁止。Update / Delete は認証必須かつ投稿者本人限定。API key / DB password の source・Git 保存禁止 |
 | Maintainability（保守性） | ログイン必須判定は Controller ごとの重複実装を避け、Spring MVC 側で一元化する |
 | Other（その他） | context path は `/dokoTsubu`。Controller / JSP に `/dokoTsubu` を固定文字列として書かない |
+| Deploy（公開） | `DokoTsubu3` の公開先は Vercel。Project Root は `DokoTsubu3`。Spring Boot / JSP / JDBC / WAR / embedded Tomcat は維持する。Vercel 公開用に `Dockerfile.vercel` を使用する。Cloud Run は採用しない |
+| Production Database（公開DB） | 公開 DB は Aiven MySQL。ローカル開発では現行ローカル MySQL を使用してよい |
+| Session（セッション） | Controller / JSP から利用する API は現行 `HttpSession` を維持する。Vercel 公開前に Spring Session JDBC で Session 保存先を外部化する。Spring Security 認証基盤は導入しない |
+| Secrets（秘密情報） | ローカルは `.local-secrets/`。Vercel は Vercel Environment Variables。DB 設定名は `DOKOTSUBU_DB_URL` / `DOKOTSUBU_DB_USERNAME` / `DOKOTSUBU_DB_PASSWORD`。実値は source / Git / 文書へ記載しない |
 
 ### 5.3 Screen List（画面一覧）
 

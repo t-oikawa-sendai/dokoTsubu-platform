@@ -4,10 +4,10 @@
 | Item（項目） | Value（値） |
 |---|---|
 | Document ID（文書ID） | DATA-001 |
-| Version（バージョン） | 1.1 |
+| Version（バージョン） | 1.2 |
 | Status（ステータス） | Approved |
 | Created Date（作成日） | 2026-06-21 |
-| Last Updated（最終更新日） | 2026-09-12 |
+| Last Updated（最終更新日） | 2026-09-28 |
 | Owner（管理者） | Takashi Oikawa |
 | Related Documents（関連文書） | README.md / 02_REQUIREMENTS_DEFINITION.md / 05_ARCHITECTURE_DESIGN.md |
 
@@ -54,8 +54,9 @@
 
 ## 4. Assumptions（前提条件）
 
-- 現行 DB 実体は 2026-09-12 のライブ MySQL 実測で確認済みである
-- Phase 1 は既存 DB を利用する。現行実体と Phase 1 の DB アクセス対象は一致させる
+- Development DB は現行ローカル MySQL である。2026-09-12 のライブ MySQL 実測で確認済みである
+- Production DB は Aiven MySQL である。Schema は `dokotsubu`。Domain tables は `USERS` / `MUTTERS`。構造は現行ローカル MySQL と同一である
+- 2026-09-28 の Aiven 実接続スパイクで、現行 DDL・JDBC・FR-001・FR-002 が変更なしで動作することを確認済みである
 - Application 内部の Java 命名は通常の lower camel / class naming を用いてよい
 - 現行 `DokoTsubu2` の DAO は `users` / `MUTTERS` / `USERS` の表記が混在する。DB アクセス対象の正は `USERS` / `MUTTERS` である
 - Application は `BakaUpArea` を参照しない
@@ -66,7 +67,7 @@
 
 ### 5.1 Entity Definition and ER Diagram（エンティティ定義・ER図）
 
-現行 DB 実体と Phase 1 target を分離して示す。Phase 1 は既存 DB を利用するため、両者の Schema / table / `TEXT` 長 / FK 有無は一致する。
+現行ローカル MySQL 実体と Phase 1 target を分離して示す。Development と Production の Schema / table / `TEXT` 長 / FK 有無は一致する。
 
 #### 現行 DB 実体（2026-09-12 ライブ MySQL 実測）
 
@@ -88,6 +89,29 @@ Phase 1 の DB アクセス対象は現行実体へ合わせる。
 | `MUTTERS.TEXT` | `VARCHAR(255)` |
 | FK | 追加しない |
 | password | `USERS.PASS VARCHAR(255)` に BCrypt hash を保存する |
+
+#### Environment（環境別 DB）
+
+Domain table 構造は Development と Production で同一とする。Host / Port / Username / Password 等の実値は記録しない。
+
+| Environment（環境） | Database（DB） | Schema | Domain tables |
+|---|---|---|---|
+| Development（開発） | 現行ローカル MySQL | `dokotsubu` | `USERS` / `MUTTERS` |
+| Production（本番） | Aiven MySQL | `dokotsubu` | `USERS` / `MUTTERS` |
+
+#### Aiven 実接続スパイク（2026-09-28）
+
+公開 DB として Aiven MySQL を正式採用する根拠は、次の確認済み結果である。Application コードと domain DDL は変更していない。
+
+| Item（項目） | Result（結果） |
+|---|---|
+| Aiven JDBC 接続 | PASS |
+| 現行 `USERS` DDL | PASS |
+| 現行 `MUTTERS` DDL | PASS |
+| FR-001 登録 | PASS |
+| BCrypt 保存 | PASS |
+| FR-002 ログイン | PASS |
+| 既存 UserDAO SQL | 変更不要 |
 
 #### Entity List（エンティティ一覧）
 
@@ -151,6 +175,8 @@ erDiagram
 - 利用者名と password hash を扱う
 - password 平文、Gemini API key、DB password、その他秘密情報を source および Git 管理ファイルへ実値記載しない
 - ローカル起動で秘密情報ファイルが必要な場合だけ `/Users/takashioikawa/Dev/dokoTsubu-platform/.local-secrets/` を使用し、Git 管理しない
+- Vercel の秘密情報は Vercel Environment Variables に置く
+- DB 設定名は `DOKOTSUBU_DB_URL` / `DOKOTSUBU_DB_USERNAME` / `DOKOTSUBU_DB_PASSWORD` を維持する。実値は source / Git / 文書へ記載しない
 - Application から `BakaUpArea` を参照してはならない
 
 ### 5.5 Encryption, Masking, and Logging Policy（暗号化・マスキング・ログ取得方針）
@@ -165,11 +191,11 @@ erDiagram
 
 | Type（種別） | Design Specification（設計仕様） |
 |---|---|
-| Authentication（認証） | `HttpSession` を継続する。キーは `loginUser`。保存内容は user id と user name のみ。password はセッションへ保存しない。ログイン必須判定は Spring MVC の共通機構で一元化する。Spring Security の FilterChain 等は導入しない |
+| Authentication（認証） | Application API は現行 `HttpSession` を維持する。キーは `loginUser`。保存内容は user id と user name のみ。password は Session へ保存しない。Vercel 公開時は instance-local Session へ依存しない。Vercel 公開完了前に、保存先を Spring Session JDBC + Aiven MySQL へ外部化する。Spring Session 用テーブルは domain table `USERS` / `MUTTERS` とは分ける。現時点では Spring Session JDBC は未実装である。ログイン必須判定は Spring MVC の共通機構で一元化する。Spring Security の FilterChain 等は導入しない |
 | Authorization（認可） | 編集・削除は「ログイン済み」かつ `MUTTERS.USER_ID == loginUser.id` の両方を満たす場合だけ許可する。ID だけを条件とする UPDATE / DELETE は禁止する。最終判定はサーバー側で行う。DB FK の有無には依存しない |
 | Access Control（権限管理） | 画面は自分の投稿以外に編集・削除操作を表示しない。画面非表示は補助であり、認可の正ではない |
 | Communication（通信） | Gemini API は HTTPS REST。新規の通信暗号化要件は設けない |
-| Data Storage（データ保存） | password は BCrypt hash のみ。Gemini API key と DB 接続情報は Spring 外部設定から取得する。`/Users/takashioikawa/Dev/ai-config.json` への絶対パス依存は廃止する |
+| Data Storage（データ保存） | password は BCrypt hash のみ。Development DB は現行ローカル MySQL、Production DB は Aiven MySQL。Gemini API key と DB 接続情報は Spring 外部設定から取得する。ローカルは `.local-secrets/`、Vercel は Environment Variables。`/Users/takashioikawa/Dev/ai-config.json` への絶対パス依存は廃止する |
 | Data Disposal（データ廃棄） | ログアウト時にセッションを破棄する。追加の廃棄プロセスは Phase 1 対象外 |
 | Personal Data Protection（個人情報保護） | セッションと永続化に password 平文を残さない。秘密値を Git / source に置かない |
 
@@ -195,7 +221,8 @@ password 移行方針:
 ## 7. Handoff to Detail Design（詳細設計への引き継ぎ）
 
 - DAO は JDBC を維持する。JPA / Spring Data へ置換しない
-- DB アクセス対象は Schema `dokotsubu`、Tables `USERS` / `MUTTERS` である
+- Development DB は現行ローカル MySQL、Production DB は Aiven MySQL とする。Schema は `dokotsubu`、Domain tables は `USERS` / `MUTTERS`。構造は同一である
+- Vercel 公開完了前に Session 保存先を Spring Session JDBC + Aiven MySQL へ外部化する。Spring Session 用テーブルは domain table とは分ける。現時点では未実装である。password は Session へ保存しない
 - 更新・削除 SQL は必ず `ID` と `USER_ID` の両方を条件にする
 - 投稿者認可は `MUTTERS.USER_ID == loginUser.id` を Application で検証する。DB FK には依存しない
 - password は `PASS VARCHAR(255)` に BCrypt hash を保存する。既存ユーザーは維持し、Spring Boot 切替前に平文を BCrypt へ一度だけ移行する。Application に平文 / BCrypt の恒久的な二重認証ロジックを持たせない。実 DB への password 更新は今回実施しない

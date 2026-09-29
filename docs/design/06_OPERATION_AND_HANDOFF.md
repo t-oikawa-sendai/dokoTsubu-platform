@@ -4,10 +4,10 @@
 | Item（項目） | Value（値） |
 |---|---|
 | Document ID（文書ID） | OPS-001 |
-| Version（バージョン） | 1.2 |
+| Version（バージョン） | 1.3 |
 | Status（ステータス） | Approved |
 | Created Date（作成日） | 2026-06-21 |
-| Last Updated（最終更新日） | 2026-09-13 |
+| Last Updated（最終更新日） | 2026-09-29 |
 | Owner（管理者） | Takashi Oikawa |
 | Related Documents（関連文書） | README.md / 01_REQUEST_DEFINITION.md / 03_DATA_AND_SECURITY_DESIGN.md / 05_ARCHITECTURE_DESIGN.md |
 
@@ -27,7 +27,7 @@
 
 ## 1. Purpose（目的）
 
-本文書は、Phase 1 実装担当への制約と、ローカル起動に必要な運用前提を定義する。
+本文書は、Phase 1 実装担当への制約と、ローカル起動および Vercel 公開に必要な運用前提を定義する。
 
 ---
 
@@ -37,13 +37,14 @@
 - 秘密情報の置き方
 - 確認済み DB 実体の引き継ぎ
 - ローカル executable WAR の起動前提
+- Vercel 公開と Aiven MySQL 接続の運用概要
 
 ---
 
 ## 3. Out of Scope（対象外範囲）
 
-- Docker / Cloud Run
-- Staging / Production 運用
+- Cloud Run
+- Staging 運用
 - 監視基盤の新設
 - Legacy 文書の改訂
 - Application 実装そのもの
@@ -67,10 +68,10 @@
 |---|---|---|
 | HO-001 | 機能基準 | `DokoTsubu2` の現行機能を基準とする。`DokoTsubu2/` は Phase 1 実装で変更せず、機能確認・挙動比較の参照元として使用する。Spring Boot Application は `DokoTsubu3/` に新規作成する |
 | HO-002 | Legacy 不整合 | Legacy 文書の不整合をそのまま実装しない。正本は `docs/design/` |
-| HO-003 | 秘密情報 | secrets を Git へ入れない。実値を source に書かない |
+| HO-003 | 秘密情報 | secrets を Git へ入れない。実値を source / 文書に書かない。ローカルは `.local-secrets/`。Vercel は Environment Variables。DB 設定名は `DOKOTSUBU_DB_URL` / `DOKOTSUBU_DB_USERNAME` / `DOKOTSUBU_DB_PASSWORD` |
 | HO-004 | 外部設定 | DB 接続情報と Gemini API key を Spring 外部設定へ移す。絶対パス JSON は使わない |
-| HO-005 | DB 実体 | 2026-09-12 ライブ MySQL 実測で確認済み。Schema `dokotsubu`、Tables `USERS` / `MUTTERS`、`MUTTERS.TEXT VARCHAR(255)`、FK なし。DB 構造変更は今回の Spring Boot 移行に含めない |
-| HO-006 | 認証基盤 | Spring Security を Phase 1 で追加しない |
+| HO-005 | DB 実体 | Development は現行ローカル MySQL。Production は Aiven MySQL。Schema `dokotsubu`、Domain tables `USERS` / `MUTTERS`、`MUTTERS.TEXT VARCHAR(255)`、FK なし。構造は同一。2026-09-28 の Aiven 実接続スパイクで現行 DDL・JDBC・FR-001・FR-002 が変更なしで動作することを確認済み。Domain table `USERS` / `MUTTERS` の構造変更は行わない |
+| HO-006 | 認証基盤 | Spring Security 認証基盤は導入しない。Application API は `HttpSession` を維持する。Vercel 公開完了前に Session 保存先を Spring Session JDBC + Aiven MySQL へ外部化する。Spring Session 用テーブルは domain table とは分ける。今回は Spring Session JDBC を実装しない |
 | HO-007 | 永続化 | JPA / Hibernate / Spring Data へ置換しない。JDBC を維持する |
 
 ### 5.2 Implementation Constraints and Notes（実装時の注意点・制約）
@@ -99,7 +100,11 @@
 - model 初期値は `gemini-2.5-flash-lite`、temperature は `1.5`
 - context path は `/dokoTsubu`。Controller / JSP に固定文字列として書かない
 - Application から `BakaUpArea` を参照しない
-- ローカル秘密情報ファイルが必要な場合だけ `.local-secrets/` を使い、Git 管理しない
+- ローカル秘密情報は `.local-secrets/` を使い、Git 管理しない
+- Vercel の秘密情報は Vercel Environment Variables に置く。DB 設定名は `DOKOTSUBU_DB_URL` / `DOKOTSUBU_DB_USERNAME` / `DOKOTSUBU_DB_PASSWORD`。実値は source / Git / 文書へ記載しない
+- 公開先は Vercel。Project Root は `DokoTsubu3`。`Dockerfile.vercel` を使用する。Cloud Run は採用しない
+- 公開 DB は Aiven MySQL。ローカル開発では現行ローカル MySQL を使用してよい
+- Vercel 公開完了前に Session 保存先を Spring Session JDBC + Aiven MySQL へ外部化する。今回は Spring Session JDBC を実装しない
 - Thymeleaf を導入しない
 - 不要な機能追加・抽象化をしない
 
@@ -110,17 +115,20 @@
 | Unit Test（単体テスト） | 新規テスト基盤の導入は Phase 1 必須としない |
 | Integration Test（結合テスト） | 新規必須としない |
 | System Test（システムテスト） | ローカル executable WAR で現行機能が維持されることを確認する |
-| Acceptance Test（受け入れテスト） | [01_REQUEST_DEFINITION.md](./01_REQUEST_DEFINITION.md) の SC-001〜SC-006 を満たすこと |
+| Acceptance Test（受け入れテスト） | [01_REQUEST_DEFINITION.md](./01_REQUEST_DEFINITION.md) の SC-001〜SC-009 を満たすこと |
 
 ### 5.4 Deployment and Release Overview（デプロイ・リリース手順概要）
 
 | Step（ステップ） | Task（作業内容） | Owner（担当） |
 |---|---|---|
-| 1 | Spring Boot executable WAR をローカルで起動する | 実装担当 |
-| 2 | context path `/dokoTsubu` で入口に到達できることを確認する | 実装担当 |
-| 3 | 外部設定で MySQL と Gemini に接続できることを確認する | 実装担当 |
+| 1 | `DokoTsubu3` を build する | 実装担当 |
+| 2 | Spring Session JDBC により Session を外部化する | 実装担当 |
+| 3 | Vercel Environment Variables を設定する | 実装担当 |
+| 4 | `Dockerfile.vercel` により Vercel へ配置する | 実装担当 |
+| 5 | Aiven MySQL への接続を確認する | 実装担当 |
+| 6 | 公開 URL で受け入れ確認する | 実装担当 |
 
-外部 Tomcat への必須配備は行わない。Staging / Production 手順は対象外。
+外部 Tomcat への必須配備は行わない。Cloud Run は採用しない。Staging 手順は対象外。上表は将来の公開手順である。Spring Session JDBC の実装自体は今回行わない。ローカル開発では現行ローカル MySQL を使用してよい。
 
 ### 5.5 Monitoring, Alerts, and Incident Response（監視・アラート・障害対応方針）
 
@@ -129,7 +137,8 @@
 ### 5.6 Operational Constraints and Maintenance（運用上の制約・定期メンテナンス）
 
 - Git に Gemini API key / DB password / その他秘密情報を置かない
-- `.local-secrets/` は Git 管理外とする
+- ローカル秘密情報は `.local-secrets/` とし、Git 管理外とする
+- Vercel の秘密情報は Vercel Environment Variables とする。実値は文書へ記載しない
 - 定期メンテナンス方針は Phase 1 対象外
 
 ---
@@ -145,7 +154,7 @@
 実装担当が最初に守る要点:
 
 1. `DokoTsubu2` を機能基準とし、Legacy 不整合を実装しない。`DokoTsubu2/` は Phase 1 実装で変更しない。Spring Boot Application は `DokoTsubu3/` に新規作成し、`DokoTsubu2` のソースを一括コピーして開始しない。必要な機能を設計正本に従い段階的に `DokoTsubu3` へ実装する
-2. secrets を Git / source に入れず、DB / Gemini 設定を外部化する
-3. Schema `dokotsubu`、Tables `USERS` / `MUTTERS`、`TEXT VARCHAR(255)`、FK なしを前提とする。DB 構造変更は今回の Spring Boot 移行に含めない
-4. Spring Security と JPA 系を追加しない
+2. secrets を Git / source に入れず、DB / Gemini 設定を外部化する。ローカルは `.local-secrets/`、Vercel は Environment Variables
+3. Development DB は現行ローカル MySQL、Production DB は Aiven MySQL。Schema `dokotsubu`、Domain tables `USERS` / `MUTTERS`、`TEXT VARCHAR(255)`、FK なし。Domain table `USERS` / `MUTTERS` の構造変更は行わない
+4. Spring Security 認証基盤と JPA 系を追加しない。Vercel 公開完了前に Session 保存先を Spring Session JDBC で外部化する。今回は実装しない。公開先は Vercel とし、Cloud Run は採用しない
 5. 既存ユーザーは維持する。平文 password は Spring Boot 切替前に BCrypt へ一度だけ移行し、Application に二重認証ロジックを持たせない。実 DB への password 更新は今回実施しない

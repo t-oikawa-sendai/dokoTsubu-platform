@@ -4,10 +4,10 @@
 | Item（項目） | Value（値） |
 |---|---|
 | Document ID（文書ID） | ARCH-001 |
-| Version（バージョン） | 1.2 |
+| Version（バージョン） | 1.3 |
 | Status（ステータス） | Approved |
 | Created Date（作成日） | 2026-06-21 |
-| Last Updated（最終更新日） | 2026-09-13 |
+| Last Updated（最終更新日） | 2026-09-28 |
 | Owner（管理者） | Takashi Oikawa |
 | Related Documents（関連文書） | README.md / 02_REQUIREMENTS_DEFINITION.md / 03_DATA_AND_SECURITY_DESIGN.md / 06_OPERATION_AND_HANDOFF.md |
 
@@ -62,8 +62,9 @@ Phase 1 対象外として次を導入しない。
 - `DokoTsubu3/` は独立した Maven Application とする
 - 機能の基準は現行 `DokoTsubu2` 実装事実である
 - context path は `/dokoTsubu` とするが、コードへ固定文字列として書かない
-- 現行ライブ DB 実体は 2026-09-12 実測で確認済みである。Schema は `dokotsubu`、Tables は `USERS` / `MUTTERS` である
-- Phase 1 は現行 DB を維持し、不要な schema migration を行わない
+- Development DB は現行ローカル MySQL である。2026-09-12 実測で Schema は `dokotsubu`、Tables は `USERS` / `MUTTERS` である
+- Production DB は Aiven MySQL である。Domain table 構造は現行ローカル MySQL と同一とし、不要な schema migration を行わない
+- 公開先は Vercel である。Project Root は `DokoTsubu3`。Cloud Run は採用しない
 
 ---
 
@@ -74,13 +75,12 @@ Phase 1 対象外として次を導入しない。
 ```text
 Browser
   ↓
-Spring MVC Controller
+Vercel
   ↓
-Service
+Spring Boot / embedded Tomcat
+  Controller → Service → DAO (JDBC)
   ↓
-DAO (JDBC)
-  ↓
-MySQL
+Aiven MySQL
 
 Post Service
   ↓
@@ -92,15 +92,19 @@ Gemini API
 ```mermaid
 flowchart TB
   BR[Browser]
+  VC[Vercel]
+  APP[Spring Boot / embedded Tomcat]
   C[Spring MVC Controller]
   S[Service]
   D[DAO JDBC]
-  DB[(MySQL)]
+  DB[(Aiven MySQL)]
   PS[Post Service]
   G[Gemini Client]
   API[Gemini API]
 
-  BR --> C
+  BR --> VC
+  VC --> APP
+  APP --> C
   C --> S
   S --> D
   D --> DB
@@ -135,8 +139,11 @@ flowchart TB
 | Packaging | WAR | - | JSP を維持する |
 | View | JSP | 現行 JSP を移行 | Thymeleaf は対象外 |
 | Persistence | JDBC | - | Spring Data / JPA は使用しない |
-| Database（DB） | MySQL | 9.6.0（2026-09-12 ローカル実測） | 現行ローカル実体 |
-| Runtime | embedded Tomcat（Spring Boot 管理） | 11.0.x | 外部 Tomcat 必須にはしない |
+| Development Database（開発DB） | 現行ローカル MySQL | 9.6.0（2026-09-12 ローカル実測） | ローカル開発で使用してよい |
+| Production Database（公開DB） | Aiven MySQL | - | 公開 DB。Schema `dokotsubu`。Domain tables は現行と同一 |
+| Deployment（公開先） | Vercel | - | Project Root は `DokoTsubu3`。`Dockerfile.vercel` を使用する。Cloud Run は採用しない |
+| Session Persistence（セッション保存） | Spring Session JDBC | Vercel 公開前に実装 | Application API は `HttpSession` を維持する。保存先は Aiven MySQL。domain table とは別。現時点では未実装 |
+| Runtime | embedded Tomcat（Spring Boot 管理） | 11.0.x | 外部 Tomcat 必須にはしない。Spring Boot / JSP / JDBC / WAR は維持する |
 | External API | Gemini API | 初期 model `gemini-2.5-flash-lite` | 現行連携を維持する |
 | Other（その他） | BCrypt | - | password hash のみ。Spring Security 認証基盤は導入しない |
 
@@ -152,7 +159,7 @@ dokoTsubu-platform/
 - `DokoTsubu2/` は機能・挙動の比較基準として保持する
 - `DokoTsubu2/` を Spring Boot プロジェクトへ直接変換しない
 - `DokoTsubu3/` は独立した Maven Application とする
-- Controller → Service → DAO(JDBC) → MySQL の既存確定 Architecture は変更しない
+- Controller → Service → DAO(JDBC) → MySQL の既存確定 Architecture は変更しない。Production の MySQL は Aiven MySQL、Development は現行ローカル MySQL とする
 - JSP、WAR、embedded Tomcat 等の確定技術構成も変更しない
 - Presentation: Spring MVC Controller + JSP
 - Application: Service（現行 Logic の責務）
@@ -166,7 +173,7 @@ dokoTsubu-platform/
 | Integration Target / API Name（連携先 / API名） | Method（連携方式） | Purpose / Overview（用途・概要） |
 |---|---|---|
 | Gemini generateContent | HTTPS REST 同期呼び出し | 投稿成功後の短文コメント。初期 model は `gemini-2.5-flash-lite`。temperature は `1.5`。失敗しても投稿は rollback しない |
-| MySQL | JDBC | Schema `dokotsubu` の `USERS` / `MUTTERS` への永続化。Phase 1 で不要な schema migration は行わない |
+| Aiven MySQL（Production） / 現行ローカル MySQL（Development） | JDBC | Schema `dokotsubu` の domain tables `USERS` / `MUTTERS` への永続化。構造は同一。不要な schema migration は行わない |
 
 Gemini API key は環境変数等の Spring 外部設定から取得する。ソースおよび Git 管理ファイルへ実値を書かない。
 
@@ -176,7 +183,7 @@ Gemini API key は環境変数等の Spring 外部設定から取得する。ソ
 
 | Aspect（観点） | Design Details（設計内容） |
 |---|---|
-| Scaling Policy（スケーリング方針） | 本文書では対象外。理由: Phase 1 は現行機能のローカル移行である |
+| Scaling Policy（スケーリング方針） | 本文書では対象外。理由: スケール台数は未指定。Vercel 公開時の Session は instance-local メモリへ依存しない |
 | Redundancy（冗長化） | 本文書では対象外。理由: Phase 1 対象外 |
 | Failover（フェイルオーバー） | 本文書では対象外。理由: Phase 1 対象外 |
 | Other Fault Tolerance（その他耐障害設計） | Gemini 失敗時も投稿を残し、失敗文を画面へ返す |
@@ -185,9 +192,9 @@ Gemini API key は環境変数等の Spring 外部設定から取得する。ソ
 
 | Environment（環境） | Configuration / Resources（構成・リソース概要） |
 |---|---|
-| Development（開発） | ローカル executable WAR。embedded Tomcat。context path `/dokoTsubu`。MySQL と Gemini は外部設定。秘密情報がファイル必要な場合のみ `.local-secrets/`（Git 管理外） |
-| Staging（ステージング） | 本文書では対象外。理由: Phase 1 対象外 |
-| Production（本番） | 本文書では対象外。理由: Phase 1 対象外 |
+| Development（開発） | ローカル。executable WAR。embedded Tomcat。context path `/dokoTsubu`。DB は現行ローカル MySQL。Gemini は外部設定。秘密情報がファイル必要な場合のみ `.local-secrets/`（Git 管理外） |
+| Staging（ステージング） | 本文書では対象外。理由: ステージング環境は未指定 |
+| Production（本番） | Vercel + Aiven MySQL。Project Root は `DokoTsubu3`。`Dockerfile.vercel` により配置する。DB 設定は Vercel Environment Variables（`DOKOTSUBU_DB_URL` / `DOKOTSUBU_DB_USERNAME` / `DOKOTSUBU_DB_PASSWORD`）。実値は文書へ記載しない。Session は Vercel 公開完了前に Spring Session JDBC で Aiven MySQL へ外部化する |
 
 ---
 
@@ -203,4 +210,6 @@ Gemini API key は環境変数等の Spring 外部設定から取得する。ソ
 - 絶対パスの `ai-config.json` を復活させない
 - context path は設定で `/dokoTsubu` とし、Controller / JSP に直書きしない
 - temperature の正は `1.5` である。Legacy 文書の `0.7` は持ち込まない
-- MySQL は Schema `dokotsubu` の `USERS` / `MUTTERS` を対象とする。Phase 1 で不要な schema migration は行わない
+- 公開先は Vercel。Project Root は `DokoTsubu3`。`Dockerfile.vercel` を使用する。Cloud Run は採用しない
+- Development DB は現行ローカル MySQL、Production DB は Aiven MySQL。Schema は `dokotsubu`、Domain tables は `USERS` / `MUTTERS`。不要な schema migration は行わない
+- Vercel 公開完了前に Session 保存先を Spring Session JDBC で Aiven MySQL へ外部化する。Application API は `HttpSession` を維持する。現時点では未実装である

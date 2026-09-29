@@ -4,10 +4,10 @@
 | Item（項目） | Value（値） |
 |---|---|
 | Document ID（文書ID） | REQ-001 |
-| Version（バージョン） | 1.2 |
+| Version（バージョン） | 1.3 |
 | Status（ステータス） | Approved |
 | Created Date（作成日） | 2026-06-21 |
-| Last Updated（最終更新日） | 2026-09-13 |
+| Last Updated（最終更新日） | 2026-09-28 |
 | Owner（管理者） | Takashi Oikawa |
 | Related Documents（関連文書） | README.md / 02_REQUIREMENTS_DEFINITION.md / 03_DATA_AND_SECURITY_DESIGN.md / 06_OPERATION_AND_HANDOFF.md |
 
@@ -27,7 +27,7 @@
 
 ## 1. Purpose（目的）
 
-本文書は、現行 `DokoTsubu2` の機能を基準として、新規 `DokoTsubu3/` に Spring Boot 版を構築する Phase 1 の背景・対象・成功条件を定義し、要件定義および設計の前提とする。現行 `DokoTsubu2` 自体は保持する。Phase 1 の機能要件・成功条件自体は変更しない。
+本文書は、現行 `DokoTsubu2` の機能を基準として、新規 `DokoTsubu3/` に Spring Boot 版を構築する Phase 1 の背景・対象・成功条件を定義し、要件定義および設計の前提とする。現行 `DokoTsubu2` 自体は保持する。Phase 1 の機能要件自体は変更しない。公開先と公開 DB の成功条件を追加する。
 
 ---
 
@@ -39,7 +39,7 @@ Phase 1 は次を対象とする。
 - `DokoTsubu2` の現行機能を基準とした、新規 `DokoTsubu3/` への Spring Boot / Spring MVC / JSP / JDBC / MySQL 版の構築
 - Gemini API 連携の維持
 - 認証・認可・password・秘密情報配置を本文書群の確定設計へ合わせること
-- 後続の外部公開へ接続できる構成（PF としての土台）
+- `DokoTsubu3` の公開先は Vercel。公開 DB は Aiven MySQL
 
 ---
 
@@ -51,7 +51,7 @@ Phase 1 では次を対象外とする。
 - JPA / Hibernate / Spring Data
 - Thymeleaf
 - 不要な新機能および不要な抽象化
-- Docker / Cloud Run
+- Cloud Run
 - 外部 Tomcat 必須構成
 - Legacy 文書（`docs/設計書.md` 等）の改訂
 
@@ -61,7 +61,8 @@ Phase 1 では次を対象外とする。
 
 - 機能の基準は現行 `DokoTsubu2` 実装事実とする
 - Legacy 文書と実装の不整合は、Phase 1 正本では実装事実と確定設計を優先する
-- ローカルで MySQL および Gemini API を利用できる
+- ローカル開発では現行ローカル MySQL および Gemini API を利用できる
+- 公開 DB は Aiven MySQL とする
 - データ構造の詳細は [03_DATA_AND_SECURITY_DESIGN.md](./03_DATA_AND_SECURITY_DESIGN.md) を参照する
 
 ---
@@ -103,7 +104,7 @@ Phase 1 の目的は、現行 `DokoTsubu2` を保持したまま、その現行�
 |---|---|
 | Budget（予算） | 本文書では対象外。理由: 未指定 |
 | Deadline（期限） | 本文書では対象外。理由: 未指定 |
-| Technical（技術） | Spring Boot / Spring MVC / JSP / JDBC / MySQL。WAR + embedded Tomcat。Gemini API 維持。Spring Security 認証基盤・JPA・Thymeleaf は導入しない |
+| Technical（技術） | 公開先は Vercel。Project Root は `DokoTsubu3`。Spring Boot / Spring MVC / JSP / JDBC / WAR / embedded Tomcat は維持する。Vercel 公開用に `Dockerfile.vercel` を使用する。Cloud Run は採用しない。公開 DB は Aiven MySQL。Gemini API 維持。Spring Security 認証基盤・JPA・Thymeleaf は導入しない |
 | Regulatory（法規） | 秘密値を Git / source に置かない。password を平文保存しない |
 
 ### 5.5 Success Criteria and Acceptance Conditions（成功基準・受け入れ条件）
@@ -116,6 +117,9 @@ Phase 1 の目的は、現行 `DokoTsubu2` を保持したまま、その現行�
 | SC-004 | Gemini 連携が維持される（投稿成功後の同期呼び出し。失敗しても投稿は残る） |
 | SC-005 | 秘密値が Git / source に存在しない |
 | SC-006 | 他人の投稿を編集・削除できない |
+| SC-007 | Vercel で `DokoTsubu3` を公開できる |
+| SC-008 | Aiven MySQL へ接続できる |
+| SC-009 | Vercel 公開時の Session が instance-local メモリへ依存しない |
 
 ---
 

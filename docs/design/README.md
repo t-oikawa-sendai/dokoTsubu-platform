@@ -17,10 +17,10 @@ README Writing Policy（README作成方針）
 | Item（項目） | Value（値） |
 |---|---|
 | Document ID（文書ID） | README-001 |
-| Version（バージョン） | 1.2 |
+| Version（バージョン） | 1.3 |
 | Status（ステータス） | Approved |
 | Created Date（作成日） | 2026-06-21 |
-| Last Updated（最終更新日） | 2026-09-13 |
+| Last Updated（最終更新日） | 2026-09-28 |
 | Owner（管理者） | Takashi Oikawa |
 | Related Documents（関連文書） | docs/standards/DESIGN_DOCUMENT_STANDARD.md / [CHANGELOG.md](../../CHANGELOG.md)（リポジトリルート） |
 
@@ -53,7 +53,7 @@ Phase 1 では `DokoTsubu2/` を直接 Spring Boot 化しない。新規 `DokoTs
 | Item（項目） | Summary（概要） | Detail Document（詳細文書） |
 |---|---|---|
 | Current Problems（現在の問題点） | Servlet / Eclipse 依存、秘密情報のソース配置、編集削除の認可欠落 | [01_REQUEST_DEFINITION.md](./01_REQUEST_DEFINITION.md) |
-| Development Purpose（開発目的） | `DokoTsubu2` の現行機能を維持し、新規 `DokoTsubu3` として Spring Boot 化し、後続の外部公開へ接続できる構成にする | [01_REQUEST_DEFINITION.md](./01_REQUEST_DEFINITION.md) |
+| Development Purpose（開発目的） | `DokoTsubu2` の現行機能を維持し、新規 `DokoTsubu3` として Spring Boot 化し、Vercel で公開できる構成にする | [01_REQUEST_DEFINITION.md](./01_REQUEST_DEFINITION.md) |
 | Solution Approach（解決方針） | Spring MVC + JSP + JDBC。秘密情報は外部設定。編集削除は投稿者本人限定 | [01_REQUEST_DEFINITION.md](./01_REQUEST_DEFINITION.md) |
 | System Functions（システム機能） | 登録、ログイン、ログアウト、一覧、投稿、検索、編集、削除、Gemini コメント | [02_REQUIREMENTS_DEFINITION.md](./02_REQUIREMENTS_DEFINITION.md) |
 | Expected Benefits（期待効果） | 現行機能を保ちつつ、秘密値排除と本人以外の更新削除防止ができる | [01_REQUEST_DEFINITION.md](./01_REQUEST_DEFINITION.md) |
@@ -75,12 +75,12 @@ Phase 1 では `DokoTsubu2/` を直接 Spring Boot 化しない。新規 `DokoTs
 
 | File（ファイル名） | Document Name（文書名） | Status（ステータス） | Version（バージョン） | Owner（担当者） |
 |---|---|---|---|---|
-| [01_REQUEST_DEFINITION.md](./01_REQUEST_DEFINITION.md) | Request Definition（要求定義） | Approved | 1.2 | Takashi Oikawa |
-| [02_REQUIREMENTS_DEFINITION.md](./02_REQUIREMENTS_DEFINITION.md) | Requirements Definition（要件定義） | Approved | 1.1 | Takashi Oikawa |
-| [03_DATA_AND_SECURITY_DESIGN.md](./03_DATA_AND_SECURITY_DESIGN.md) | Data and Security Design（データ・セキュリティ設計） | Approved | 1.1 | Takashi Oikawa |
+| [01_REQUEST_DEFINITION.md](./01_REQUEST_DEFINITION.md) | Request Definition（要求定義） | Approved | 1.3 | Takashi Oikawa |
+| [02_REQUIREMENTS_DEFINITION.md](./02_REQUIREMENTS_DEFINITION.md) | Requirements Definition（要件定義） | Approved | 1.2 | Takashi Oikawa |
+| [03_DATA_AND_SECURITY_DESIGN.md](./03_DATA_AND_SECURITY_DESIGN.md) | Data and Security Design（データ・セキュリティ設計） | Approved | 1.2 | Takashi Oikawa |
 | [04_UI_AND_FLOW_DESIGN.md](./04_UI_AND_FLOW_DESIGN.md) | UI and Flow Design（UI・フロー設計） | Approved | 1.1 | Takashi Oikawa |
-| [05_ARCHITECTURE_DESIGN.md](./05_ARCHITECTURE_DESIGN.md) | Architecture Design（アーキテクチャ設計） | Approved | 1.2 | Takashi Oikawa |
-| [06_OPERATION_AND_HANDOFF.md](./06_OPERATION_AND_HANDOFF.md) | Operation and Handoff Design（運用・詳細設計引き継ぎ） | Approved | 1.2 | Takashi Oikawa |
+| [05_ARCHITECTURE_DESIGN.md](./05_ARCHITECTURE_DESIGN.md) | Architecture Design（アーキテクチャ設計） | Approved | 1.3 | Takashi Oikawa |
+| [06_OPERATION_AND_HANDOFF.md](./06_OPERATION_AND_HANDOFF.md) | Operation and Handoff Design（運用・詳細設計引き継ぎ） | Approved | 1.3 | Takashi Oikawa |
 
 ---
 
@@ -99,6 +99,10 @@ Phase 1 では `DokoTsubu2/` を直接 Spring Boot 化しない。新規 `DokoTs
 - Gemini 初期 model は `gemini-2.5-flash-lite`。temperature の正は `1.5`
 - Legacy 文書の不整合は Phase 1 正本へ持ち込まない
 - 現行ライブ MySQL 実体は 2026-09-12 実測で確認済み。詳細は [03_DATA_AND_SECURITY_DESIGN.md](./03_DATA_AND_SECURITY_DESIGN.md) を正とする
+- Deploy: Vercel
+- Production DB: Aiven MySQL
+- Session: HttpSession API + Spring Session JDBC
+- Local DB: 現行 MySQL
 
 ---
 
