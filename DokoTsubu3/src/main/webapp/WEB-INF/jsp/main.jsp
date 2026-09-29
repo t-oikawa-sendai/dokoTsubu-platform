@@ -1,12 +1,12 @@
 <%--
 Program Name: main.jsp
 Language: JSP
-Function: Mutter list and post screen (SCR-005)
+Function: Mutter list, post, and search screen (SCR-005)
 Created: 2026-09-29
 Last Updated: 2026-09-29
 Author: Takashi Oikawa
 AI: Cursor Grok 4.7
-Memo: Phase 1 DokoTsubu3 FR-004, FR-005, and FR-009. Dynamic text is HTML-escaped. No search, edit, or delete.
+Memo: Phase 1 DokoTsubu3 FR-004, FR-005, FR-006, and FR-009. Dynamic text is HTML-escaped. No edit or delete.
 --%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8" %>
@@ -57,6 +57,19 @@ String aiMsg = (String) request.getAttribute("aiMsg");
           </div>
           <div class="dt-actions">
             <input class="dt-btn dt-btn--primary" type="submit" value="つぶやく">
+          </div>
+        </form>
+      </section>
+
+      <section class="dt-card" aria-label="検索">
+        <h2 class="dt-card__title">検索</h2>
+        <form method="get" action="<%= request.getContextPath() %>/SearchMutter" class="dt-form">
+          <div class="dt-field">
+            <label class="dt-field__label" for="dt-keyword">キーワード</label>
+            <input id="dt-keyword" class="dt-field__input" type="text" name="keyword">
+          </div>
+          <div class="dt-actions">
+            <input class="dt-btn dt-btn--primary" type="submit" value="検索">
           </div>
         </form>
       </section>

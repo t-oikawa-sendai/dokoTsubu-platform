@@ -1,12 +1,12 @@
 /*
  * Program Name: MutterService
  * Language: Java
- * Function: Return the mutter list and save a mutter before asking Gemini
+ * Function: Return the mutter list, search mutters by keyword, and save a mutter before asking Gemini
  * Created: 2026-09-29
  * Last Updated: 2026-09-29
  * Author: Takashi Oikawa
  * AI: Cursor Grok 4.7
- * Memo: Phase 1 DokoTsubu3 FR-004, FR-005, and FR-009. Gemini runs only after INSERT succeeds. No rollback.
+ * Memo: Phase 1 DokoTsubu3 FR-004, FR-005, FR-006, and FR-009. Gemini runs only after INSERT succeeds. No rollback.
  */
 
 package dokotsubu.service;
@@ -32,6 +32,10 @@ public class MutterService {
 
     public List<Mutter> findAll() {
         return mutterDAO.findAll();
+    }
+
+    public List<Mutter> search(String keyword) {
+        return mutterDAO.search(keyword);
     }
 
     public String post(int userId, String text) {

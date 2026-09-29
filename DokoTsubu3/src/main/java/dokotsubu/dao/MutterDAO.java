@@ -1,12 +1,12 @@
 /*
  * Program Name: MutterDAO
  * Language: Java
- * Function: Select mutters in ID descending order and insert one mutter
+ * Function: Select mutters in ID descending order, search mutter text, and insert one mutter
  * Created: 2026-09-29
  * Last Updated: 2026-09-29
  * Author: Takashi Oikawa
  * AI: Cursor Grok 4.7
- * Memo: Phase 1 DokoTsubu3 FR-004 and FR-005. List query unchanged. Insert uses the same DB settings.
+ * Memo: Phase 1 DokoTsubu3 FR-004, FR-005, and FR-006. List and insert queries unchanged. Search uses LIKE and the same DB settings.
  */
 
 package dokotsubu.dao;
@@ -54,6 +54,30 @@ public class MutterDAO {
                         rs.getInt("ID"),
                         rs.getString("NAME"),
                         rs.getString("TEXT")));
+            }
+            return mutterList;
+        } catch (SQLException e) {
+            return new ArrayList<>();
+        }
+    }
+
+    public List<Mutter> search(String keyword) {
+        List<Mutter> mutterList = new ArrayList<>();
+        String sql = "SELECT m.ID, u.NAME, m.TEXT "
+                + "FROM MUTTERS m "
+                + "JOIN USERS u ON m.USER_ID = u.ID "
+                + "WHERE m.TEXT LIKE ? "
+                + "ORDER BY m.ID DESC";
+        try (Connection conn = DriverManager.getConnection(jdbcUrl, dbUsername, dbPassword);
+                PreparedStatement pStmt = conn.prepareStatement(sql)) {
+            pStmt.setString(1, "%" + keyword + "%");
+            try (ResultSet rs = pStmt.executeQuery()) {
+                while (rs.next()) {
+                    mutterList.add(new Mutter(
+                            rs.getInt("ID"),
+                            rs.getString("NAME"),
+                            rs.getString("TEXT")));
+                }
             }
             return mutterList;
         } catch (SQLException e) {
