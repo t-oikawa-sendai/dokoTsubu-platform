@@ -1,12 +1,12 @@
 /*
  * Program Name: MutterDAO
  * Language: Java
- * Function: Select mutters in ID descending order, search mutter text, insert one mutter, and select or update one owned mutter
+ * Function: Select mutters in ID descending order, search mutter text, insert one mutter, and select, update, or delete one owned mutter
  * Created: 2026-09-29
  * Last Updated: 2026-09-29
  * Author: Takashi Oikawa
  * AI: Cursor
- * Memo: Phase 1 DokoTsubu3 FR-004, FR-005, FR-006, and FR-007. List and search also return USER_ID. Owned select and UPDATE always use ID and USER_ID.
+ * Memo: Phase 1 DokoTsubu3 FR-004, FR-005, FR-006, FR-007, and FR-008. List and search also return USER_ID. Owned select, UPDATE, and DELETE always use ID and USER_ID.
  */
 
 package dokotsubu.dao;
@@ -130,6 +130,18 @@ public class MutterDAO {
             pStmt.setString(1, text);
             pStmt.setInt(2, id);
             pStmt.setInt(3, userId);
+            return pStmt.executeUpdate() == 1;
+        } catch (SQLException e) {
+            return false;
+        }
+    }
+
+    public boolean delete(int id, int userId) {
+        String sql = "DELETE FROM MUTTERS WHERE ID = ? AND USER_ID = ?";
+        try (Connection conn = DriverManager.getConnection(jdbcUrl, dbUsername, dbPassword);
+                PreparedStatement pStmt = conn.prepareStatement(sql)) {
+            pStmt.setInt(1, id);
+            pStmt.setInt(2, userId);
             return pStmt.executeUpdate() == 1;
         } catch (SQLException e) {
             return false;

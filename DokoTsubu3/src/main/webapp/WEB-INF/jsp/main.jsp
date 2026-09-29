@@ -6,7 +6,7 @@ Created: 2026-09-29
 Last Updated: 2026-09-29
 Author: Takashi Oikawa
 AI: Cursor
-Memo: Phase 1 DokoTsubu3 FR-004, FR-005, FR-006, FR-007, and FR-009. Dynamic text is HTML-escaped. Edit link only when mutter.userId equals loginUser.id. No delete.
+Memo: Phase 1 DokoTsubu3 FR-004, FR-005, FR-006, FR-007, FR-008, and FR-009. Dynamic text is HTML-escaped. Edit and delete links only when mutter.userId equals loginUser.id.
 --%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8" %>
@@ -80,6 +80,7 @@ String aiMsg = (String) request.getAttribute("aiMsg");
           <p class="dt-text"><%= HtmlUtils.htmlEscape(mutter.getUserName() == null ? "" : mutter.getUserName()) %>：<%= HtmlUtils.htmlEscape(mutter.getText() == null ? "" : mutter.getText()) %>
             <% if (mutter.getUserId() == loginUser.getId()) { %>
               <a class="dt-link" href="<%= request.getContextPath() %>/UpdateMutter?id=<%= mutter.getId() %>">編集</a>
+              <a class="dt-link" href="<%= request.getContextPath() %>/DeleteMutter?id=<%= mutter.getId() %>">削除</a>
             <% } %>
           </p>
         <% } %>

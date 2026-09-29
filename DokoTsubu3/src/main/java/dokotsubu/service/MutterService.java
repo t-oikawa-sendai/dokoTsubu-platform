@@ -1,12 +1,12 @@
 /*
  * Program Name: MutterService
  * Language: Java
- * Function: Return the mutter list, search mutters by keyword, save a mutter before asking Gemini, and find or update an owned mutter
+ * Function: Return the mutter list, search mutters by keyword, save a mutter before asking Gemini, and find, update, or delete an owned mutter
  * Created: 2026-09-29
  * Last Updated: 2026-09-29
  * Author: Takashi Oikawa
  * AI: Cursor
- * Memo: Phase 1 DokoTsubu3 FR-004, FR-005, FR-006, FR-007, and FR-009. Gemini runs only after INSERT succeeds. No rollback. Edit passes mutter id and login user id to DAO.
+ * Memo: Phase 1 DokoTsubu3 FR-004, FR-005, FR-006, FR-007, FR-008, and FR-009. Gemini runs only after INSERT succeeds. No rollback. Edit and delete pass mutter id and login user id to DAO.
  */
 
 package dokotsubu.service;
@@ -51,5 +51,9 @@ public class MutterService {
 
     public boolean updateOwned(int id, int userId, String text) {
         return mutterDAO.update(id, userId, text);
+    }
+
+    public boolean deleteOwned(int id, int userId) {
+        return mutterDAO.delete(id, userId);
     }
 }

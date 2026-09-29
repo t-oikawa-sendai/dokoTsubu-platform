@@ -6,7 +6,7 @@
  * Last Updated: 2026-09-29
  * Author: Takashi Oikawa
  * AI: Cursor
- * Memo: Phase 1 DokoTsubu3 FR-004, FR-006, and FR-007. /Main, /SearchMutter, and /UpdateMutter. Delete is later.
+ * Memo: Phase 1 DokoTsubu3 FR-004, FR-006, FR-007, and FR-008. /Main, /SearchMutter, /UpdateMutter, and /DeleteMutter.
  */
 
 package dokotsubu.config;
@@ -27,6 +27,6 @@ public class LoginRequiredWebConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(loginRequiredInterceptor)
-                .addPathPatterns("/Main", "/SearchMutter", "/UpdateMutter");
+                .addPathPatterns("/Main", "/SearchMutter", "/UpdateMutter", "/DeleteMutter");
     }
 }
