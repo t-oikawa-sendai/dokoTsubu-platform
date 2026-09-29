@@ -4,10 +4,10 @@
 | Item（項目） | Value（値） |
 |---|---|
 | Document ID（文書ID） | ARCH-001 |
-| Version（バージョン） | 1.3 |
+| Version（バージョン） | 1.4 |
 | Status（ステータス） | Approved |
 | Created Date（作成日） | 2026-06-21 |
-| Last Updated（最終更新日） | 2026-09-28 |
+| Last Updated（最終更新日） | 2026-09-29 |
 | Owner（管理者） | Takashi Oikawa |
 | Related Documents（関連文書） | README.md / 02_REQUIREMENTS_DEFINITION.md / 03_DATA_AND_SECURITY_DESIGN.md / 06_OPERATION_AND_HANDOFF.md |
 
@@ -144,7 +144,7 @@ flowchart TB
 | Deployment（公開先） | Vercel | - | Project Root は `DokoTsubu3`。`Dockerfile.vercel` を使用する。Cloud Run は採用しない |
 | Session Persistence（セッション保存） | Spring Session JDBC | Vercel 公開前に実装 | Application API は `HttpSession` を維持する。保存先は Aiven MySQL。domain table とは別。現時点では未実装 |
 | Runtime | embedded Tomcat（Spring Boot 管理） | 11.0.x | 外部 Tomcat 必須にはしない。Spring Boot / JSP / JDBC / WAR は維持する |
-| External API | Gemini API | 初期 model `gemini-2.5-flash-lite` | 現行連携を維持する |
+| External API | Gemini API | model `gemini-3.5-flash-lite` | 現行連携を維持する |
 | Other（その他） | BCrypt | - | password hash のみ。Spring Security 認証基盤は導入しない |
 
 ### 5.3 Module Structure and Layer Design（モジュール構成・レイヤー設計）
@@ -172,10 +172,10 @@ dokoTsubu-platform/
 
 | Integration Target / API Name（連携先 / API名） | Method（連携方式） | Purpose / Overview（用途・概要） |
 |---|---|---|
-| Gemini generateContent | HTTPS REST 同期呼び出し | 投稿成功後の短文コメント。初期 model は `gemini-2.5-flash-lite`。temperature は `1.5`。失敗しても投稿は rollback しない |
+| Gemini generateContent | HTTPS REST 同期呼び出し | 投稿成功後の短文コメント。model は `gemini-3.5-flash-lite`。`temperature` / `top_p` / `top_k` は明示指定しない。失敗しても投稿は rollback しない |
 | Aiven MySQL（Production） / 現行ローカル MySQL（Development） | JDBC | Schema `dokotsubu` の domain tables `USERS` / `MUTTERS` への永続化。構造は同一。不要な schema migration は行わない |
 
-Gemini API key は環境変数等の Spring 外部設定から取得する。ソースおよび Git 管理ファイルへ実値を書かない。
+Gemini API key は Spring 外部設定 `DOKOTSUBU_GEMINI_API_KEY` から取得する。ソースおよび Git 管理ファイルへ実値を書かない。
 
 アプリケーションエンドポイントは [02_REQUIREMENTS_DEFINITION.md](./02_REQUIREMENTS_DEFINITION.md) の API-001〜007 を正とする。公開 REST API は設けない。
 
@@ -194,7 +194,7 @@ Gemini API key は環境変数等の Spring 外部設定から取得する。ソ
 |---|---|
 | Development（開発） | ローカル。executable WAR。embedded Tomcat。context path `/dokoTsubu`。DB は現行ローカル MySQL。Gemini は外部設定。秘密情報がファイル必要な場合のみ `.local-secrets/`（Git 管理外） |
 | Staging（ステージング） | 本文書では対象外。理由: ステージング環境は未指定 |
-| Production（本番） | Vercel + Aiven MySQL。Project Root は `DokoTsubu3`。`Dockerfile.vercel` により配置する。DB 設定は Vercel Environment Variables（`DOKOTSUBU_DB_URL` / `DOKOTSUBU_DB_USERNAME` / `DOKOTSUBU_DB_PASSWORD`）。実値は文書へ記載しない。Session は Vercel 公開完了前に Spring Session JDBC で Aiven MySQL へ外部化する |
+| Production（本番） | Vercel + Aiven MySQL。Project Root は `DokoTsubu3`。`Dockerfile.vercel` により配置する。DB 設定は Vercel Environment Variables（`DOKOTSUBU_DB_URL` / `DOKOTSUBU_DB_USERNAME` / `DOKOTSUBU_DB_PASSWORD`）。Gemini API key は Vercel Environment Variables の `DOKOTSUBU_GEMINI_API_KEY`。実値は文書へ記載しない。Session は Vercel 公開完了前に Spring Session JDBC で Aiven MySQL へ外部化する |
 
 ---
 
@@ -209,7 +209,8 @@ Gemini API key は環境変数等の Spring 外部設定から取得する。ソ
 - Spring Security / JPA / Spring Data / Thymeleaf を追加しない
 - 絶対パスの `ai-config.json` を復活させない
 - context path は設定で `/dokoTsubu` とし、Controller / JSP に直書きしない
-- temperature の正は `1.5` である。Legacy 文書の `0.7` は持ち込まない
+- Gemini model は `gemini-3.5-flash-lite`
+- `temperature` / `top_p` / `top_k` は明示指定しない
 - 公開先は Vercel。Project Root は `DokoTsubu3`。`Dockerfile.vercel` を使用する。Cloud Run は採用しない
 - Development DB は現行ローカル MySQL、Production DB は Aiven MySQL。Schema は `dokotsubu`、Domain tables は `USERS` / `MUTTERS`。不要な schema migration は行わない
 - Vercel 公開完了前に Session 保存先を Spring Session JDBC で Aiven MySQL へ外部化する。Application API は `HttpSession` を維持する。現時点では未実装である

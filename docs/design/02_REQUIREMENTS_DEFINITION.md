@@ -4,10 +4,10 @@
 | Item（項目） | Value（値） |
 |---|---|
 | Document ID（文書ID） | REQS-001 |
-| Version（バージョン） | 1.2 |
+| Version（バージョン） | 1.3 |
 | Status（ステータス） | Approved |
 | Created Date（作成日） | 2026-06-21 |
-| Last Updated（最終更新日） | 2026-09-28 |
+| Last Updated（最終更新日） | 2026-09-29 |
 | Owner（管理者） | Takashi Oikawa |
 | Related Documents（関連文書） | README.md / 01_REQUEST_DEFINITION.md / 03_DATA_AND_SECURITY_DESIGN.md / 04_UI_AND_FLOW_DESIGN.md / 05_ARCHITECTURE_DESIGN.md |
 
@@ -73,7 +73,7 @@
 | FR-006 | つぶやき検索 | High | `GET /SearchMutter`。要ログイン。パラメーター `keyword`。`MUTTERS` の本文を `LIKE` で絞り込み、ID 降順で一覧表示する |
 | FR-007 | つぶやき編集 | High | `GET /UpdateMutter` と `POST /UpdateMutter`。要ログインかつ投稿者本人。対象は `id`。`POST` の本文は `text`。成功時は一覧へ戻る。失敗時は編集画面へ戻す |
 | FR-008 | つぶやき削除 | High | `GET /DeleteMutter`。要ログインかつ投稿者本人。対象は `id`。処理後は一覧へ戻る |
-| FR-009 | Gemini コメント生成 | High | 投稿成功後に同期呼び出し。初期 model は `gemini-2.5-flash-lite`。temperature は `1.5`。失敗しても投稿は rollback しない。失敗時も `aiMsg` に失敗文を載せて表示する |
+| FR-009 | Gemini コメント生成 | High | 投稿成功後に同期呼び出し。model は `gemini-3.5-flash-lite`。`temperature` / `top_p` / `top_k` は明示指定しない。失敗しても投稿は rollback しない。失敗時も `aiMsg` に失敗文を載せて表示する |
 
 既存仕様として維持するもの:
 
@@ -94,7 +94,7 @@
 | Deploy（公開） | `DokoTsubu3` の公開先は Vercel。Project Root は `DokoTsubu3`。Spring Boot / JSP / JDBC / WAR / embedded Tomcat は維持する。Vercel 公開用に `Dockerfile.vercel` を使用する。Cloud Run は採用しない |
 | Production Database（公開DB） | 公開 DB は Aiven MySQL。ローカル開発では現行ローカル MySQL を使用してよい |
 | Session（セッション） | Controller / JSP から利用する API は現行 `HttpSession` を維持する。Vercel 公開前に Spring Session JDBC で Session 保存先を外部化する。Spring Security 認証基盤は導入しない |
-| Secrets（秘密情報） | ローカルは `.local-secrets/`。Vercel は Vercel Environment Variables。DB 設定名は `DOKOTSUBU_DB_URL` / `DOKOTSUBU_DB_USERNAME` / `DOKOTSUBU_DB_PASSWORD`。実値は source / Git / 文書へ記載しない |
+| Secrets（秘密情報） | ローカルは `.local-secrets/`。Vercel は Vercel Environment Variables。DB 設定名は `DOKOTSUBU_DB_URL` / `DOKOTSUBU_DB_USERNAME` / `DOKOTSUBU_DB_PASSWORD`。Gemini API key の設定名は `DOKOTSUBU_GEMINI_API_KEY`。実値は source / Git / 文書へ記載しない |
 
 ### 5.3 Screen List（画面一覧）
 

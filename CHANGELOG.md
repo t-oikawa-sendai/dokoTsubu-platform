@@ -57,6 +57,11 @@ Governance導入Baselineは、Governance導入成功後に記録する。
 
 | Version | Date | Document | Category | Changes | Author |
 |---|---|---|---|---|---|
+| 1.4 | 2026-09-29 | `/docs/design/README.md` | Changed | Gemini modelを `gemini-3.5-flash-lite` へ更新。Gemini API key環境変数を `DOKOTSUBU_GEMINI_API_KEY` と確定。Gemini 3.xに合わせ temperature / top_p / top_k の固定指定を廃止 | Takashi Oikawa |
+| 1.3 | 2026-09-29 | `/docs/design/02_REQUIREMENTS_DEFINITION.md` | Changed | Gemini modelを `gemini-3.5-flash-lite` へ更新。Gemini API key環境変数を `DOKOTSUBU_GEMINI_API_KEY` と確定。Gemini 3.xに合わせ temperature / top_p / top_k の固定指定を廃止 | Takashi Oikawa |
+| 1.3 | 2026-09-29 | `/docs/design/03_DATA_AND_SECURITY_DESIGN.md` | Changed | Gemini API key環境変数を `DOKOTSUBU_GEMINI_API_KEY` と確定。API key実値を source / Git / 文書 / ログへ記載しない方針を明記 | Takashi Oikawa |
+| 1.4 | 2026-09-29 | `/docs/design/05_ARCHITECTURE_DESIGN.md` | Changed | Gemini modelを `gemini-3.5-flash-lite` へ更新。Gemini API key環境変数を `DOKOTSUBU_GEMINI_API_KEY` と確定。Gemini 3.xに合わせ temperature / top_p / top_k の固定指定を廃止 | Takashi Oikawa |
+| 1.4 | 2026-09-29 | `/docs/design/06_OPERATION_AND_HANDOFF.md` | Changed | Gemini modelを `gemini-3.5-flash-lite` へ更新。Gemini API key環境変数を `DOKOTSUBU_GEMINI_API_KEY` と確定。Gemini 3.xに合わせ temperature / top_p / top_k の固定指定を廃止 | Takashi Oikawa |
 | 1.3 | 2026-09-29 | `/docs/design/06_OPERATION_AND_HANDOFF.md` | Changed | Vercel を DokoTsubu3 公開先として確定。Aiven MySQL を 2026-09-28 実接続スパイク PASS 後に正式採用。現行 JDBC / DDL / FR-001 / FR-002 が Aiven で変更なしに動作することを確認。Vercel 公開時の Session を Spring Session JDBC で外部化する方針を確定。Spring Security 認証基盤は引き続き導入しない | Takashi Oikawa |
 | 1.3 | 2026-09-28 | `/docs/design/README.md` | Changed | Vercel を DokoTsubu3 公開先として確定。Aiven MySQL を 2026-09-28 実接続スパイク PASS 後に正式採用。現行 JDBC / DDL / FR-001 / FR-002 が Aiven で変更なしに動作することを確認。Vercel 公開時の Session を Spring Session JDBC で外部化する方針を確定。Spring Security 認証基盤は引き続き導入しない | Takashi Oikawa |
 | 1.3 | 2026-09-28 | `/docs/design/01_REQUEST_DEFINITION.md` | Changed | Vercel を DokoTsubu3 公開先として確定。Aiven MySQL を 2026-09-28 実接続スパイク PASS 後に正式採用。現行 JDBC / DDL / FR-001 / FR-002 が Aiven で変更なしに動作することを確認。Vercel 公開時の Session を Spring Session JDBC で外部化する方針を確定。Spring Security 認証基盤は引き続き導入しない | Takashi Oikawa |

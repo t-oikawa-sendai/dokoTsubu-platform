@@ -4,7 +4,7 @@
 | Item（項目） | Value（値） |
 |---|---|
 | Document ID（文書ID） | OPS-001 |
-| Version（バージョン） | 1.3 |
+| Version（バージョン） | 1.4 |
 | Status（ステータス） | Approved |
 | Created Date（作成日） | 2026-06-21 |
 | Last Updated（最終更新日） | 2026-09-29 |
@@ -68,8 +68,8 @@
 |---|---|---|
 | HO-001 | 機能基準 | `DokoTsubu2` の現行機能を基準とする。`DokoTsubu2/` は Phase 1 実装で変更せず、機能確認・挙動比較の参照元として使用する。Spring Boot Application は `DokoTsubu3/` に新規作成する |
 | HO-002 | Legacy 不整合 | Legacy 文書の不整合をそのまま実装しない。正本は `docs/design/` |
-| HO-003 | 秘密情報 | secrets を Git へ入れない。実値を source / 文書に書かない。ローカルは `.local-secrets/`。Vercel は Environment Variables。DB 設定名は `DOKOTSUBU_DB_URL` / `DOKOTSUBU_DB_USERNAME` / `DOKOTSUBU_DB_PASSWORD` |
-| HO-004 | 外部設定 | DB 接続情報と Gemini API key を Spring 外部設定へ移す。絶対パス JSON は使わない |
+| HO-003 | 秘密情報 | secrets を Git へ入れない。実値を source / 文書に書かない。ローカルは `.local-secrets/`。Vercel は Environment Variables。DB 設定名は `DOKOTSUBU_DB_URL` / `DOKOTSUBU_DB_USERNAME` / `DOKOTSUBU_DB_PASSWORD`。Gemini API key の設定名は `DOKOTSUBU_GEMINI_API_KEY` |
+| HO-004 | 外部設定 | DB 接続情報と Gemini API key（`DOKOTSUBU_GEMINI_API_KEY`）を Spring 外部設定へ移す。絶対パス JSON は使わない |
 | HO-005 | DB 実体 | Development は現行ローカル MySQL。Production は Aiven MySQL。Schema `dokotsubu`、Domain tables `USERS` / `MUTTERS`、`MUTTERS.TEXT VARCHAR(255)`、FK なし。構造は同一。2026-09-28 の Aiven 実接続スパイクで現行 DDL・JDBC・FR-001・FR-002 が変更なしで動作することを確認済み。Domain table `USERS` / `MUTTERS` の構造変更は行わない |
 | HO-006 | 認証基盤 | Spring Security 認証基盤は導入しない。Application API は `HttpSession` を維持する。Vercel 公開完了前に Session 保存先を Spring Session JDBC + Aiven MySQL へ外部化する。Spring Session 用テーブルは domain table とは分ける。今回は Spring Session JDBC を実装しない |
 | HO-007 | 永続化 | JPA / Hibernate / Spring Data へ置換しない。JDBC を維持する |
@@ -97,11 +97,12 @@
 - DB アクセス対象は Schema `dokotsubu`、Tables `USERS` / `MUTTERS`。`MUTTERS.TEXT` は `VARCHAR(255)`。FK はない
 - table rename / schema rename / `TEXT` 長変更 / FK 追加は、今回の Spring Boot 移行に含めない
 - Gemini は投稿成功後に同期呼び出しする。失敗しても投稿は rollback しない
-- model 初期値は `gemini-2.5-flash-lite`、temperature は `1.5`
+- model は `gemini-3.5-flash-lite`
+- `temperature` / `top_p` / `top_k` は明示指定しない
 - context path は `/dokoTsubu`。Controller / JSP に固定文字列として書かない
 - Application から `BakaUpArea` を参照しない
 - ローカル秘密情報は `.local-secrets/` を使い、Git 管理しない
-- Vercel の秘密情報は Vercel Environment Variables に置く。DB 設定名は `DOKOTSUBU_DB_URL` / `DOKOTSUBU_DB_USERNAME` / `DOKOTSUBU_DB_PASSWORD`。実値は source / Git / 文書へ記載しない
+- Vercel の秘密情報は Vercel Environment Variables に置く。設定名は `DOKOTSUBU_DB_URL` / `DOKOTSUBU_DB_USERNAME` / `DOKOTSUBU_DB_PASSWORD` / `DOKOTSUBU_GEMINI_API_KEY`。実値は source / Git / 文書へ記載しない
 - 公開先は Vercel。Project Root は `DokoTsubu3`。`Dockerfile.vercel` を使用する。Cloud Run は採用しない
 - 公開 DB は Aiven MySQL。ローカル開発では現行ローカル MySQL を使用してよい
 - Vercel 公開完了前に Session 保存先を Spring Session JDBC + Aiven MySQL へ外部化する。今回は Spring Session JDBC を実装しない
@@ -138,7 +139,7 @@
 
 - Git に Gemini API key / DB password / その他秘密情報を置かない
 - ローカル秘密情報は `.local-secrets/` とし、Git 管理外とする
-- Vercel の秘密情報は Vercel Environment Variables とする。実値は文書へ記載しない
+- Vercel の秘密情報は Vercel Environment Variables（`DOKOTSUBU_DB_URL` / `DOKOTSUBU_DB_USERNAME` / `DOKOTSUBU_DB_PASSWORD` / `DOKOTSUBU_GEMINI_API_KEY`）とする。実値は文書へ記載しない
 - 定期メンテナンス方針は Phase 1 対象外
 
 ---
