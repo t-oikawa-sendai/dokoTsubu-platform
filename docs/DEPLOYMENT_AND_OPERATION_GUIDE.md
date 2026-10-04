@@ -17,7 +17,7 @@
 
 本書は `DokoTsubu3` を GitHub `main` から Vercel に公開し、Aiven MySQL と Gemini API を設定・運用するための手順である。設計上の要件と画面遷移の正本は [設計書一覧](./design/README.md) 以下の7文書とし、本書は実際の設定・操作・確認記録を扱う。
 
-**本番公開は完了している。** 2026-10-04 時点の本番デプロイは Vercel で `Ready`、公開 URL のログイン画面表示と、存在しないユーザーによるログイン失敗画面を確認した。これらは全機能の本番合格を意味しない。**Aiven MySQL への接続、**登録、正しい認証、投稿、Gemini 応答、検索、編集、削除、ログアウト、複数インスタンス間のセッション維持は、本書作成時点で本番実機の確認記録がない。
+**本番公開は完了している。** 2026-10-04 に Vercel のデプロイが `Ready` となり、ログイン画面と存在しないユーザーのログイン失敗画面を確認した。同日、利用者は本番 URL で新規登録し、同じアカウントでログインしてメイン画面まで表示されたと報告した。登録・認証で使用する DB 書き込み・読み出しの経路は、この操作結果とコードから動作したと判断できる。Aiven 側での接続先・登録行の直接照合、投稿、Gemini 応答、検索、編集、削除、ログアウト、複数インスタンス間のセッション維持は未確認である。
 
 ## 2. Current Production Configuration（現在の本番構成）
 
@@ -28,19 +28,24 @@
 | Root Directory（ルートディレクトリ） | `DokoTsubu3` |
 | Build / Runtime（ビルド・実行） | Container、`DokoTsubu3/Dockerfile.vercel`、Java 21、実行可能 WAR、`PORT=8080` |
 | Context Path（アプリのパス） | `/dokoTsubu`。`application.properties` で設定 |
-| Production Database（本番DB） | Aiven MySQL、schema `dokotsubu`。接続値は Vercel の環境変数から取得 |
-| Session Store（セッション保存先） | Spring Session JDBC。同じ Aiven MySQL を使用。起動時のテーブル自動作成は無効 |
+| Production Database（本番DB） | Aiven MySQL を接続先に設定。schema `dokotsubu`。登録・ログイン成功の利用者報告あり。Aiven 側での直接照合は未実施 |
+| Session Store（セッション保存先） | Spring Session JDBC。同じ Aiven MySQL を使う設定。起動時のテーブル自動作成は無効。複数インスタンス間の維持は未確認 |
 | Gemini（生成AI） | `DOKOTSUBU_GEMINI_API_KEY` を外部設定。model は `gemini-3.5-flash-lite` |
 | Last Checked Deployment（確認済みデプロイ） | [Vercel deployment](https://vercel.com/t-oikawa-sendai/doko-tsubu-platform/6K8tg4cz1H7GDiMCrEzdmX5iDN61)、`Ready`、commit `1a1c0f1` |
 | Login URL（ログイン画面） | <https://doko-tsubu-platform.vercel.app/dokoTsubu/Login> |
 
-構成の流れは、GitHub `main` → Vercel Container → Spring Boot WAR → Aiven MySQL である。投稿保存後の Gemini 呼び出しはアプリ内から行う設計である。Vercel のドメイン直下 `/` はアプリの入口ではなく、確認時は 404 だった。利用者には上記の `/dokoTsubu/Login` まで含む URL を案内する。
+設計上の構成は、GitHub `main` → Vercel Container → Spring Boot WAR → Aiven MySQL である。投稿保存後の Gemini 呼び出しはアプリ内から行う設計である。Vercel のドメイン直下 `/` はアプリの入口ではなく、確認時は 404 だった。利用者には上記の `/dokoTsubu/Login` まで含む URL を案内する。
 
 ## 3. Before Deployment（デプロイ前の確認）
 
 1. 対象リポジトリ、`main` の commit、変更有無を確認し、公開対象を確定する。未コミットのローカル変更は GitHub からの Vercel デプロイに含まれない。
 2. `DokoTsubu3/Dockerfile.vercel` と `DokoTsubu3/src/main/resources/application.properties` が対象 commit に含まれることを確認する。Dockerfile は Maven で WAR を作り、Vercel の `PORT` で起動する。
-3. Aiven Console で対象の MySQL service を開き、Service Overview の接続情報から host、port、database、username を照合する。初回作成時は Aiven の MySQL service を用意し、`dokotsubu` database を作成する。domain table `USERS` / `MUTTERS` は既存構造と設計書を照合し、未作成なら承認済み DDL を用意して適用する。本リポジトリには domain table 作成用 DDL が収録されていないため、本書だけを根拠に構造を推測して作成しない。接続先 service と `dokotsubu` schema を確定し、`USERS`、`MUTTERS`、`SPRING_SESSION`、`SPRING_SESSION_ATTRIBUTES` の存在を確認する。Session 用 DDL は `DokoTsubu3/db/spring-session-mysql.sql`。アプリ起動時には作成されない。既に存在するテーブルへ DDL を再適用しない。存在しない場合は対象DB、既存データ、影響・復旧手段を確認してから一度だけ適用する。
+3. Aiven MySQL の接続先と必要なテーブルを確認する。
+
+   1. **接続情報:** Aiven Console で対象の MySQL service を開き、Service Overview の host、port、database、username を照合する。秘密値は文書や画面共有に残さない。
+   2. **初回の database:** service と `dokotsubu` database がない場合だけ作成する。既存の本番環境では作り直さない。
+   3. **テーブル:** 対象の `dokotsubu` に `USERS`、`MUTTERS`、`SPRING_SESSION`、`SPRING_SESSION_ATTRIBUTES` があるか確認する。
+   4. **不足時の DDL:** 対象 DB、既存データ、影響、復旧手段を確認してから、不足するテーブルにだけ承認済み DDL を一度適用する。Domain table 用 DDL は本リポジトリにないため構造を推測して作らない。Session 用 DDL は `DokoTsubu3/db/spring-session-mysql.sql` を参照する。既存テーブルには再適用しない。アプリ起動時の自動作成は無効である。
 4. DB の JDBC URL、ユーザー名、パスワード、Gemini API キーの入手元を確認する。値を本書、ソース、Git、チャット、スクリーンショット、ログへ記載しない。ローカルの秘密情報はリポジトリ内 `.local-secrets/` に置き、Git 管理外にする。
 5. ローカルでビルドを確認する場合は `DokoTsubu3` で `mvn -B package` を実行する。DB 接続・Gemini 呼び出しの成功はビルド成功だけでは証明できない。Vercel の Dockerfile 自体は `mvn -B -DskipTests package` を実行する。
 6. ローカル起動が必要なら、対象のローカル MySQL に同じ schema と Session テーブルがあることを確認し、秘密値を表示せずに4つの `DOKOTSUBU_*` 変数を実行環境へ渡す。`DokoTsubu3` で `mvn spring-boot:run` を実行し、`http://localhost:8080/dokoTsubu/Login` を開く。ローカル用の接続値は Git 管理外の `.local-secrets/` に保管する。
@@ -85,14 +90,15 @@ Vercel Project → `Settings` → `Environment Variables` で対象名と `Produ
 
 | Action（操作） | Observed Result（観測結果） | Judgment（判定範囲） |
 |---|---|---|
-| Vercel の最新 Production deployment を開く | commit `1a1c0f1` が `Ready` | デプロイ完了 |
+| 2026-10-04 に確認した Production deployment を開く | commit `1a1c0f1` が `Ready` | 当該デプロイの公開を確認 |
 | <https://doko-tsubu-platform.vercel.app/dokoTsubu/Login> を開く | ログイン画面が表示 | HTTP 配信とログイン画面の表示 |
 | 存在しないユーザーでログインする | 「ログインに失敗しました」と表示 | ログイン失敗画面の表示まで。DB 接続失敗時も同じ画面になる実装のため、DB 接続の確認にはならない |
+| 本番 URL で新規登録し、同じアカウントでログインする | メイン画面まで表示（2026-10-04、利用者の実機確認） | `USERS` への登録とログイン照合が動作。Aiven 側の直接照合は未実施 |
 | ドメイン直下 `/` を開く | 404 | context path のため想定される入口外の結果 |
 
-### 6.2 Designed User Flow（設計上の利用手順・本番未確認）
+### 6.2 Designed User Flow（設計上の利用手順・未確認項目を含む）
 
-次は [UI and Flow Design（UI・フロー設計）](./design/04_UI_AND_FLOW_DESIGN.md) に基づく操作方法である。以下の各機能を本番で実測したという意味ではない。実運用前の確認では、実データと権限に配慮し、成功画面と失敗時の画面をそれぞれ確認する。
+次は [UI and Flow Design（UI・フロー設計）](./design/04_UI_AND_FLOW_DESIGN.md) に基づく操作方法である。登録・ログイン・メイン画面表示は第6.1節の利用者確認の範囲で実施済みである。ほかの機能は本番実測の記録がない。実運用前の確認では、実データと権限に配慮し、成功画面と失敗時の画面をそれぞれ確認する。
 
 1. **登録:** ログイン画面から「登録」を開き、ユーザー名とパスワードを入力して登録する。成功時は登録結果、重複などの失敗時は入力画面のメッセージを確認する。
 2. **ログイン:** 登録済みの認証情報をログイン画面へ入力する。成功後に `Main` の一覧へ進めること、誤った認証情報では失敗メッセージが出ることを確認する。

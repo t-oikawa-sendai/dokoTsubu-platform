@@ -57,6 +57,11 @@ Governance導入Baselineは、Governance導入成功後に記録する。
 
 | Version | Date | Document | Category | Changes | Author |
 |---|---|---|---|---|---|
+| 0.3 | 2026-10-04 | `/README.md` | Changed | 公開ログイン URL と Version 3 の現行構成を先に示し、旧版の技術・構成・画面説明を参考として区別 | Takashi Oikawa |
+| 0.1 | 2026-10-04 | `/docs/DEPLOYMENT_AND_OPERATION_GUIDE.md` | Changed | Aiven 準備手順を4項目に分割。利用者の本番登録・ログイン成功を記録し、Aiven 側の直接照合と残る機能の未確認を区別。表示上の記号と古い deployment の表記を修正 | Takashi Oikawa |
+| 1.5 | 2026-10-04 | `/docs/design/03_DATA_AND_SECURITY_DESIGN.md` | Changed | 重複する本番観測結果を削除し、確認範囲の正本を運用手順書へ集約 | Takashi Oikawa |
+| 1.6 | 2026-10-04 | `/docs/design/05_ARCHITECTURE_DESIGN.md` | Changed | セッション保存欄と引き継ぎから本番観測結果の重複を削除し、運用手順書を参照 | Takashi Oikawa |
+| 1.6 | 2026-10-04 | `/docs/design/06_OPERATION_AND_HANDOFF.md` | Changed | 重複する本番観測結果を削除し、公開状態・確認範囲の正本を運用手順書へ集約 | Takashi Oikawa |
 | 0.1 | 2026-10-04 | `/docs/DEPLOYMENT_AND_OPERATION_GUIDE.md` | Added | Vercel 公開までの手順、Production 設定、再デプロイ、利用操作、実測済み範囲と未確認項目を記録。DB 接続は未確認と明記 | Takashi Oikawa |
 | 0.3 | 2026-10-04 | `/README.md` | Fixed | Vercel 未公開との旧記述を現行公開状態へ修正し、運用手順書へ誘導 | Takashi Oikawa |
 | 1.6 | 2026-10-04 | `/docs/design/README.md` | Changed | 運用手順書への案内を追加し、レビュー中の設計書の版・状態を一覧へ反映 | Takashi Oikawa |

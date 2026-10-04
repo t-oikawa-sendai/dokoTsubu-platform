@@ -20,7 +20,21 @@
 
 ## 概要 (Overview)
 
-「どこつぶ」は、ユーザーが短いテキスト（つぶやき）を投稿・閲覧・検索・編集・削除できるWebアプリケーションです。 職業訓練校での実践ユニット訓練のアプリです。
+「どこつぶ」は、ユーザーが短いテキスト（つぶやき）を投稿・閲覧・検索・編集・削除できるWebアプリケーションです。職業訓練校での実践ユニット訓練のアプリです。
+
+公開アプリの入口: [どこつぶのログイン画面](https://doko-tsubu-platform.vercel.app/dokoTsubu/Login)
+
+---
+
+## Current Version 3（Version 3 の現行構成）
+
+| Item（項目） | Configuration（構成） |
+|---|---|
+| Application（アプリ） | `DokoTsubu3/`。Java 21 / Spring Boot / Spring MVC / JSP / JDBC |
+| Runtime（実行方式） | 実行可能 WAR + embedded Tomcat |
+| Hosting（公開先） | Vercel Container。入口 URL は上記 |
+| Production Database（本番DB） | Aiven MySQL を接続先に設定。実接続の確認状況は [運用手順書](./docs/DEPLOYMENT_AND_OPERATION_GUIDE.md) を参照 |
+| Session（セッション） | `HttpSession` API + Spring Session JDBC。本番での維持動作の確認状況は運用手順書を参照 |
 
 ---
 
@@ -66,9 +80,9 @@ Version 3 は Vercel に公開済みである。確認済みの公開 URL、設�
 
 
 
-## 技術スタック (Tech Stack)
+## Legacy Tech Stack（Spring Boot 化前の技術スタック・参考）
 
-以下の表は、Spring Boot 化前の MySQL 構成である。教材の H2 版は出発点として前節に分けて記す。Version 3 の公開構成は運用手順書を参照。
+以下は Spring Boot 化前の MySQL 構成である。現行の Version 3 は上の構成表を参照。
 
 
 | 分類 (Category)             | 技術 (Technology)               |
@@ -86,7 +100,7 @@ Version 3 は Vercel に公開済みである。確認済みの公開 URL、設�
 
 
 
-## アーキテクチャ (Architecture)
+## Legacy Architecture（Spring Boot 化前の構成・参考）
 
 以下は Spring Boot 化前の構成である。Version 3 は `DokoTsubu3` の Spring Boot 版であり、Vercel で公開済みである。
 
@@ -103,7 +117,7 @@ MVC パターン (MVC Pattern)
 
 
 
-## 画面構成 (Screen Structure)
+## Legacy Screen Flow（Spring Boot 化前の画面構成・参考）
 
 ```
 index.jsp（TOP / ログイン画面）
