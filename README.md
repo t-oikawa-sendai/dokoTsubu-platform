@@ -6,12 +6,12 @@
 | Item（項目）                | Value（値）       |
 | ----------------------- | -------------- |
 | Document ID（文書ID）       | LEGACY-001     |
-| Version（バージョン）          | 0.2            |
+| Version（バージョン）          | 0.3            |
 | Status（ステータス）           | Draft          |
 | Created Date（作成日）       | 2024-06-15     |
 | Last Updated（最終更新日）     | 2026-10-04     |
 | Owner（管理者）              | Takashi Oikawa |
-| Related Documents（関連文書） | None           |
+| Related Documents（関連文書） | [デプロイ・運用手順書](./docs/DEPLOYMENT_AND_OPERATION_GUIDE.md) / [設計書一覧](./docs/design/README.md) |
 
 
 > シンプルなつぶやき共有Webアプリケーション (Simple Microblogging Web Application)
@@ -41,7 +41,7 @@ Version 3（`DokoTsubu3`）で扱う内容は次のとおり。
 - 秘密情報の外部設定
 - Spring Session JDBC。ローカル MySQL で実装・確認済み
 
-Vercel への公開は対象である。Aiven への適用と Vercel 公開は現時点では未実施であり、未確認である。現時点の状態は未公開である。
+Version 3 は Vercel に公開済みである。確認済みの公開 URL、設定、動作範囲、未確認項目は [Deployment and Operation Guide（デプロイ・運用手順書）](./docs/DEPLOYMENT_AND_OPERATION_GUIDE.md) を参照。
 
 設計、実装、レビューは AI が分担した。
 
@@ -68,7 +68,7 @@ Vercel への公開は対象である。Aiven への適用と Vercel 公開は�
 
 ## 技術スタック (Tech Stack)
 
-以下の表は、Spring Boot 化前の MySQL 構成である。教材の H2 版は出発点として前節に分けて記す。Version 3 の Vercel 公開は未実施である。
+以下の表は、Spring Boot 化前の MySQL 構成である。教材の H2 版は出発点として前節に分けて記す。Version 3 の公開構成は運用手順書を参照。
 
 
 | 分類 (Category)             | 技術 (Technology)               |
@@ -88,7 +88,7 @@ Vercel への公開は対象である。Aiven への適用と Vercel 公開は�
 
 ## アーキテクチャ (Architecture)
 
-以下は Spring Boot 化前の構成である。Version 3 は `DokoTsubu3` の Spring Boot 版であり、公開は未実施である。
+以下は Spring Boot 化前の構成である。Version 3 は `DokoTsubu3` の Spring Boot 版であり、Vercel で公開済みである。
 
 ```
 MVC パターン (MVC Pattern)

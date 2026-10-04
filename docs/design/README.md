@@ -17,8 +17,8 @@ README Writing Policy（README作成方針）
 | Item（項目） | Value（値） |
 |---|---|
 | Document ID（文書ID） | README-001 |
-| Version（バージョン） | 1.5 |
-| Status（ステータス） | Approved |
+| Version（バージョン） | 1.6 |
+| Status（ステータス） | Review |
 | Created Date（作成日） | 2026-06-21 |
 | Last Updated（最終更新日） | 2026-10-04 |
 | Owner（管理者） | Takashi Oikawa |
@@ -77,10 +77,12 @@ Phase 1 では `DokoTsubu2/` を直接 Spring Boot 化しない。新規 `DokoTs
 |---|---|---|---|---|
 | [01_REQUEST_DEFINITION.md](./01_REQUEST_DEFINITION.md) | Request Definition（要求定義） | Approved | 1.3 | Takashi Oikawa |
 | [02_REQUIREMENTS_DEFINITION.md](./02_REQUIREMENTS_DEFINITION.md) | Requirements Definition（要件定義） | Approved | 1.3 | Takashi Oikawa |
-| [03_DATA_AND_SECURITY_DESIGN.md](./03_DATA_AND_SECURITY_DESIGN.md) | Data and Security Design（データ・セキュリティ設計） | Approved | 1.4 | Takashi Oikawa |
+| [03_DATA_AND_SECURITY_DESIGN.md](./03_DATA_AND_SECURITY_DESIGN.md) | Data and Security Design（データ・セキュリティ設計） | Review | 1.5 | Takashi Oikawa |
 | [04_UI_AND_FLOW_DESIGN.md](./04_UI_AND_FLOW_DESIGN.md) | UI and Flow Design（UI・フロー設計） | Approved | 1.1 | Takashi Oikawa |
-| [05_ARCHITECTURE_DESIGN.md](./05_ARCHITECTURE_DESIGN.md) | Architecture Design（アーキテクチャ設計） | Approved | 1.5 | Takashi Oikawa |
-| [06_OPERATION_AND_HANDOFF.md](./06_OPERATION_AND_HANDOFF.md) | Operation and Handoff Design（運用・詳細設計引き継ぎ） | Approved | 1.5 | Takashi Oikawa |
+| [05_ARCHITECTURE_DESIGN.md](./05_ARCHITECTURE_DESIGN.md) | Architecture Design（アーキテクチャ設計） | Review | 1.6 | Takashi Oikawa |
+| [06_OPERATION_AND_HANDOFF.md](./06_OPERATION_AND_HANDOFF.md) | Operation and Handoff Design（運用・詳細設計引き継ぎ） | Review | 1.6 | Takashi Oikawa |
+
+公開時の具体的な設定、再デプロイ、画面操作、確認済み範囲は [Deployment and Operation Guide（デプロイ・運用手順書）](../DEPLOYMENT_AND_OPERATION_GUIDE.md) を参照。
 
 ---
 

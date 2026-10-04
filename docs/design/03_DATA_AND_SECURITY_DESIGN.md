@@ -4,8 +4,8 @@
 | Item（項目） | Value（値） |
 |---|---|
 | Document ID（文書ID） | DATA-001 |
-| Version（バージョン） | 1.4 |
-| Status（ステータス） | Approved |
+| Version（バージョン） | 1.5 |
+| Status（ステータス） | Review |
 | Created Date（作成日） | 2026-06-21 |
 | Last Updated（最終更新日） | 2026-10-04 |
 | Owner（管理者） | Takashi Oikawa |
@@ -192,7 +192,7 @@ erDiagram
 
 | Type（種別） | Design Specification（設計仕様） |
 |---|---|
-| Authentication（認証） | Application API は現行 `HttpSession` を維持する。キーは `loginUser`。保存内容は user id と user name のみ。password は Session へ保存しない。Vercel 公開時は instance-local Session へ依存しない。Vercel 公開完了前に、保存先を Spring Session JDBC + Aiven MySQL へ外部化する。Spring Session 用テーブルは domain table `USERS` / `MUTTERS` とは分ける。Spring Session JDBC はローカル MySQL で実装・確認済みである。Aiven への適用と Vercel 公開は未確認である。ログイン必須判定は Spring MVC の共通機構で一元化する。Spring Security の FilterChain 等は導入しない |
+| Authentication（認証） | Application API は現行 `HttpSession` を維持する。キーは `loginUser`。保存内容は user id と user name のみ。password は Session へ保存しない。Vercel 公開時は instance-local Session へ依存しない。Vercel 公開用に、保存先を Spring Session JDBC + Aiven MySQL へ外部化する。Spring Session 用テーブルは domain table `USERS` / `MUTTERS` とは分ける。Spring Session JDBC はローカル MySQL で実装・確認済みである。Aiven MySQL を接続先とする Vercel 本番デプロイは Ready で、ログイン画面表示と存在しないユーザーのログイン失敗画面を確認済みである。ただし、正しいログインと複数インスタンス間の Session 維持は本番未確認である。ログイン必須判定は Spring MVC の共通機構で一元化する。Spring Security の FilterChain 等は導入しない |
 | Authorization（認可） | 編集・削除は「ログイン済み」かつ `MUTTERS.USER_ID == loginUser.id` の両方を満たす場合だけ許可する。ID だけを条件とする UPDATE / DELETE は禁止する。最終判定はサーバー側で行う。DB FK の有無には依存しない |
 | Access Control（権限管理） | 画面は自分の投稿以外に編集・削除操作を表示しない。画面非表示は補助であり、認可の正ではない |
 | Communication（通信） | Gemini API は HTTPS REST。新規の通信暗号化要件は設けない |
@@ -223,7 +223,7 @@ password 移行方針:
 
 - DAO は JDBC を維持する。JPA / Spring Data へ置換しない
 - Development DB は現行ローカル MySQL、Production DB は Aiven MySQL とする。Schema は `dokotsubu`、Domain tables は `USERS` / `MUTTERS`。構造は同一である
-- Vercel 公開完了前に Session 保存先を Spring Session JDBC + Aiven MySQL へ外部化する。Spring Session 用テーブルは domain table とは分ける。ローカル MySQL で実装・確認済みである。Aiven への適用と Vercel 公開は未確認である。password は Session へ保存しない
+- Vercel 公開用に Session 保存先を Spring Session JDBC + Aiven MySQL へ外部化する。Spring Session 用テーブルは domain table とは分ける。ローカル MySQL で実装・確認済みである。Aiven MySQL を接続先とする Vercel 本番デプロイは Ready で、ログイン画面表示と存在しないユーザーのログイン失敗画面を確認済みである。ただし、正しいログインと複数インスタンス間の Session 維持は本番未確認である。password は Session へ保存しない
 - 更新・削除 SQL は必ず `ID` と `USER_ID` の両方を条件にする
 - 投稿者認可は `MUTTERS.USER_ID == loginUser.id` を Application で検証する。DB FK には依存しない
 - password は `PASS VARCHAR(255)` に BCrypt hash を保存する。既存ユーザーは維持し、Spring Boot 切替前に平文を BCrypt へ一度だけ移行する。Application に平文 / BCrypt の恒久的な二重認証ロジックを持たせない。実 DB への password 更新は今回実施しない

@@ -57,6 +57,12 @@ Governance導入Baselineは、Governance導入成功後に記録する。
 
 | Version | Date | Document | Category | Changes | Author |
 |---|---|---|---|---|---|
+| 0.1 | 2026-10-04 | `/docs/DEPLOYMENT_AND_OPERATION_GUIDE.md` | Added | Vercel 公開までの手順、Production 設定、再デプロイ、利用操作、実測済み範囲と未確認項目を記録 | Takashi Oikawa |
+| 0.3 | 2026-10-04 | `/README.md` | Fixed | Vercel 未公開との旧記述を現行公開状態へ修正し、運用手順書へ誘導 | Takashi Oikawa |
+| 1.6 | 2026-10-04 | `/docs/design/README.md` | Changed | 運用手順書への案内を追加し、レビュー中の設計書の版・状態を一覧へ反映 | Takashi Oikawa |
+| 1.5 | 2026-10-04 | `/docs/design/03_DATA_AND_SECURITY_DESIGN.md` | Fixed | Aiven・Vercel の旧未確認記述を本番の確認範囲へ修正。複数インスタンス間 Session 維持は未確認と明記 | Takashi Oikawa |
+| 1.6 | 2026-10-04 | `/docs/design/05_ARCHITECTURE_DESIGN.md` | Fixed | Session 実装・公開の状態を実測範囲へ修正。設計方針は維持 | Takashi Oikawa |
+| 1.6 | 2026-10-04 | `/docs/design/06_OPERATION_AND_HANDOFF.md` | Fixed | 公開手順の実施結果と本番未確認項目を記録し、詳細運用手順書を参照 | Takashi Oikawa |
 | - | 2026-10-04 | `/DokoTsubu3/Dockerfile.vercel` | Fixed | 起動時の `PORT` がシェルのプロセス ID として展開され、Java の `server.port` に数値で渡らない不具合を修正 | Takashi Oikawa |
 | 0.2 | 2026-10-04 | `/README.md` | Changed | 教材の H2 版から Version 3 までの累積変更を追記。Version 3 は Spring Boot 化、本人限定の編集・削除、秘密情報の外部設定、Spring Session JDBC。Vercel 公開は対象であり未実施。AI が設計・実装・レビューを分担 | Takashi Oikawa |
 | 1.5 | 2026-10-04 | `/docs/design/README.md` | Changed | 設計書一覧の 03 を 1.4、05 と 06 を 1.5 へ更新 | Takashi Oikawa |
