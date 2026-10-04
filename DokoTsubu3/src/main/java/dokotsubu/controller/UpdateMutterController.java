@@ -3,10 +3,10 @@
  * Language: Java
  * Function: Show and update the login user's own mutter for /UpdateMutter
  * Created: 2026-09-29
- * Last Updated: 2026-09-29
+ * Last Updated: 2026-10-04
  * Author: Takashi Oikawa
- * AI: Cursor
- * Memo: Phase 1 DokoTsubu3 FR-007. Login check stays in the interceptor. Not owned or missing mutter redirects to /Main.
+ * AI: Cursor Grok 4.7
+ * Memo: Phase 1 DokoTsubu3 FR-007. Login check stays in the interceptor. Not owned or missing mutter redirects to /Main. Update failure keeps the current failure message and returns to the edit screen.
  */
 
 package dokotsubu.controller;
@@ -56,12 +56,11 @@ public class UpdateMutterController {
         if (owned == null) {
             return "redirect:/Main";
         }
-        if (text == null || text.length() == 0) {
-            request.setAttribute("errorMsg", "つぶやきが入力されていません");
-        } else if (mutterService.updateOwned(id, loginUser.getId(), text)) {
-            return "redirect:/Main";
+        if (text == null || text.length() == 0
+                || !mutterService.updateOwned(id, loginUser.getId(), text)) {
+            request.setAttribute("errorMsg", "更新できませんでした。ID・本文・DB を確認してください。");
         } else {
-            request.setAttribute("errorMsg", "つぶやきの更新に失敗しました");
+            return "redirect:/Main";
         }
         request.setAttribute("mutter",
                 new Mutter(owned.getId(), owned.getUserId(), owned.getUserName(), text));

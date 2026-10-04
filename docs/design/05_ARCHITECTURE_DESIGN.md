@@ -4,10 +4,10 @@
 | Item（項目） | Value（値） |
 |---|---|
 | Document ID（文書ID） | ARCH-001 |
-| Version（バージョン） | 1.4 |
+| Version（バージョン） | 1.5 |
 | Status（ステータス） | Approved |
 | Created Date（作成日） | 2026-06-21 |
-| Last Updated（最終更新日） | 2026-09-29 |
+| Last Updated（最終更新日） | 2026-10-04 |
 | Owner（管理者） | Takashi Oikawa |
 | Related Documents（関連文書） | README.md / 02_REQUIREMENTS_DEFINITION.md / 03_DATA_AND_SECURITY_DESIGN.md / 06_OPERATION_AND_HANDOFF.md |
 
@@ -142,7 +142,7 @@ flowchart TB
 | Development Database（開発DB） | 現行ローカル MySQL | 9.6.0（2026-09-12 ローカル実測） | ローカル開発で使用してよい |
 | Production Database（公開DB） | Aiven MySQL | - | 公開 DB。Schema `dokotsubu`。Domain tables は現行と同一 |
 | Deployment（公開先） | Vercel | - | Project Root は `DokoTsubu3`。`Dockerfile.vercel` を使用する。Cloud Run は採用しない |
-| Session Persistence（セッション保存） | Spring Session JDBC | Vercel 公開前に実装 | Application API は `HttpSession` を維持する。保存先は Aiven MySQL。domain table とは別。現時点では未実装 |
+| Session Persistence（セッション保存） | Spring Session JDBC | Vercel 公開前に実装 | Application API は `HttpSession` を維持する。保存先は Aiven MySQL。domain table とは別。ローカル MySQL で実装・確認済み。Aiven への適用と Vercel 公開は未確認 |
 | Runtime | embedded Tomcat（Spring Boot 管理） | 11.0.x | 外部 Tomcat 必須にはしない。Spring Boot / JSP / JDBC / WAR は維持する |
 | External API | Gemini API | model `gemini-3.5-flash-lite` | 現行連携を維持する |
 | Other（その他） | BCrypt | - | password hash のみ。Spring Security 認証基盤は導入しない |
@@ -213,4 +213,4 @@ Gemini API key は Spring 外部設定 `DOKOTSUBU_GEMINI_API_KEY` から取得�
 - `temperature` / `top_p` / `top_k` は明示指定しない
 - 公開先は Vercel。Project Root は `DokoTsubu3`。`Dockerfile.vercel` を使用する。Cloud Run は採用しない
 - Development DB は現行ローカル MySQL、Production DB は Aiven MySQL。Schema は `dokotsubu`、Domain tables は `USERS` / `MUTTERS`。不要な schema migration は行わない
-- Vercel 公開完了前に Session 保存先を Spring Session JDBC で Aiven MySQL へ外部化する。Application API は `HttpSession` を維持する。現時点では未実装である
+- Vercel 公開完了前に Session 保存先を Spring Session JDBC で Aiven MySQL へ外部化する。Application API は `HttpSession` を維持する。ローカル MySQL で実装・確認済みである。Aiven への適用と Vercel 公開は未確認である

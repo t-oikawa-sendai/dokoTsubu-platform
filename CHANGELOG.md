@@ -3,7 +3,7 @@ Program Name: dokoTsubu-platform CHANGELOG
 Language: Markdown
 Function: dokoTsubu-platformの変更履歴正本
 Created: 2026-09-11
-Last Updated: 2026-09-29
+Last Updated: 2026-10-04
 Author: Takashi Oikawa
 AI: Cursor Grok 4.7
 Memo: Canonical Templateから新設したRepository固有履歴正本。過去Application履歴は推測して追加しない。Runtime側に CHANGELOG_TEMPLATE.md は作成しない。
@@ -18,7 +18,7 @@ Memo: Canonical Templateから新設したRepository固有履歴正本。過去A
 | Version（バージョン） | 0.1 |
 | Status（ステータス） | Draft |
 | Created Date（作成日） | 2026-09-11 |
-| Last Updated（最終更新日） | 2026-09-29 |
+| Last Updated（最終更新日） | 2026-10-04 |
 | Owner（管理者） | Takashi Oikawa |
 | Related Documents（関連文書） | /CONSTITUTION.md / /AGENTS.md / /docs/design/README.md |
 
@@ -57,6 +57,12 @@ Governance導入Baselineは、Governance導入成功後に記録する。
 
 | Version | Date | Document | Category | Changes | Author |
 |---|---|---|---|---|---|
+| - | 2026-10-04 | `/DokoTsubu3/Dockerfile.vercel` | Fixed | 起動時の `PORT` がシェルのプロセス ID として展開され、Java の `server.port` に数値で渡らない不具合を修正 | Takashi Oikawa |
+| 0.2 | 2026-10-04 | `/README.md` | Changed | 教材の H2 版から Version 3 までの累積変更を追記。Version 3 は Spring Boot 化、本人限定の編集・削除、秘密情報の外部設定、Spring Session JDBC。Vercel 公開は対象であり未実施。AI が設計・実装・レビューを分担 | Takashi Oikawa |
+| 1.5 | 2026-10-04 | `/docs/design/README.md` | Changed | 設計書一覧の 03 を 1.4、05 と 06 を 1.5 へ更新 | Takashi Oikawa |
+| 1.4 | 2026-10-04 | `/docs/design/03_DATA_AND_SECURITY_DESIGN.md` | Fixed | 認証節と引き継ぎの Spring Session JDBC を、ローカル MySQL で実装・確認済み、Aiven への適用と Vercel 公開は未確認へ更新。設計方針は維持 | Takashi Oikawa |
+| 1.5 | 2026-10-04 | `/docs/design/05_ARCHITECTURE_DESIGN.md` | Fixed | セッション保存欄と引き継ぎの未実装記述を、ローカル MySQL で実装・確認済み、Aiven への適用と Vercel 公開は未確認へ更新。設計方針は維持 | Takashi Oikawa |
+| 1.5 | 2026-10-04 | `/docs/design/06_OPERATION_AND_HANDOFF.md` | Fixed | HO-006、実装制約、公開手順、引き継ぎの未実装記述を、ローカル MySQL で実装・確認済み、Aiven への適用と Vercel 公開は未確認へ更新。設計方針は維持 | Takashi Oikawa |
 | 1.4 | 2026-09-29 | `/docs/design/README.md` | Changed | Gemini modelを `gemini-3.5-flash-lite` へ更新。Gemini API key環境変数を `DOKOTSUBU_GEMINI_API_KEY` と確定。Gemini 3.xに合わせ temperature / top_p / top_k の固定指定を廃止 | Takashi Oikawa |
 | 1.3 | 2026-09-29 | `/docs/design/02_REQUIREMENTS_DEFINITION.md` | Changed | Gemini modelを `gemini-3.5-flash-lite` へ更新。Gemini API key環境変数を `DOKOTSUBU_GEMINI_API_KEY` と確定。Gemini 3.xに合わせ temperature / top_p / top_k の固定指定を廃止 | Takashi Oikawa |
 | 1.3 | 2026-09-29 | `/docs/design/03_DATA_AND_SECURITY_DESIGN.md` | Changed | Gemini API key環境変数を `DOKOTSUBU_GEMINI_API_KEY` と確定。API key実値を source / Git / 文書 / ログへ記載しない方針を明記 | Takashi Oikawa |

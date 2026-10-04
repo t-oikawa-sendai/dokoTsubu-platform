@@ -4,10 +4,10 @@ Program Name: DokoTsubu3 pom.xml
 Language: Maven POM XML
 Function: Maven build definition for DokoTsubu3 Spring Boot WAR
 Created: 2026-09-13
-Last Updated: 2026-09-13
+Last Updated: 2026-10-04
 Author: Takashi Oikawa
-AI: Cursor Grok 4.6
-Memo: Phase 1 DokoTsubu3. MySQL Connector/J and spring-security-crypto for register.
+AI: Cursor Grok 4.7
+Memo: Phase 1 DokoTsubu3. MySQL Connector/J, spring-security-crypto, and Spring Session JDBC.
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -47,6 +47,10 @@ Memo: Phase 1 DokoTsubu3. MySQL Connector/J and spring-security-crypto for regis
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-crypto</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-session-jdbc</artifactId>
         </dependency>
     </dependencies>
 
