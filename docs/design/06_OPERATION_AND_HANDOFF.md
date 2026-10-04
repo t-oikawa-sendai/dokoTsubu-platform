@@ -129,7 +129,7 @@
 | 5 | Aiven MySQL への接続を確認する | 実装担当 |
 | 6 | 公開 URL で受け入れ確認する | 実装担当 |
 
-外部 Tomcat への必須配備は行わない。Cloud Run は採用しない。Staging 手順は対象外。上表の公開・基本到達確認を実施し、Vercel 本番デプロイは Ready、ログイン画面表示と存在しないユーザーのログイン失敗画面を確認した。複数インスタンス間の Session 維持と残りの業務機能は本番未確認である。詳細な設定・再デプロイ・画面操作は [Deployment and Operation Guide（デプロイ・運用手順書）](../DEPLOYMENT_AND_OPERATION_GUIDE.md) を参照。ローカル開発では現行ローカル MySQL を使用してよい。
+外部 Tomcat への必須配備は行わない。Cloud Run は採用しない。Staging 手順は対象外。上表のうち手順1〜4を実施し、Vercel 本番デプロイは Ready、ログイン画面表示と存在しないユーザーのログイン失敗画面を確認した。手順5（Aiven MySQL への接続）、複数インスタンス間の Session 維持、残りの業務機能は本番未確認である。詳細な設定・再デプロイ・画面操作は [Deployment and Operation Guide（デプロイ・運用手順書）](../DEPLOYMENT_AND_OPERATION_GUIDE.md) を参照。ローカル開発では現行ローカル MySQL を使用してよい。
 
 ### 5.5 Monitoring, Alerts, and Incident Response（監視・アラート・障害対応方針）
 
