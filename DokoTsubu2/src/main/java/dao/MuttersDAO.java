@@ -1,10 +1,13 @@
 /*
- * DATE		: 2024-06-15
- * LASTUPDATE:2025-11-14
- * Author:Takashi Oikawa
- * Function:
- * Memo:mysqlからh2に変更 再度MySQLに変更
-*/
+ * Program Name: MuttersDAO
+ * Language: Java
+ * Function: Read, insert, update, and delete mutters
+ * Created: 2024-06-15
+ * Last Updated: 2026-10-05
+ * Author: Takashi Oikawa
+ * AI: Cursor Grok 4.7
+ * Memo: DB connection values come from DOKOTSUBU_DB_URL, DOKOTSUBU_DB_USERNAME, and DOKOTSUBU_DB_PASSWORD. useAffectedRows=false is kept when the URL does not already set it, so UPDATE still returns matched rows. SQL is unchanged.
+ */
 
 package dao;
 
@@ -21,9 +24,20 @@ import model.Mutter;
 public class MuttersDAO {
     // データベース接続に使用する情報（MySQL）
     // Update:20260404 useAffectedRows=false で UPDATE の戻りを「一致行数」に寄せる（内容未変更で affected 0 になり result==1 を満たさない事象の抑制）
-    private final String JDBC_URL = "jdbc:mysql://localhost/dokoTsubu?useAffectedRows=false";
-    private final String DB_USER = "root";
-    private final String DB_PASS = "7358";
+    private final String JDBC_URL = jdbcUrl();
+    private final String DB_USER = System.getenv("DOKOTSUBU_DB_USERNAME");
+    private final String DB_PASS = System.getenv("DOKOTSUBU_DB_PASSWORD");
+
+    private static String jdbcUrl() {
+        String url = System.getenv("DOKOTSUBU_DB_URL");
+        if (url == null || url.contains("useAffectedRows=")) {
+            return url;
+        }
+        if (url.contains("?")) {
+            return url + "&useAffectedRows=false";
+        }
+        return url + "?useAffectedRows=false";
+    }
 
     // つぶやき取得
     public List<Mutter> findAll() {

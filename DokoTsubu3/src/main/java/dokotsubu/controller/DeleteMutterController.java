@@ -1,18 +1,18 @@
 /*
  * Program Name: DeleteMutterController
  * Language: Java
- * Function: Delete the login user's own mutter for GET /DeleteMutter
+ * Function: Delete the login user's own mutter for POST /DeleteMutter
  * Created: 2026-09-29
- * Last Updated: 2026-09-29
+ * Last Updated: 2026-10-05
  * Author: Takashi Oikawa
- * AI: Cursor
- * Memo: Phase 1 DokoTsubu3 FR-008. Login check stays in the interceptor. Always redirects to /Main.
+ * AI: Cursor Grok 4.7
+ * Memo: Phase 1 DokoTsubu3 FR-008. GET /DeleteMutter is not mapped. Login check and CSRF stay in interceptors. Owned delete still uses mutter id and login user id. Always redirects to /Main.
  */
 
 package dokotsubu.controller;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import dokotsubu.model.LoginUser;
@@ -29,7 +29,7 @@ public class DeleteMutterController {
         this.mutterService = mutterService;
     }
 
-    @GetMapping("/DeleteMutter")
+    @PostMapping("/DeleteMutter")
     public String deleteMutter(
             @RequestParam("id") int id,
             HttpServletRequest request) {

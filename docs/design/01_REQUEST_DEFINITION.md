@@ -4,10 +4,10 @@
 | Item（項目） | Value（値） |
 |---|---|
 | Document ID（文書ID） | REQ-001 |
-| Version（バージョン） | 1.3 |
+| Version（バージョン） | 1.4 |
 | Status（ステータス） | Approved |
 | Created Date（作成日） | 2026-06-21 |
-| Last Updated（最終更新日） | 2026-09-28 |
+| Last Updated（最終更新日） | 2026-10-05 |
 | Owner（管理者） | Takashi Oikawa |
 | Related Documents（関連文書） | README.md / 02_REQUIREMENTS_DEFINITION.md / 03_DATA_AND_SECURITY_DESIGN.md / 06_OPERATION_AND_HANDOFF.md |
 
@@ -115,7 +115,7 @@ Phase 1 の目的は、現行 `DokoTsubu2` を保持したまま、その現行�
 | SC-002 | Spring Boot で起動できる |
 | SC-003 | MySQL へ接続できる |
 | SC-004 | Gemini 連携が維持される（投稿成功後の同期呼び出し。失敗しても投稿は残る） |
-| SC-005 | 秘密値が Git / source に存在しない |
+| SC-005 | 秘密値の実値が、Repository 全体の現行 Git 管理ファイルに存在しない |
 | SC-006 | 他人の投稿を編集・削除できない |
 | SC-007 | Vercel で `DokoTsubu3` を公開できる |
 | SC-008 | Aiven MySQL へ接続できる |

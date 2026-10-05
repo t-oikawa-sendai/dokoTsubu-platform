@@ -92,7 +92,7 @@ UserDAO.java の設定値を確認します。
 		
 Java		
 "private final String DB_USER = ""root"";"		
-"private final String DB_PASS = ""7358""; // このパスワード"		
+"private final String DB_PASS = System.getenv(""DOKOTSUBU_DB_PASSWORD""); // 外部設定から取得。実値は記載しない"
 		
 新しいPCのMySQLパスワードの確認		
 		
@@ -100,8 +100,8 @@ Java
 		
 不一致の場合の対処		
 		
-"方法A (推奨): コードの DB_PASS = ""7358"" を、新しいPCの root の実際のパスワードに合わせて修正します。"		
+"方法A (推奨): コードの DB_PASS は外部設定 System.getenv(""DOKOTSUBU_DB_PASSWORD"") から取得する。新しいPCの root の実際のパスワードに合わせて外部設定を修正します。実値はコードへ記載しない。"
 		
-方法B: MySQLにログインし、ALTER USER 'root'@'localhost' IDENTIFIED BY '7358'; を実行して、MySQL側のパスワードをコードに合わせます。		
+方法B: MySQLにログインし、ALTER USER 'root'@'localhost' IDENTIFIED BY '<置換用DBパスワード>'; を実行して、MySQL側のパスワードをコードに合わせます。
 		
 これらの手順を完了すれば、3台の新しいPCでスムーズに開発を始めることができるはずです。頑張ってください！		

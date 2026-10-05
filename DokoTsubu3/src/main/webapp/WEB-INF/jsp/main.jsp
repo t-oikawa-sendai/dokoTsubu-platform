@@ -3,10 +3,10 @@ Program Name: main.jsp
 Language: JSP
 Function: Mutter list, post, and search screen (SCR-005)
 Created: 2026-09-29
-Last Updated: 2026-09-29
+Last Updated: 2026-10-05
 Author: Takashi Oikawa
-AI: Cursor
-Memo: Phase 1 DokoTsubu3 FR-004, FR-005, FR-006, FR-007, FR-008, and FR-009. Dynamic text is HTML-escaped. Edit and delete links only when mutter.userId equals loginUser.id.
+AI: Cursor Grok 4.7
+Memo: Phase 1 DokoTsubu3 FR-004, FR-005, FR-006, FR-007, FR-008, and FR-009. Dynamic text is HTML-escaped. Edit and delete controls only when mutter.userId equals loginUser.id. Post and delete forms include csrfToken. Delete is POST /DeleteMutter.
 --%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8" %>
@@ -17,6 +17,10 @@ LoginUser loginUser = (LoginUser) session.getAttribute("loginUser");
 List<Mutter> mutterList = (List<Mutter>) request.getAttribute("mutterList");
 String errorMsg = (String) request.getAttribute("errorMsg");
 String aiMsg = (String) request.getAttribute("aiMsg");
+String csrfToken = (String) request.getAttribute("csrfToken");
+if (csrfToken == null) {
+    csrfToken = "";
+}
 %>
 <!DOCTYPE html>
 <html>
@@ -51,6 +55,7 @@ String aiMsg = (String) request.getAttribute("aiMsg");
           <p class="dt-text">AI：<%= HtmlUtils.htmlEscape(aiMsg) %></p>
         <% } %>
         <form method="post" action="<%= request.getContextPath() %>/Main" class="dt-form">
+          <input type="hidden" name="csrfToken" value="<%= HtmlUtils.htmlEscape(csrfToken) %>">
           <div class="dt-field">
             <label class="dt-field__label" for="dt-text">つぶやき</label>
             <input id="dt-text" class="dt-field__input" type="text" name="text">
@@ -77,12 +82,16 @@ String aiMsg = (String) request.getAttribute("aiMsg");
       <section class="dt-card" aria-label="投稿一覧">
         <h2 class="dt-card__title">投稿一覧</h2>
         <% for (Mutter mutter : mutterList) { %>
-          <p class="dt-text"><%= HtmlUtils.htmlEscape(mutter.getUserName() == null ? "" : mutter.getUserName()) %>：<%= HtmlUtils.htmlEscape(mutter.getText() == null ? "" : mutter.getText()) %>
+          <div class="dt-text"><%= HtmlUtils.htmlEscape(mutter.getUserName() == null ? "" : mutter.getUserName()) %>：<%= HtmlUtils.htmlEscape(mutter.getText() == null ? "" : mutter.getText()) %>
             <% if (mutter.getUserId() == loginUser.getId()) { %>
               <a class="dt-link" href="<%= request.getContextPath() %>/UpdateMutter?id=<%= mutter.getId() %>">編集</a>
-              <a class="dt-link" href="<%= request.getContextPath() %>/DeleteMutter?id=<%= mutter.getId() %>">削除</a>
+              <form method="post" action="<%= request.getContextPath() %>/DeleteMutter" style="display:inline">
+                <input type="hidden" name="id" value="<%= mutter.getId() %>">
+                <input type="hidden" name="csrfToken" value="<%= HtmlUtils.htmlEscape(csrfToken) %>">
+                <button type="submit" class="dt-link" style="background:none;border:0;padding:0;font:inherit;cursor:pointer">削除</button>
+              </form>
             <% } %>
-          </p>
+          </div>
         <% } %>
       </section>
     </main>

@@ -4,10 +4,10 @@
 | Item（項目） | Value（値） |
 |---|---|
 | Document ID（文書ID） | REQS-001 |
-| Version（バージョン） | 1.3 |
+| Version（バージョン） | 1.4 |
 | Status（ステータス） | Approved |
 | Created Date（作成日） | 2026-06-21 |
-| Last Updated（最終更新日） | 2026-09-29 |
+| Last Updated（最終更新日） | 2026-10-05 |
 | Owner（管理者） | Takashi Oikawa |
 | Related Documents（関連文書） | README.md / 01_REQUEST_DEFINITION.md / 03_DATA_AND_SECURITY_DESIGN.md / 04_UI_AND_FLOW_DESIGN.md / 05_ARCHITECTURE_DESIGN.md |
 
@@ -72,7 +72,7 @@
 | FR-005 | つぶやき投稿 | High | `POST /Main`。要ログイン。パラメーター `text`。未入力時は一覧画面にエラーを出す。投稿成功後に Gemini を同期呼び出し、`aiMsg` を一覧画面へ渡す |
 | FR-006 | つぶやき検索 | High | `GET /SearchMutter`。要ログイン。パラメーター `keyword`。`MUTTERS` の本文を `LIKE` で絞り込み、ID 降順で一覧表示する |
 | FR-007 | つぶやき編集 | High | `GET /UpdateMutter` と `POST /UpdateMutter`。要ログインかつ投稿者本人。対象は `id`。`POST` の本文は `text`。成功時は一覧へ戻る。失敗時は編集画面へ戻す |
-| FR-008 | つぶやき削除 | High | `GET /DeleteMutter`。要ログインかつ投稿者本人。対象は `id`。処理後は一覧へ戻る |
+| FR-008 | つぶやき削除 | High | `POST /DeleteMutter`。要ログインかつ投稿者本人。対象は `id`。処理後は一覧へ戻る。`GET /DeleteMutter` では削除しない |
 | FR-009 | Gemini コメント生成 | High | 投稿成功後に同期呼び出し。model は `gemini-3.5-flash-lite`。`temperature` / `top_p` / `top_k` は明示指定しない。失敗しても投稿は rollback しない。失敗時も `aiMsg` に失敗文を載せて表示する |
 
 既存仕様として維持するもの:
@@ -88,7 +88,7 @@
 |---|---|
 | Performance（性能） | Gemini は投稿後の同期呼び出しとする。タイムアウト等の新規性能目標は設けない |
 | Availability（可用性） | Gemini 失敗時も投稿を残す。可用性目標値は設けない |
-| Security Requirement Level（セキュリティ要求レベル） | password 平文保存禁止。session への password 保持禁止。Update / Delete は認証必須かつ投稿者本人限定。API key / DB password の source・Git 保存禁止 |
+| Security Requirement Level（セキュリティ要求レベル） | password 平文保存禁止。session への password 保持禁止。Update / Delete は認証必須かつ投稿者本人限定。API key / DB password の source・Git 保存禁止。`POST /Main`、`POST /UpdateMutter`、`POST /DeleteMutter` は Session 保存型 CSRF token を照合する。Spring Security は導入しない |
 | Maintainability（保守性） | ログイン必須判定は Controller ごとの重複実装を避け、Spring MVC 側で一元化する |
 | Other（その他） | context path は `/dokoTsubu`。Controller / JSP に `/dokoTsubu` を固定文字列として書かない |
 | Deploy（公開） | `DokoTsubu3` の公開先は Vercel。Project Root は `DokoTsubu3`。Spring Boot / JSP / JDBC / WAR / embedded Tomcat は維持する。Vercel 公開用に `Dockerfile.vercel` を使用する。Cloud Run は採用しない |
@@ -122,7 +122,7 @@ Phase 1 の外部公開 REST API は無い。次は Spring MVC のアプリケ�
 | API-004 | `GET/POST /Main` | 一覧表示 / 投稿 + Gemini |
 | API-005 | `GET /SearchMutter` | 検索 |
 | API-006 | `GET/POST /UpdateMutter` | 編集画面 / 更新 |
-| API-007 | `GET /DeleteMutter` | 削除 |
+| API-007 | `POST /DeleteMutter` | 削除 |
 
 詳細は [05_ARCHITECTURE_DESIGN.md](./05_ARCHITECTURE_DESIGN.md) および [04_UI_AND_FLOW_DESIGN.md](./04_UI_AND_FLOW_DESIGN.md) を正とする。
 

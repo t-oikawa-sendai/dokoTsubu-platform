@@ -4,10 +4,10 @@
 | Item（項目） | Value（値） |
 |---|---|
 | Document ID（文書ID） | DATA-001 |
-| Version（バージョン） | 1.5 |
+| Version（バージョン） | 1.6 |
 | Status（ステータス） | Review |
 | Created Date（作成日） | 2026-06-21 |
-| Last Updated（最終更新日） | 2026-10-04 |
+| Last Updated（最終更新日） | 2026-10-05 |
 | Owner（管理者） | Takashi Oikawa |
 | Related Documents（関連文書） | README.md / 02_REQUIREMENTS_DEFINITION.md / 05_ARCHITECTURE_DESIGN.md |
 
@@ -173,7 +173,7 @@ erDiagram
 ### 5.4 Personal and Confidential Data Policy（個人情報・機密データの取り扱い方針）
 
 - 利用者名と password hash を扱う
-- password 平文、Gemini API key、DB password、その他秘密情報を source および Git 管理ファイルへ実値記載しない
+- password 平文、Gemini API key、DB password、その他秘密情報の実値を、Repository 全体の現行 Git 管理ファイルへ記載しない。部分マスク表記も残さない
 - ローカル起動で秘密情報ファイルが必要な場合だけ `/Users/takashioikawa/Dev/dokoTsubu-platform/.local-secrets/` を使用し、Git 管理しない
 - Vercel の秘密情報は Vercel Environment Variables に置く
 - DB 設定名は `DOKOTSUBU_DB_URL` / `DOKOTSUBU_DB_USERNAME` / `DOKOTSUBU_DB_PASSWORD` を維持する。実値は source / Git / 文書へ記載しない
@@ -185,7 +185,7 @@ erDiagram
 | Type（種別） | Target（対象） | Policy / Method（方式・方針） |
 |---|---|---|
 | Encryption（暗号化） | USERS.PASS | 登録時に BCrypt で一方向ハッシュ化する。可逆暗号化は用いない |
-| Masking（マスキング） | API key / DB password | 文書・source・Git に実値を書かない |
+| Masking（マスキング） | API key / DB password | Repository 全体の現行 Git 管理ファイルおよび文書に実値を書かない。部分マスク表記も残さない |
 | Logging（ログ取得） | 秘密値 | ログへ API key / password / DB password を出さない。新規ログ基盤は Phase 1 対象外 |
 
 ### 5.6 Security Design Specifications（セキュリティ設計仕様）
@@ -194,6 +194,7 @@ erDiagram
 |---|---|
 | Authentication（認証） | Application API は現行 `HttpSession` を維持する。キーは `loginUser`。保存内容は user id と user name のみ。password は Session へ保存しない。Vercel 公開時は instance-local Session へ依存しない。Vercel 公開用に、保存先を Spring Session JDBC + Aiven MySQL へ外部化する。Spring Session 用テーブルは domain table `USERS` / `MUTTERS` とは分ける。ログイン必須判定は Spring MVC の共通機構で一元化する。Spring Security の FilterChain 等は導入しない |
 | Authorization（認可） | 編集・削除は「ログイン済み」かつ `MUTTERS.USER_ID == loginUser.id` の両方を満たす場合だけ許可する。ID だけを条件とする UPDATE / DELETE は禁止する。最終判定はサーバー側で行う。DB FK の有無には依存しない |
+| CSRF | Spring Security は導入しない。Session 保存型 CSRF token を Spring MVC Interceptor で照合する。token は既存 `HttpSession` に保存し、Spring Session JDBC 構成は維持する。パラメーター名は `csrfToken`。対象は `POST /Main`、`POST /UpdateMutter`、`POST /DeleteMutter`。各フォームは token を含む。token なしまたは Session token と不一致の場合は状態変更処理を実行せず 403 を返す |
 | Access Control（権限管理） | 画面は自分の投稿以外に編集・削除操作を表示しない。画面非表示は補助であり、認可の正ではない |
 | Communication（通信） | Gemini API は HTTPS REST。新規の通信暗号化要件は設けない |
 | Data Storage（データ保存） | password は BCrypt hash のみ。Development DB は現行ローカル MySQL、Production DB は Aiven MySQL。Gemini API key と DB 接続情報は Spring 外部設定から取得する。ローカルは `.local-secrets/`、Vercel は Environment Variables。`/Users/takashioikawa/Dev/ai-config.json` への絶対パス依存は廃止する |
@@ -228,4 +229,5 @@ password 移行方針:
 - 投稿者認可は `MUTTERS.USER_ID == loginUser.id` を Application で検証する。DB FK には依存しない
 - password は `PASS VARCHAR(255)` に BCrypt hash を保存する。既存ユーザーは維持し、Spring Boot 切替前に平文を BCrypt へ一度だけ移行する。Application に平文 / BCrypt の恒久的な二重認証ロジックを持たせない。実 DB への password 更新は今回実施しない
 - table rename / schema rename / `TEXT` 長変更 / FK 追加は、今回の Spring Boot 移行に含めない
-- 秘密値の実値を設計書・実装・Git に書かない
+- 秘密値の実値を、Repository 全体の現行 Git 管理ファイルへ書かない。部分マスク表記も残さない
+- `POST /Main`、`POST /UpdateMutter`、`POST /DeleteMutter` は Session 保存型 CSRF token を Spring MVC Interceptor で照合する。Spring Security は導入しない。不一致時は状態変更せず 403 を返す

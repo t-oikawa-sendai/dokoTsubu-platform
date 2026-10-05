@@ -3,7 +3,7 @@ Program Name: dokoTsubu-platform CHANGELOG
 Language: Markdown
 Function: dokoTsubu-platformの変更履歴正本
 Created: 2026-09-11
-Last Updated: 2026-10-04
+Last Updated: 2026-10-05
 Author: Takashi Oikawa
 AI: Cursor Grok 4.7
 Memo: Canonical Templateから新設したRepository固有履歴正本。過去Application履歴は推測して追加しない。Runtime側に CHANGELOG_TEMPLATE.md は作成しない。
@@ -18,7 +18,7 @@ Memo: Canonical Templateから新設したRepository固有履歴正本。過去A
 | Version（バージョン） | 0.1 |
 | Status（ステータス） | Draft |
 | Created Date（作成日） | 2026-09-11 |
-| Last Updated（最終更新日） | 2026-10-04 |
+| Last Updated（最終更新日） | 2026-10-05 |
 | Owner（管理者） | Takashi Oikawa |
 | Related Documents（関連文書） | /CONSTITUTION.md / /AGENTS.md / /docs/design/README.md |
 
@@ -57,6 +57,14 @@ Governance導入Baselineは、Governance導入成功後に記録する。
 
 | Version | Date | Document | Category | Changes | Author |
 |---|---|---|---|---|---|
+| 1.7 | 2026-10-05 | `/docs/design/README.md` | Changed | 設計書一覧の版を、SEC-01 / SEC-02 対応後の 01〜06 に合わせた | Takashi Oikawa |
+| 1.4 | 2026-10-05 | `/docs/design/01_REQUEST_DEFINITION.md` | Security | SC-005 の対象を Repository 全体の現行 Git 管理ファイルであると明確化した | Takashi Oikawa |
+| 1.4 | 2026-10-05 | `/docs/design/02_REQUIREMENTS_DEFINITION.md` | Security | FR-008 と API-007 を `POST /DeleteMutter` にした。対象 POST の Session 保存型 CSRF 照合を非機能要件へ追記した | Takashi Oikawa |
+| 1.6 | 2026-10-05 | `/docs/design/03_DATA_AND_SECURITY_DESIGN.md` | Security | §5.6 に Session 保存型 CSRF を明記した。秘密値の対象を現行 Git 管理ファイル全体とし、部分マスクを残さない方針を追記した | Takashi Oikawa |
+| 1.2 | 2026-10-05 | `/docs/design/04_UI_AND_FLOW_DESIGN.md` | Security | 削除を `POST /DeleteMutter` に変更し、投稿・編集・削除フォームの `csrfToken` を追記した | Takashi Oikawa |
+| 1.7 | 2026-10-05 | `/docs/design/05_ARCHITECTURE_DESIGN.md` | Security | 対象 POST の CSRF 照合を Spring MVC Interceptor と Session 保存型 token で行うことを追記した | Takashi Oikawa |
+| 1.7 | 2026-10-05 | `/docs/design/06_OPERATION_AND_HANDOFF.md` | Security | `DokoTsubu2` 変更禁止の例外を秘密情報除去のみと明記した。削除 POST と CSRF 照合を実装制約へ追記した | Takashi Oikawa |
+| - | 2026-10-05 | `/DokoTsubu2/` `/DokoTsubu3/` `/docs/修正検討事項_20260408.md` `/docs/環境構築手順書.md` | Security | 現行 Git 管理ファイルから DB パスワード実値を除去した。削除を POST のみにし、対象 3 POST へ Session 保存型 CSRF 照合を追加した | Takashi Oikawa |
 | 0.3 | 2026-10-04 | `/README.md` | Changed | 公開ログイン URL と Version 3 の現行構成を先に示し、旧版の技術・構成・画面説明を参考として区別 | Takashi Oikawa |
 | 0.1 | 2026-10-04 | `/docs/DEPLOYMENT_AND_OPERATION_GUIDE.md` | Changed | Aiven 準備手順を4項目に分割。利用者の本番登録・ログイン成功を記録し、Aiven 側の直接照合と残る機能の未確認を区別。表示上の記号と古い deployment の表記を修正 | Takashi Oikawa |
 | 1.5 | 2026-10-04 | `/docs/design/03_DATA_AND_SECURITY_DESIGN.md` | Changed | 重複する本番観測結果を削除し、確認範囲の正本を運用手順書へ集約 | Takashi Oikawa |

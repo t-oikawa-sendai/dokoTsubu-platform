@@ -1,10 +1,12 @@
 /*
- * プログラム名: UserDAO
- * 機能概要: ユーザーの登録およびログイン照会のためのデータベースアクセスを提供する。
- * 動作条件: MySQL に接続可能であること。users テーブルが存在し、NAME に UNIQUE 制約があること。
- * その他記載事項: registerUser の戻り値は int 定数。1062 かつ NAME 用 UNIQUE キー重複のみ REGISTER_DUPLICATE、それ以外は REGISTER_DB_ERROR。
- * Date:2026/04/01
+ * Program Name: UserDAO
+ * Language: Java
+ * Function: Insert and look up users for registration and login
+ * Created: 2026-04-01
+ * Last Updated: 2026-10-05
  * Author: Takashi Oikawa
+ * AI: Cursor Grok 4.7
+ * Memo: DB connection values come from DOKOTSUBU_DB_URL, DOKOTSUBU_DB_USERNAME, and DOKOTSUBU_DB_PASSWORD. SQL and result codes are unchanged. REGISTER_DUPLICATE is only MySQL 1062 on the NAME unique key. Other SQL errors are REGISTER_DB_ERROR.
  */
 
 package dao;
@@ -19,10 +21,9 @@ import java.util.Locale;
 import model.User;
 
 public class UserDAO {
-	private final String JDBC_URL = "jdbc:mysql://localhost/dokoTsubu";		
-//	private final String JDBC_URL = "jdbc:h2://localhost/dokoTsubu";	  //2025-11-07ADD
-	private final String DB_USER = "root";
-	private final String DB_PASS = "7358";
+	private final String JDBC_URL = System.getenv("DOKOTSUBU_DB_URL");
+	private final String DB_USER = System.getenv("DOKOTSUBU_DB_USERNAME");
+	private final String DB_PASS = System.getenv("DOKOTSUBU_DB_PASSWORD");
 
 	// registerUser() の結果コード（新規ファイルを増やさず、呼び出し元で分岐できるようにする）
 	public static final int REGISTER_OK = 1;

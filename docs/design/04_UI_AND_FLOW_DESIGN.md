@@ -4,10 +4,10 @@
 | Item（項目） | Value（値） |
 |---|---|
 | Document ID（文書ID） | UI-001 |
-| Version（バージョン） | 1.1 |
+| Version（バージョン） | 1.2 |
 | Status（ステータス） | Approved |
 | Created Date（作成日） | 2026-06-21 |
-| Last Updated（最終更新日） | 2026-09-12 |
+| Last Updated（最終更新日） | 2026-10-05 |
 | Owner（管理者） | Takashi Oikawa |
 | Related Documents（関連文書） | README.md / 02_REQUIREMENTS_DEFINITION.md / 05_ARCHITECTURE_DESIGN.md |
 
@@ -71,8 +71,8 @@
 | SCR-002 | ユーザー登録（現行 `registerView.jsp`） | `username`, `password` | エラーメッセージ | `POST /Register` | 認証不要 |
 | SCR-003 | ユーザー登録完了（現行 `registerResult.jsp`） | なし | 完了メッセージ | 入口へ戻る | リンクは context-aware とする |
 | SCR-004 | ログイン結果（現行 `loginResult.jsp`） | なし | 成功時はユーザー名、失敗時はエラー | 成功時は `GET /Main`、失敗時は入口へ | `loginUser` の有無で分岐 |
-| SCR-005 | メイン（現行 `main.jsp`） | 投稿 `text`、検索 `keyword` | 一覧、エラー、`aiMsg` | 投稿、検索、更新、ログアウト、自分の投稿の編集・削除 | Gemini 一言は投稿直後のみ |
-| SCR-006 | つぶやき編集（現行 `updateMutter.jsp`） | hidden `id`、`text` | エラー、入力値 | `POST /UpdateMutter`、一覧へ戻る | 失敗時は本画面へ戻る |
+| SCR-005 | メイン（現行 `main.jsp`） | 投稿 `text`、検索 `keyword`、投稿と削除の `csrfToken` | 一覧、エラー、`aiMsg` | 投稿、検索、更新、ログアウト、自分の投稿の編集・削除 | Gemini 一言は投稿直後のみ。削除は `POST /DeleteMutter` |
+| SCR-006 | つぶやき編集（現行 `updateMutter.jsp`） | hidden `id`、`text`、`csrfToken` | エラー、入力値 | `POST /UpdateMutter`、一覧へ戻る | 失敗時は本画面へ戻る |
 | SCR-007 | ログアウト（現行 `logout.jsp`） | なし | 完了メッセージ | 入口へ戻る | セッション破棄後 |
 
 Phase 1 で現行から変える表示:
@@ -110,7 +110,7 @@ flowchart TD
   SCR005 -->|POST /Main| SCR005
   SCR005 -->|GET /SearchMutter| SCR005
   SCR005 -->|GET /UpdateMutter 本人| SCR006
-  SCR005 -->|GET /DeleteMutter 本人| SCR005
+  SCR005 -->|POST /DeleteMutter 本人| SCR005
   SCR006 -->|POST 成功| SCR005
   SCR006 -->|POST 失敗| SCR006
   SCR007 --> SCR001
@@ -138,7 +138,7 @@ flowchart TD
 | SC-003 | 投稿と Gemini | 1. SCR-005 で `text` を送信 → 2. 保存後に Gemini を同期呼び出し → 3. 同一画面に一覧と `aiMsg` を表示。Gemini 失敗でも投稿は残る |
 | SC-004 | 検索 | 1. SCR-005 で `keyword` を送信 → 2. `LIKE` 結果を同一画面に表示 |
 | SC-005 | 編集 | 1. 自分の投稿の編集を開く → 2. `text` を送信 → 3. 成功なら SCR-005、失敗なら SCR-006 |
-| SC-006 | 削除 | 1. 自分の投稿の削除を実行 → 2. SCR-005 へ戻る |
+| SC-006 | 削除 | 1. 自分の投稿の削除を `POST /DeleteMutter` で実行する → 2. SCR-005 へ戻る |
 | SC-007 | ログアウト | 1. SCR-005 からログアウト → 2. セッション破棄 → 3. SCR-007 |
 
 他人の投稿には編集・削除操作を出さない。URL 直叩きでもサーバー側で拒否する。
@@ -149,8 +149,9 @@ flowchart TD
 |---|---|---|
 | 登録 | `username` / `password` 必須 | 未入力・重複・その他エラーは SCR-002 に表示。現行メッセージを維持する |
 | ログイン | `name` / `pass` 必須 | 未入力・認証失敗は SCR-004 に表示。現行メッセージを維持する |
-| 投稿 | `text` 必須 | 未入力は SCR-005 に表示。現行メッセージを維持する |
-| 編集 | `id` / `text` 必須。本人のみ | 失敗時は SCR-006 に戻し、入力を保持する。現行失敗メッセージを維持する。新規の他人操作メッセージは設けない。拒否時は更新せず一覧へ戻す |
+| 投稿 | `text` 必須。`csrfToken` 必須 | 未入力は SCR-005 に表示。現行メッセージを維持する。token なしまたは不一致では投稿せず 403 を返す |
+| 編集 | `id` / `text` 必須。本人のみ。`csrfToken` 必須 | 失敗時は SCR-006 に戻し、入力を保持する。現行失敗メッセージを維持する。新規の他人操作メッセージは設けない。拒否時は更新せず一覧へ戻す。token なしまたは不一致では更新せず 403 を返す |
+| 削除 | 本人のみ。`POST /DeleteMutter`。`csrfToken` 必須 | token なしまたは不一致では削除せず 403 を返す。`GET /DeleteMutter` では削除しない。他人の投稿は削除しない |
 | Gemini | 投稿成功後に呼び出す | 失敗文も `aiMsg` として SCR-005 に表示する |
 
 ### 5.6 Accessibility and Responsive Design Policy（アクセシビリティ・レスポンシブ対応方針）

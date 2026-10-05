@@ -4,10 +4,10 @@
 | Item（項目） | Value（値） |
 |---|---|
 | Document ID（文書ID） | ARCH-001 |
-| Version（バージョン） | 1.6 |
+| Version（バージョン） | 1.7 |
 | Status（ステータス） | Review |
 | Created Date（作成日） | 2026-06-21 |
-| Last Updated（最終更新日） | 2026-10-04 |
+| Last Updated（最終更新日） | 2026-10-05 |
 | Owner（管理者） | Takashi Oikawa |
 | Related Documents（関連文書） | README.md / 02_REQUIREMENTS_DEFINITION.md / 03_DATA_AND_SECURITY_DESIGN.md / 06_OPERATION_AND_HANDOFF.md |
 
@@ -127,7 +127,7 @@ flowchart TB
 
 現行 `*Logic` の責務は Service へ移す。DAO は JDBC を維持する。
 
-ログイン必須判定は Controller に複製せず、Spring MVC の共通機構で一元化する。
+ログイン必須判定は Controller に複製せず、Spring MVC の共通機構で一元化する。`POST /Main`、`POST /UpdateMutter`、`POST /DeleteMutter` の CSRF 照合も Spring MVC Interceptor で行う。token は既存 `HttpSession` に保存する。Spring Security は導入しない。
 
 ### 5.2 Technology Stack and Rationale（技術スタック・採用理由）
 
@@ -207,6 +207,7 @@ Gemini API key は Spring 外部設定 `DOKOTSUBU_GEMINI_API_KEY` から取得�
 ## 7. Handoff to Detail Design（詳細設計への引き継ぎ）
 
 - Spring Security / JPA / Spring Data / Thymeleaf を追加しない
+- `POST /Main`、`POST /UpdateMutter`、`POST /DeleteMutter` の CSRF 照合は Spring MVC Interceptor と Session 保存型 token で行う。Spring Session JDBC と `HttpSession` API は維持する
 - 絶対パスの `ai-config.json` を復活させない
 - context path は設定で `/dokoTsubu` とし、Controller / JSP に直書きしない
 - Gemini model は `gemini-3.5-flash-lite`

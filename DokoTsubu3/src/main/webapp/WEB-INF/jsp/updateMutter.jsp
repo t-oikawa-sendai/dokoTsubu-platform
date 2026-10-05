@@ -3,10 +3,10 @@ Program Name: updateMutter.jsp
 Language: JSP
 Function: Mutter edit screen (SCR-006)
 Created: 2026-09-29
-Last Updated: 2026-09-29
+Last Updated: 2026-10-05
 Author: Takashi Oikawa
-AI: Cursor
-Memo: Phase 1 DokoTsubu3 FR-007. Dynamic text is HTML-escaped. Shows DB text on GET and submitted text on POST error.
+AI: Cursor Grok 4.7
+Memo: Phase 1 DokoTsubu3 FR-007. Dynamic text is HTML-escaped. Shows DB text on GET and submitted text on POST error. Update form includes csrfToken.
 --%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8" %>
@@ -15,6 +15,10 @@ Memo: Phase 1 DokoTsubu3 FR-007. Dynamic text is HTML-escaped. Shows DB text on 
 <%
 Mutter mutter = (Mutter) request.getAttribute("mutter");
 String errorMsg = (String) request.getAttribute("errorMsg");
+String csrfToken = (String) request.getAttribute("csrfToken");
+if (csrfToken == null) {
+    csrfToken = "";
+}
 %>
 <!DOCTYPE html>
 <html>
@@ -38,6 +42,7 @@ String errorMsg = (String) request.getAttribute("errorMsg");
           <p class="dt-error" role="alert"><%= HtmlUtils.htmlEscape(errorMsg) %></p>
         <% } %>
         <form method="post" action="<%= request.getContextPath() %>/UpdateMutter" class="dt-form">
+          <input type="hidden" name="csrfToken" value="<%= HtmlUtils.htmlEscape(csrfToken) %>">
           <input type="hidden" name="id" value="<%= mutter.getId() %>">
           <div class="dt-field">
             <label class="dt-field__label" for="dt-text">つぶやき</label>
