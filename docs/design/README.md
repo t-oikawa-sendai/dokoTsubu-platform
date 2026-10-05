@@ -17,12 +17,12 @@ README Writing Policy（README作成方針）
 | Item（項目） | Value（値） |
 |---|---|
 | Document ID（文書ID） | README-001 |
-| Version（バージョン） | 1.7 |
+| Version（バージョン） | 1.8 |
 | Status（ステータス） | Review |
 | Created Date（作成日） | 2026-06-21 |
 | Last Updated（最終更新日） | 2026-10-05 |
 | Owner（管理者） | Takashi Oikawa |
-| Related Documents（関連文書） | docs/standards/DESIGN_DOCUMENT_STANDARD.md / [CHANGELOG.md](../../CHANGELOG.md)（リポジトリルート） |
+| Related Documents（関連文書） | docs/standards/DESIGN_DOCUMENT_STANDARD.md / [Project README](../../README.md) / [API_SPEC.md](../specs/API_SPEC.md) / [GEMINI_INTEGRATION_SPEC.md](../specs/GEMINI_INTEGRATION_SPEC.md) / [ENVIRONMENT_SETUP_GUIDE.md](../ENVIRONMENT_SETUP_GUIDE.md) / [DEPLOYMENT_AND_OPERATION_GUIDE.md](../DEPLOYMENT_AND_OPERATION_GUIDE.md) / [CHANGELOG.md](../../CHANGELOG.md)（リポジトリルート） |
 
 > 詳細な変更履歴はリポジトリルートの [CHANGELOG.md](../../CHANGELOG.md) を参照。
 
@@ -65,7 +65,7 @@ Phase 1 では `DokoTsubu2/` を直接 Spring Boot 化しない。新規 `DokoTs
 
 代表画面はメイン画面（一覧・投稿・検索・Gemini 一言）である。
 
-承認済みスクリーンショットは存在しないため、画像は掲載しない。
+<img src="./screenshots/thumbnail/main-screen.png" alt="SCR-005 メイン（DokoTsubu Ver.3.0）" width="320">
 
 詳細（画面一覧・項目定義・操作フロー）: [04_UI_AND_FLOW_DESIGN.md](./04_UI_AND_FLOW_DESIGN.md)
 
@@ -75,14 +75,23 @@ Phase 1 では `DokoTsubu2/` を直接 Spring Boot 化しない。新規 `DokoTs
 
 | File（ファイル名） | Document Name（文書名） | Status（ステータス） | Version（バージョン） | Owner（担当者） |
 |---|---|---|---|---|
-| [01_REQUEST_DEFINITION.md](./01_REQUEST_DEFINITION.md) | Request Definition（要求定義） | Approved | 1.4 | Takashi Oikawa |
-| [02_REQUIREMENTS_DEFINITION.md](./02_REQUIREMENTS_DEFINITION.md) | Requirements Definition（要件定義） | Approved | 1.4 | Takashi Oikawa |
-| [03_DATA_AND_SECURITY_DESIGN.md](./03_DATA_AND_SECURITY_DESIGN.md) | Data and Security Design（データ・セキュリティ設計） | Review | 1.6 | Takashi Oikawa |
-| [04_UI_AND_FLOW_DESIGN.md](./04_UI_AND_FLOW_DESIGN.md) | UI and Flow Design（UI・フロー設計） | Approved | 1.2 | Takashi Oikawa |
-| [05_ARCHITECTURE_DESIGN.md](./05_ARCHITECTURE_DESIGN.md) | Architecture Design（アーキテクチャ設計） | Review | 1.7 | Takashi Oikawa |
-| [06_OPERATION_AND_HANDOFF.md](./06_OPERATION_AND_HANDOFF.md) | Operation and Handoff Design（運用・詳細設計引き継ぎ） | Review | 1.7 | Takashi Oikawa |
+| [01_REQUEST_DEFINITION.md](./01_REQUEST_DEFINITION.md) | Request Definition（要求定義） | Review | 1.5 | Takashi Oikawa |
+| [02_REQUIREMENTS_DEFINITION.md](./02_REQUIREMENTS_DEFINITION.md) | Requirements Definition（要件定義） | Review | 1.5 | Takashi Oikawa |
+| [03_DATA_AND_SECURITY_DESIGN.md](./03_DATA_AND_SECURITY_DESIGN.md) | Data and Security Design（データ・セキュリティ設計） | Review | 1.9 | Takashi Oikawa |
+| [04_UI_AND_FLOW_DESIGN.md](./04_UI_AND_FLOW_DESIGN.md) | UI and Flow Design（UI・フロー設計） | Review | 1.3 | Takashi Oikawa |
+| [05_ARCHITECTURE_DESIGN.md](./05_ARCHITECTURE_DESIGN.md) | Architecture Design（アーキテクチャ設計） | Review | 1.8 | Takashi Oikawa |
+| [06_OPERATION_AND_HANDOFF.md](./06_OPERATION_AND_HANDOFF.md) | Operation and Handoff Design（運用・詳細設計引き継ぎ） | Review | 1.9 | Takashi Oikawa |
 
-公開時の具体的な設定、再デプロイ、画面操作、確認済み範囲は [Deployment and Operation Guide（デプロイ・運用手順書）](../DEPLOYMENT_AND_OPERATION_GUIDE.md) を参照。
+Related Specifications and Guides（関連仕様・運用文書）:
+
+| Category | Document |
+|---|---|
+| API Specification | [../specs/API_SPEC.md](../specs/API_SPEC.md) |
+| Gemini Integration | [../specs/GEMINI_INTEGRATION_SPEC.md](../specs/GEMINI_INTEGRATION_SPEC.md) |
+| Environment Setup | [../ENVIRONMENT_SETUP_GUIDE.md](../ENVIRONMENT_SETUP_GUIDE.md) |
+| Deployment / Operation | [../DEPLOYMENT_AND_OPERATION_GUIDE.md](../DEPLOYMENT_AND_OPERATION_GUIDE.md) |
+| Project README | [../../README.md](../../README.md) |
+| Change History | [../../CHANGELOG.md](../../CHANGELOG.md) |
 
 ---
 
@@ -120,7 +129,7 @@ Phase 1 では `DokoTsubu2/` を直接 Spring Boot 化しない。新規 `DokoTs
 | DokoTsubu3 | Phase 1 で新規作成する Spring Boot 版 |
 | どこつぶ / DokoTsubu | アプリ名。外部 URL の context path は `/dokoTsubu` |
 | Phase 1 | Spring Boot 移行フェーズ |
-| Legacy 文書 | `docs/設計書.md` / `docs/API仕様書.md` / `docs/AI設定仕様書.md` / `docs/環境構築手順書.md` 等。参照のみ |
+| Legacy 文書 | `docs/archive/` 配下の DokoTsubu2 時点の文書。参照のみ |
 | loginUser | セッションキー。user id と user name のみを保持する |
 | aiMsg | 投稿直後にメイン画面へ渡す Gemini 一言 |
 

@@ -4,12 +4,12 @@
 | Item（項目） | Value（値） |
 |---|---|
 | Document ID（文書ID） | UI-001 |
-| Version（バージョン） | 1.2 |
-| Status（ステータス） | Approved |
+| Version（バージョン） | 1.3 |
+| Status（ステータス） | Review |
 | Created Date（作成日） | 2026-06-21 |
 | Last Updated（最終更新日） | 2026-10-05 |
 | Owner（管理者） | Takashi Oikawa |
-| Related Documents（関連文書） | README.md / 02_REQUIREMENTS_DEFINITION.md / 05_ARCHITECTURE_DESIGN.md |
+| Related Documents（関連文書） | [Project README](../../README.md) / [README.md](./README.md) / [02_REQUIREMENTS_DEFINITION.md](./02_REQUIREMENTS_DEFINITION.md) / [03_DATA_AND_SECURITY_DESIGN.md](./03_DATA_AND_SECURITY_DESIGN.md) / [05_ARCHITECTURE_DESIGN.md](./05_ARCHITECTURE_DESIGN.md) / [API_SPEC.md](../specs/API_SPEC.md) |
 
 ---
 
@@ -68,7 +68,7 @@
 | Screen ID（画面ID） | Screen Name（画面名） | Input Items（入力項目） | Output Items（出力項目） | Main Operations（主要操作） | Notes（備考） |
 |---|---|---|---|---|---|
 | SCR-001 | ログイン入口（現行 `index.jsp`） | `name`, `pass` | アプリ名、ログインフォーム、登録導線 | `POST /Login`、`GET /Register` | 未ログイン入口 |
-| SCR-002 | ユーザー登録（現行 `registerView.jsp`） | `username`, `password` | エラーメッセージ | `POST /Register` | 認証不要 |
+| SCR-002 | ユーザー登録（現行 `registerView.jsp`） | `username`, `password`, `gender`, `ageFeeling` | エラーメッセージ | `POST /Register` | 認証不要。`gender` 初期値は `PRIVATE`（ヒミツ）。`ageFeeling` は初期未選択 |
 | SCR-003 | ユーザー登録完了（現行 `registerResult.jsp`） | なし | 完了メッセージ | 入口へ戻る | リンクは context-aware とする |
 | SCR-004 | ログイン結果（現行 `loginResult.jsp`） | なし | 成功時はユーザー名、失敗時はエラー | 成功時は `GET /Main`、失敗時は入口へ | `loginUser` の有無で分岐 |
 | SCR-005 | メイン（現行 `main.jsp`） | 投稿 `text`、検索 `keyword`、投稿と削除の `csrfToken` | 一覧、エラー、`aiMsg` | 投稿、検索、更新、ログアウト、自分の投稿の編集・削除 | Gemini 一言は投稿直後のみ。削除は `POST /DeleteMutter` |
@@ -79,6 +79,21 @@ Phase 1 で現行から変える表示:
 
 - 編集・削除操作は自分の投稿にだけ表示する
 - 最終認可はサーバー側で行う
+- 登録画面に `gender` / `ageFeeling` を追加する。値と画面表示は [02_REQUIREMENTS_DEFINITION.md](./02_REQUIREMENTS_DEFINITION.md) の FR-001 登録項目を正とする
+- UI 上の「削除」は、内部では論理削除（`MUTTERS.DELETED_AT` の設定）である
+- User 削除画面は追加しない
+
+#### Screenshots（画面スクリーンショット）
+
+画面の参考画像である。画面仕様は上表と [02_REQUIREMENTS_DEFINITION.md](./02_REQUIREMENTS_DEFINITION.md) を正とする。
+
+##### SCR-001 ログイン入口
+
+![SCR-001 ログイン入口（DokoTsubu Ver.3.0）](./screenshots/full/login-screen.png)
+
+##### SCR-005 メイン
+
+![SCR-005 メイン（DokoTsubu Ver.3.0）](./screenshots/full/main-screen.png)
 
 ### 5.2 Screen Transition and Business Flow（画面遷移図・業務フロー）
 
@@ -127,18 +142,18 @@ flowchart TD
 
 ### 5.3 Wireframes and Layout Policy（主要画面のワイヤーフレーム・レイアウト方針）
 
-本文書では対象外。理由: 現行 JSP レイアウトを維持する。承認済みスクリーンショットは存在しないため、画像は掲載しない。
+本文書では対象外。理由: 現行 JSP レイアウトを維持する。代表画面のスクリーンショットは §5.1 に掲載する。
 
 ### 5.4 Operation Flow and User Scenarios（操作フロー・ユーザーシナリオ）
 
 | Scenario ID（シナリオID） | Operation Name（操作名） | Steps（操作手順） |
 |---|---|---|
-| SC-001 | 登録 | 1. SCR-001 から登録へ → 2. `username` / `password` を送信 → 3. 成功なら SCR-003 |
+| SC-001 | 登録 | 1. SCR-001 から登録へ → 2. `username` / `password` / `gender` / `ageFeeling` を送信 → 3. 成功なら SCR-003 |
 | SC-002 | ログイン | 1. SCR-001 で `name` / `pass` を送信 → 2. SCR-004 → 3. 成功なら SCR-005 |
 | SC-003 | 投稿と Gemini | 1. SCR-005 で `text` を送信 → 2. 保存後に Gemini を同期呼び出し → 3. 同一画面に一覧と `aiMsg` を表示。Gemini 失敗でも投稿は残る |
 | SC-004 | 検索 | 1. SCR-005 で `keyword` を送信 → 2. `LIKE` 結果を同一画面に表示 |
 | SC-005 | 編集 | 1. 自分の投稿の編集を開く → 2. `text` を送信 → 3. 成功なら SCR-005、失敗なら SCR-006 |
-| SC-006 | 削除 | 1. 自分の投稿の削除を `POST /DeleteMutter` で実行する → 2. SCR-005 へ戻る |
+| SC-006 | 削除 | 1. 自分の投稿の削除を `POST /DeleteMutter` で実行する（内部は論理削除） → 2. SCR-005 へ戻る |
 | SC-007 | ログアウト | 1. SCR-005 からログアウト → 2. セッション破棄 → 3. SCR-007 |
 
 他人の投稿には編集・削除操作を出さない。URL 直叩きでもサーバー側で拒否する。
@@ -147,11 +162,11 @@ flowchart TD
 
 | Target（対象） | Validation Rules（バリデーションルール） | Error Message / Display Policy（エラーメッセージ・表示方針） |
 |---|---|---|
-| 登録 | `username` / `password` 必須 | 未入力・重複・その他エラーは SCR-002 に表示。現行メッセージを維持する |
+| 登録 | `username` / `password` / `gender` / `ageFeeling` 必須。`gender` は 4 値、`ageFeeling` は 5 値以外を受け付けない | 未入力・許可値以外・重複・その他エラーは SCR-002 に表示する。重複時は `そのユーザー名は登録済です...`。有効 User と論理削除済み User でメッセージを変えない |
 | ログイン | `name` / `pass` 必須 | 未入力・認証失敗は SCR-004 に表示。現行メッセージを維持する |
 | 投稿 | `text` 必須。`csrfToken` 必須 | 未入力は SCR-005 に表示。現行メッセージを維持する。token なしまたは不一致では投稿せず 403 を返す |
 | 編集 | `id` / `text` 必須。本人のみ。`csrfToken` 必須 | 失敗時は SCR-006 に戻し、入力を保持する。現行失敗メッセージを維持する。新規の他人操作メッセージは設けない。拒否時は更新せず一覧へ戻す。token なしまたは不一致では更新せず 403 を返す |
-| 削除 | 本人のみ。`POST /DeleteMutter`。`csrfToken` 必須 | token なしまたは不一致では削除せず 403 を返す。`GET /DeleteMutter` では削除しない。他人の投稿は削除しない |
+| 削除 | 本人のみ。`POST /DeleteMutter`。`csrfToken` 必須 | token なしまたは不一致では削除せず 403 を返す。`GET /DeleteMutter` では削除しない。他人の投稿は削除しない。削除は論理削除である |
 | Gemini | 投稿成功後に呼び出す | 失敗文も `aiMsg` として SCR-005 に表示する |
 
 ### 5.6 Accessibility and Responsive Design Policy（アクセシビリティ・レスポンシブ対応方針）

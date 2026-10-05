@@ -4,18 +4,18 @@
 | Item（項目） | Value（値） |
 |---|---|
 | Document ID（文書ID） | DEPLOY-001 |
-| Version（バージョン） | 0.1 |
+| Version（バージョン） | 0.2 |
 | Status（ステータス） | Review |
 | Created Date（作成日） | 2026-10-04 |
-| Last Updated（最終更新日） | 2026-10-04 |
+| Last Updated（最終更新日） | 2026-10-05 |
 | Owner（管理者） | Takashi Oikawa |
-| Related Documents（関連文書） | [Design Documents Index（設計書一覧）](./design/README.md) / [Operation and Handoff Design（運用・詳細設計引き継ぎ）](./design/06_OPERATION_AND_HANDOFF.md) / [CHANGELOG.md](../CHANGELOG.md) |
+| Related Documents（関連文書） | [Project README](../README.md) / [Design Documents Index（設計書一覧）](./design/README.md) / [Architecture Design（アーキテクチャ設計）](./design/05_ARCHITECTURE_DESIGN.md) / [Operation and Handoff Design（運用・詳細設計引き継ぎ）](./design/06_OPERATION_AND_HANDOFF.md) / [Environment Setup Guide（環境構築手順書）](./ENVIRONMENT_SETUP_GUIDE.md) / [Gemini Integration Specification（Gemini連携仕様書）](./specs/GEMINI_INTEGRATION_SPEC.md) / [CHANGELOG.md](../CHANGELOG.md) |
 
 ---
 
 ## 1. Purpose and Scope（目的と対象）
 
-本書は `DokoTsubu3` を GitHub `main` から Vercel に公開し、Aiven MySQL と Gemini API を設定・運用するための手順である。設計上の要件と画面遷移の正本は [設計書一覧](./design/README.md) 以下の7文書とし、本書は実際の設定・操作・確認記録を扱う。
+本書は Version 3（`DokoTsubu3`）を GitHub `main` から Vercel に公開し、Aiven MySQL と Gemini API を設定・運用するための手順である。設計上の要件と画面遷移の正本は [設計書一覧](./design/README.md) 以下の7文書とし、本書は実際の設定・操作・確認記録を扱う。ローカル開発環境の構築は [Environment Setup Guide（環境構築手順書）](./ENVIRONMENT_SETUP_GUIDE.md) を正とする。
 
 **本番公開は完了している。** 2026-10-04 に Vercel のデプロイが `Ready` となり、ログイン画面と存在しないユーザーのログイン失敗画面を確認した。同日、利用者は本番 URL で新規登録し、同じアカウントでログインしてメイン画面まで表示されたと報告した。登録・認証で使用する DB 書き込み・読み出しの経路は、この操作結果とコードから動作したと判断できる。Aiven 側での接続先・登録行の直接照合、投稿、Gemini 応答、検索、編集、削除、ログアウト、複数インスタンス間のセッション維持は未確認である。
 
@@ -48,7 +48,7 @@
    4. **不足時の DDL:** 対象 DB、既存データ、影響、復旧手段を確認してから、不足するテーブルにだけ承認済み DDL を一度適用する。Domain table 用 DDL は本リポジトリにないため構造を推測して作らない。Session 用 DDL は `DokoTsubu3/db/spring-session-mysql.sql` を参照する。既存テーブルには再適用しない。アプリ起動時の自動作成は無効である。
 4. DB の JDBC URL、ユーザー名、パスワード、Gemini API キーの入手元を確認する。値を本書、ソース、Git、チャット、スクリーンショット、ログへ記載しない。ローカルの秘密情報はリポジトリ内 `.local-secrets/` に置き、Git 管理外にする。
 5. ローカルでビルドを確認する場合は `DokoTsubu3` で `mvn -B package` を実行する。DB 接続・Gemini 呼び出しの成功はビルド成功だけでは証明できない。Vercel の Dockerfile 自体は `mvn -B -DskipTests package` を実行する。
-6. ローカル起動が必要なら、対象のローカル MySQL に同じ schema と Session テーブルがあることを確認し、秘密値を表示せずに4つの `DOKOTSUBU_*` 変数を実行環境へ渡す。`DokoTsubu3` で `mvn spring-boot:run` を実行し、`http://localhost:8080/dokoTsubu/Login` を開く。ローカル用の接続値は Git 管理外の `.local-secrets/` に保管する。
+6. ローカル起動が必要なら、対象のローカル MySQL に同じ schema と Session テーブルがあることを確認し、秘密値を表示せずに4つの `DOKOTSUBU_*` 変数を実行環境へ渡す。`DokoTsubu3` で `mvn spring-boot:run` を実行し、`http://localhost:8080/dokoTsubu/Login` を開く。ローカル用の接続値は Git 管理外の `.local-secrets/` に保管する。詳細は [Environment Setup Guide（環境構築手順書）](./ENVIRONMENT_SETUP_GUIDE.md) を参照。
 
 ## 4. First Deployment on Vercel（Vercel への初回公開）
 

@@ -4,12 +4,12 @@
 | Item（項目） | Value（値） |
 |---|---|
 | Document ID（文書ID） | REQ-001 |
-| Version（バージョン） | 1.4 |
-| Status（ステータス） | Approved |
+| Version（バージョン） | 1.5 |
+| Status（ステータス） | Review |
 | Created Date（作成日） | 2026-06-21 |
 | Last Updated（最終更新日） | 2026-10-05 |
 | Owner（管理者） | Takashi Oikawa |
-| Related Documents（関連文書） | README.md / 02_REQUIREMENTS_DEFINITION.md / 03_DATA_AND_SECURITY_DESIGN.md / 06_OPERATION_AND_HANDOFF.md |
+| Related Documents（関連文書） | [Project README](../../README.md) / [README.md](./README.md) / [02_REQUIREMENTS_DEFINITION.md](./02_REQUIREMENTS_DEFINITION.md) / [03_DATA_AND_SECURITY_DESIGN.md](./03_DATA_AND_SECURITY_DESIGN.md) / [06_OPERATION_AND_HANDOFF.md](./06_OPERATION_AND_HANDOFF.md) |
 
 ---
 
@@ -40,6 +40,11 @@ Phase 1 は次を対象とする。
 - Gemini API 連携の維持
 - 認証・認可・password・秘密情報配置を本文書群の確定設計へ合わせること
 - `DokoTsubu3` の公開先は Vercel。公開 DB は Aiven MySQL
+- User / Mutter のデータライフサイクル管理
+- `USERS` / `MUTTERS` の論理削除
+- User プロフィールとして `GENDER` / `AGE_FEELING` を保持すること
+- User プロフィールを Gemini コメント生成の入力情報として利用すること
+- 論理削除済みデータは通常利用者へ表示しないこと
 
 ---
 
@@ -50,10 +55,10 @@ Phase 1 では次を対象外とする。
 - Spring Security による認証基盤（FilterChain 等）
 - JPA / Hibernate / Spring Data
 - Thymeleaf
-- 不要な新機能および不要な抽象化
+- 上記対象以外の不要な新機能、および不要な抽象化
 - Cloud Run
 - 外部 Tomcat 必須構成
-- Legacy 文書（`docs/設計書.md` 等）の改訂
+- Legacy 文書（`docs/archive/`）の改訂
 
 ---
 
@@ -71,9 +76,34 @@ Phase 1 では次を対象外とする。
 
 ### 5.1 Background and Purpose（背景・課題・目的）
 
-現行 `DokoTsubu2` は Eclipse Dynamic Web Project と Jakarta Servlet で動作するつぶやき共有アプリである。Servlet / Eclipse 依存、秘密情報のソース直書き、固定絶対パスの AI 設定、編集・削除の認可欠落が、後続の PF 化と外部公開の障害になる。
+#### 5.1.1 Background（背景）
 
-Phase 1 の目的は、現行 `DokoTsubu2` を保持したまま、その現行機能を基準として新規 `DokoTsubu3/` に Spring Boot 構成を構築し、秘密値を Git / source から排除し、他人の投稿を操作できない状態にすることである。新機能追加としては扱わない。
+- 現行 `DokoTsubu2` は Eclipse Dynamic Web Project と Jakarta Servlet で動作するつぶやき共有アプリである
+
+#### 5.1.2 Current Problems（現在の課題）
+
+- Servlet / Eclipse 依存
+- 秘密情報のソース直書き
+- 固定絶対パスの AI 設定
+- 編集・削除の認可欠落
+- 上記が後続の PF 化と外部公開の障害になる
+
+#### 5.1.3 Phase 1 Purpose（Phase 1の目的）
+
+- 現行 `DokoTsubu2` を保持したまま、その現行機能を基準として新規 `DokoTsubu3/` に Spring Boot 構成を構築する
+- 秘密値を Git / source から排除する
+- 他人の投稿を操作できない状態にする
+- 登録・ログイン・ログアウト・一覧・投稿・検索・編集・削除・Gemini コメントの機能要件自体は変更しない
+- User / Mutter のデータライフサイクル管理、`USERS` / `MUTTERS` の論理削除、User プロフィール（`GENDER` / `AGE_FEELING`）の保持、およびそのプロフィールの Gemini コメント生成への利用を対象とする
+- 論理削除済みデータは通常利用者へ表示しない
+
+#### 5.1.4 Scope of This Change（今回の対象）
+
+- [2. Scope（対象範囲）](#2-scope対象範囲) を正とする
+
+#### 5.1.5 Out of Scope（対象外）
+
+- [3. Out of Scope（対象外範囲）](#3-out-of-scope対象外範囲) を正とする
 
 ### 5.2 Stakeholders（ステークホルダー一覧と関心事）
 
@@ -88,15 +118,15 @@ Phase 1 の目的は、現行 `DokoTsubu2` を保持したまま、その現行�
 
 | ID | User Story / Use Case（ユーザーストーリー / ユースケース） |
 |---|---|
-| US-001 | 利用者としてユーザー名とパスワードで登録したい |
+| US-001 | 利用者としてユーザー名、パスワード、性別、年齢感覚で登録したい |
 | US-002 | 登録済み利用者としてログインしたい |
 | US-003 | ログイン中利用者としてログアウトしたい |
-| US-004 | ログイン中利用者として全つぶやきを新着順で見たい |
+| US-004 | ログイン中利用者として、論理削除されていないつぶやきを新着順で見たい |
 | US-005 | ログイン中利用者としてつぶやきを投稿したい |
 | US-006 | ログイン中利用者としてキーワードでつぶやきを検索したい |
 | US-007 | ログイン中利用者として自分のつぶやきを編集したい |
 | US-008 | ログイン中利用者として自分のつぶやきを削除したい |
-| US-009 | ログイン中利用者として投稿成功後に Gemini 一言を見たい |
+| US-009 | ログイン中利用者として、投稿本文と自分のプロフィールを踏まえた Gemini 一言を投稿成功後に見たい |
 
 ### 5.4 Constraints（制約条件）
 

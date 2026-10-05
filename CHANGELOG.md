@@ -57,6 +57,21 @@ Governance導入Baselineは、Governance導入成功後に記録する。
 
 | Version | Date | Document | Category | Changes | Author |
 |---|---|---|---|---|---|
+| 0.4 | 2026-10-05 | `/README.md` | Changed | Root README を再構成した。Overview、Version 1 / 2 / 3 の位置付けと実コード確認に基づく機能比較、Current Version 3、Vercel / Aiven 概要、関連文書一覧を追加した。Version 3 に至る累積変更・機能一覧・Legacy Tech Stack・Legacy Architecture・Legacy Screen Flow の独立章を統合・削除した。Document ID を `LEGACY-001` から `PROJECT-README-001` へ、Status を Review へ変更した。Version 1 の正本を別 Repository `t-oikawa-sendai/dokoTsubu` と明記した | Takashi Oikawa |
+| - | 2026-10-05 | `/docs/specs/` | Added | 現行仕様書の配置先として新設した | Takashi Oikawa |
+| 0.1 | 2026-10-05 | `/docs/specs/API_SPEC.md` | Added | Version 3 の API Specification（Target Specification）を新設した。設計正本と DokoTsubu3 の Controller を情報源とした。設計確定済み・未実装の仕様を含むことを明記した | Takashi Oikawa |
+| 0.1 | 2026-10-05 | `/docs/specs/GEMINI_INTEGRATION_SPEC.md` | Added | Version 3 の Gemini Integration Specification（Target Specification）を新設した。`GENDER` / `AGE_FEELING` の送信は設計確定済み・未実装であることを明記した。送信する / 送信しないデータ、Profile の扱い、エラー処理、API key 管理を定義した | Takashi Oikawa |
+| 0.1 | 2026-10-05 | `/docs/ENVIRONMENT_SETUP_GUIDE.md` | Added | Version 3 のローカル開発環境構築手順を新設した。本番運用は運用手順書へ分離した | Takashi Oikawa |
+| 0.2 | 2026-10-05 | `/docs/DEPLOYMENT_AND_OPERATION_GUIDE.md` | Changed | 関連文書リンクを更新し、ローカル構築を Environment Setup Guide へ誘導した | Takashi Oikawa |
+| - | 2026-10-05 | `/docs/archive/` | Changed | Legacy 文書 6 件を `git mv` で移動した。`AI設定仕様書.md` → `DOKOTSUBU2_AI_CONFIGURATION_SPEC.md`、`API仕様書.md` → `DOKOTSUBU2_API_SPEC.md`、`環境構築手順書.md` → `DOKOTSUBU2_ENVIRONMENT_SETUP_GUIDE.md`、`設計書.md` → `DOKOTSUBU2_DESIGN.md`、`DokoTsubu_修正履歴_20260403.md` → `DOKOTSUBU_CHANGE_HISTORY_20260403.md`、`修正検討事項_20260408.md` → `DOKOTSUBU_REVIEW_NOTES_20260408.md`。本文は変更していない | Takashi Oikawa |
+| 1.8 | 2026-10-05 | `/docs/design/README.md` | Changed | 設計書一覧の版・状態を更新し、関連仕様・運用文書への導線を追加した。Legacy 文書の所在を `docs/archive/` へ更新した。Screen Overview にメイン画面の thumbnail を 1 枚掲載した | Takashi Oikawa |
+| 1.5 | 2026-10-05 | `/docs/design/01_REQUEST_DEFINITION.md` | Changed | データライフサイクル、`USERS` / `MUTTERS` の論理削除、`GENDER` / `AGE_FEELING`、Profile の Gemini 利用を対象へ追加した。§5.1 を Background / Current Problems / Phase 1 Purpose / Scope of This Change / Out of Scope に分けて箇条書き化した | Takashi Oikawa |
+| 1.5 | 2026-10-05 | `/docs/design/02_REQUIREMENTS_DEFINITION.md` | Changed | `GENDER` / `AGE_FEELING` の値一覧、論理削除と有効データ条件、重複 username と再利用禁止、Gemini への Profile 送信を反映した。API / Gemini 仕様書への参照を追加した | Takashi Oikawa |
+| 1.9 | 2026-10-05 | `/docs/design/03_DATA_AND_SECURITY_DESIGN.md` | Changed | 現行 DB 実体と Target Schema を分離し、`CREATED_AT` / `UPDATED_AT` / `DELETED_AT`、`GENDER` / `AGE_FEELING`、User 論理削除時の Mutter 同時論理削除、NAME 再利用禁止を定義した。password 移行方針を既存 Domain データ初期化・旧 password 移行なしへ変更した。§5 を Current / Target Data Model、Table Definitions、Data Lifecycle、User Profile、Authentication / Authorization、Gemini Data Transfer、Security Design に分離した | Takashi Oikawa |
+| 1.3 | 2026-10-05 | `/docs/design/04_UI_AND_FLOW_DESIGN.md` | Changed | 登録画面へ `gender` / `ageFeeling`、初期値、validation、username 重複メッセージを追加した。UI 上の削除は内部で論理削除であることを明記した。SCR-001 / SCR-005 のスクリーンショット（`screenshots/full/`）を掲載した | Takashi Oikawa |
+| 1.8 | 2026-10-05 | `/docs/design/05_ARCHITECTURE_DESIGN.md` | Changed | §5 を Application / Domain Data / Session / Gemini Integration / Deployment Architecture に分離した。`loginUser` は id / name のみ、Profile は Session へ保存せず Gemini 生成時に DB から取得することを明記した。Domain table 構造の記述を Target Schema へ整合させた | Takashi Oikawa |
+| 1.9 | 2026-10-05 | `/docs/design/06_OPERATION_AND_HANDOFF.md` | Changed | password 移行方針を既存 Domain データ初期化へ変更した。Migration を独立節とし、前提条件、Domain データ初期化、Schema 変更、password 方針、Session 無効化、サービス再開条件に分けた | Takashi Oikawa |
+| - | 2026-10-05 | 現行文書全体 | Changed | Root README → design README → 01〜06 → specs → guides へ辿れるよう、Related Documents を実リンク化し文書間導線を整備した | Takashi Oikawa |
 | 1.7 | 2026-10-05 | `/docs/design/README.md` | Changed | 設計書一覧の版を、SEC-01 / SEC-02 対応後の 01〜06 に合わせた | Takashi Oikawa |
 | 1.4 | 2026-10-05 | `/docs/design/01_REQUEST_DEFINITION.md` | Security | SC-005 の対象を Repository 全体の現行 Git 管理ファイルであると明確化した | Takashi Oikawa |
 | 1.4 | 2026-10-05 | `/docs/design/02_REQUIREMENTS_DEFINITION.md` | Security | FR-008 と API-007 を `POST /DeleteMutter` にした。対象 POST の Session 保存型 CSRF 照合を非機能要件へ追記した | Takashi Oikawa |
