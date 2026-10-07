@@ -3,7 +3,7 @@ Program Name: dokoTsubu-platform CHANGELOG
 Language: Markdown
 Function: dokoTsubu-platformの変更履歴正本
 Created: 2026-09-11
-Last Updated: 2026-10-05
+Last Updated: 2026-10-07
 Author: Takashi Oikawa
 AI: Cursor Grok 4.7
 Memo: Canonical Templateから新設したRepository固有履歴正本。過去Application履歴は推測して追加しない。Runtime側に CHANGELOG_TEMPLATE.md は作成しない。
@@ -18,7 +18,7 @@ Memo: Canonical Templateから新設したRepository固有履歴正本。過去A
 | Version（バージョン） | 0.1 |
 | Status（ステータス） | Draft |
 | Created Date（作成日） | 2026-09-11 |
-| Last Updated（最終更新日） | 2026-10-05 |
+| Last Updated（最終更新日） | 2026-10-07 |
 | Owner（管理者） | Takashi Oikawa |
 | Related Documents（関連文書） | /CONSTITUTION.md / /AGENTS.md / /docs/design/README.md |
 
@@ -57,6 +57,8 @@ Governance導入Baselineは、Governance導入成功後に記録する。
 
 | Version | Date | Document | Category | Changes | Author |
 |---|---|---|---|---|---|
+| 0.1 | 2026-10-07 | `/docs/STUDENT_DISTRIBUTION_GUIDE.md` | Added | 修正完了版 DokoTsubu3 の生徒向け ZIP 配布・ローカル導入の準備文書（Draft）を新設した。実行用 ZIP・Domain table 初期作成 SQL・設定サンプルは未作成、導入手順は配布版で未検証であることを明記した。アプリの確定仕様は変更していない | Takashi Oikawa |
+| 0.5 | 2026-10-07 | `/README.md` | Changed | §5 Documents に生徒向け配布準備ガイドへの案内を 1 行追加し、§6 の最終更新日を更新した | Takashi Oikawa |
 | 0.4 | 2026-10-05 | `/README.md` | Changed | Root README を再構成した。Overview、Version 1 / 2 / 3 の位置付けと実コード確認に基づく機能比較、Current Version 3、Vercel / Aiven 概要、関連文書一覧を追加した。Version 3 に至る累積変更・機能一覧・Legacy Tech Stack・Legacy Architecture・Legacy Screen Flow の独立章を統合・削除した。Document ID を `LEGACY-001` から `PROJECT-README-001` へ、Status を Review へ変更した。Version 1 の正本を別 Repository `t-oikawa-sendai/dokoTsubu` と明記した | Takashi Oikawa |
 | - | 2026-10-05 | `/docs/specs/` | Added | 現行仕様書の配置先として新設した | Takashi Oikawa |
 | 0.1 | 2026-10-05 | `/docs/specs/API_SPEC.md` | Added | Version 3 の API Specification（Target Specification）を新設した。設計正本と DokoTsubu3 の Controller を情報源とした。設計確定済み・未実装の仕様を含むことを明記した | Takashi Oikawa |
