@@ -4,10 +4,10 @@
 | Item（項目） | Value（値） |
 |---|---|
 | Document ID（文書ID） | PROJECT-README-001 |
-| Version（バージョン） | 0.5 |
+| Version（バージョン） | 0.6 |
 | Status（ステータス） | Review |
 | Created Date（作成日） | 2024-06-15 |
-| Last Updated（最終更新日） | 2026-10-07 |
+| Last Updated（最終更新日） | 2026-10-08 |
 | Owner（管理者） | Takashi Oikawa |
 | Related Documents（関連文書） | [Design Documents Index（設計書一覧）](./docs/design/README.md) / [API Specification（API仕様書）](./docs/specs/API_SPEC.md) / [Gemini Integration Specification（Gemini連携仕様書）](./docs/specs/GEMINI_INTEGRATION_SPEC.md) / [Environment Setup Guide（環境構築手順書）](./docs/ENVIRONMENT_SETUP_GUIDE.md) / [Deployment and Operation Guide（デプロイ・運用手順書）](./docs/DEPLOYMENT_AND_OPERATION_GUIDE.md) / [CHANGELOG.md](./CHANGELOG.md) |
 
@@ -135,8 +135,11 @@ Version 3 で設計確定済み・未実装の項目:
 | Environment Setup（環境構築） | [docs/ENVIRONMENT_SETUP_GUIDE.md](./docs/ENVIRONMENT_SETUP_GUIDE.md) |
 | Deployment / Operation（デプロイ・運用） | [docs/DEPLOYMENT_AND_OPERATION_GUIDE.md](./docs/DEPLOYMENT_AND_OPERATION_GUIDE.md) |
 | Student Distribution（生徒向け配布準備） | [docs/STUDENT_DISTRIBUTION_GUIDE.md](./docs/STUDENT_DISTRIBUTION_GUIDE.md)。Draft。配布資材は未作成、導入手順は未検証 |
+| Current State（現在状態・残作業） | [project-notes/CURRENT.md](./project-notes/CURRENT.md) |
 | Change History（変更履歴） | [CHANGELOG.md](./CHANGELOG.md) |
 | Legacy Documents（旧文書） | `docs/archive/`。DokoTsubu2 時点の文書。現行正本ではない |
+
+AIはAGENTS.mdのRequired Reading Orderを守り、変更着手前に[CURRENT.md](./project-notes/CURRENT.md)で現在対象・残作業・次作業を確認する。
 
 ---
 
@@ -144,5 +147,5 @@ Version 3 で設計確定済み・未実装の項目:
 
 - **及川 孝志 (Takashi Oikawa)**
 - 作成開始: 2024-06-15
-- 最終更新: 2026-10-07
+- 最終更新: 2026-10-08
 - 設計、実装、レビューは AI が分担した
