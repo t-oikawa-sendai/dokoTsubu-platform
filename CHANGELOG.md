@@ -3,7 +3,7 @@ Program Name: dokoTsubu-platform CHANGELOG
 Language: Markdown
 Function: dokoTsubu-platformの変更履歴正本
 Created: 2026-09-11
-Last Updated: 2026-10-08
+Last Updated: 2026-10-12
 Author: Takashi Oikawa
 AI: Cursor Grok 4.7
 Memo: Canonical Templateから新設したRepository固有履歴正本。過去Application履歴は推測して追加しない。Runtime側に CHANGELOG_TEMPLATE.md は作成しない。
@@ -18,7 +18,7 @@ Memo: Canonical Templateから新設したRepository固有履歴正本。過去A
 | Version（バージョン） | 0.1 |
 | Status（ステータス） | Draft |
 | Created Date（作成日） | 2026-09-11 |
-| Last Updated（最終更新日） | 2026-10-08 |
+| Last Updated（最終更新日） | 2026-10-12 |
 | Owner（管理者） | Takashi Oikawa |
 | Related Documents（関連文書） | /CONSTITUTION.md / /AGENTS.md / /docs/design/README.md |
 
@@ -55,8 +55,22 @@ Git 履歴は差分確認の補助として利用する。CHANGELOG の代替と
 Governance導入Baselineは、Governance導入成功後に記録する。
 導入前に成功した事実として記録しない。
 
+2026-10-08の実装・README・仕様・ガイド・初期SQL、およびCURRENT Version 0.2〜0.4の履歴は、ローカル作業と過去レビューの記録を含む。2026-10-12のGitHub記録対象はCURRENT Version 0.5と本CHANGELOGだけであり、対応するアプリ・関連文書・初期SQLの実差分はMac miniで未commit・未pushのまま保全する。
+
 | Version | Date | Document | Category | Changes | Author |
 |---|---|---|---|---|---|
+| 0.5 | 2026-10-12 | `/project-notes/CURRENT.md` / `/CHANGELOG.md` | Changed | レビューZIP本体の実差分・17ファイルのハッシュ一致と、既存コードのレビューPASS維持を記録した。実行案は構造用dumpのCREATE TABLE拒否等が残るため要修正。本番の未確認事項と次回の開始位置を記録し、GitHub反映対象をこの文書2件に限定した。残る15ファイルはMac miniの未commit作業ツリーに保全する | Takashi Oikawa |
+| 0.4 | 2026-10-12 | `/project-notes/CURRENT.md` | Changed | Mac mini の開始 HEAD `9ca037c04b4e35ec203c725e8529cb3737f9c5f2` の作業ツリーへ、レビュー済み差分を復元した。未 commit、未 push。`cbfa174e` はこの clone では取得していない。45 件の試験は 2026-10-08 の独立環境の過去結果であり、今回の Mac mini の試験結果ではない。本番移行と公開反映は未実施。CURRENT を Version 0.4 / Review にした | Takashi Oikawa |
+| 0.3 | 2026-10-08 | `/project-notes/CURRENT.md` | Changed | 実差分レビューPASS、ローカルcommitと本番反映の事前確認への移行、push保留を記録した。基準SHAのVercel commit status成功とProduction適用・自動反映設定の未確認を区別した | Takashi Oikawa |
+| - | 2026-10-08 | `DokoTsubu3/` | Changed | 利用者の明示指示によりアプリ改修の停止を解除し、論理削除・日時管理、登録プロフィール、Geminiへのプロフィール利用を実装した。独立検証DBで確認し、設計担当の実差分レビューはPASS。本番DB・公開環境への反映は未実施 | Takashi Oikawa |
+| - | 2026-10-08 | `/DokoTsubu3/db/create-student-db.sql` | Added | 空の環境へ `dokotsubu` と Target Schema の `USERS` / `MUTTERS` を初期作成するSQLを追加した。既存DBの移行・初期化には使わない | Takashi Oikawa |
+| 0.2 | 2026-10-08 | `/project-notes/CURRENT.md` | Changed | 明示再開、実装、独立検証DBの確認結果、本番未反映を記録した | Takashi Oikawa |
+| 0.7 | 2026-10-08 | `/README.md` | Changed | §2.2の3項目を、コード実装・独立検証DBでの確認と本番未適用の区別へ更新した | Takashi Oikawa |
+| 0.2 | 2026-10-08 | `/docs/specs/API_SPEC.md` | Changed | §1の未実装注記を、実装済み・独立検証DBで確認済み・本番未適用へ更新した。仕様本文は変更していない | Takashi Oikawa |
+| 0.2 | 2026-10-08 | `/docs/specs/GEMINI_INTEGRATION_SPEC.md` | Changed | §1の未実装注記を、実装済み・送信構成と実API 1件を確認済み・本番未適用へ更新した。仕様本文は変更していない | Takashi Oikawa |
+| 0.2 | 2026-10-08 | `/docs/ENVIRONMENT_SETUP_GUIDE.md` | Changed | §4のDomain DDLが無いという記述を、空の環境専用の初期作成SQLへの案内へ変更した | Takashi Oikawa |
+| 0.3 | 2026-10-08 | `/docs/DEPLOYMENT_AND_OPERATION_GUIDE.md` | Changed | §3のDomain DDLが無いという記述を、新SQLは空の環境の初期作成用であり既存DB移行は別工程である案内へ変更した。本番確認済み範囲は増やしていない | Takashi Oikawa |
+| 0.2 | 2026-10-08 | `/docs/STUDENT_DISTRIBUTION_GUIDE.md` | Changed | 初期作成SQLの準備状況を更新した。実装状況はREADMEとCURRENTへ誘導し、ZIP・設定サンプル・配布版導入の未完了は維持した | Takashi Oikawa |
 | 0.1 | 2026-10-08 | `/project-notes/CURRENT.md` | Added | 現在状態・確定事項・残作業・現在対象・次作業の記録（Version 0.1 / Review）を新設した。アプリコードと DB は変更せず、アプリ改修の停止を維持した | Takashi Oikawa |
 | 0.6 | 2026-10-08 | `/README.md` | Changed | §5 Documents に現在状態への案内を 1 行追加し、AI が変更着手前に CURRENT.md で現在対象・残作業・次作業を確認する旨を記載した。Version を 0.6、最終更新日を 2026-10-08 にした | Takashi Oikawa |
 | 0.1 | 2026-10-07 | `/docs/STUDENT_DISTRIBUTION_GUIDE.md` | Added | 修正完了版 DokoTsubu3 の生徒向け ZIP 配布・ローカル導入の準備文書（Draft）を新設した。実行用 ZIP・Domain table 初期作成 SQL・設定サンプルは未作成、導入手順は配布版で未検証であることを明記した。アプリの確定仕様は変更していない | Takashi Oikawa |
