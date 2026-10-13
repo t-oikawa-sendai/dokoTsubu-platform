@@ -3,7 +3,7 @@ Program Name: dokoTsubu-platform CURRENT
 Language: Markdown
 Function: 現在状態・確定事項・残作業・現在対象・次作業の記録
 Created: 2026-10-08
-Last Updated: 2026-10-12
+Last Updated: 2026-10-13
 Author: Takashi Oikawa
 AI: ChatGPT（原稿）/ Cursor（配置）
 Memo: 仕様正本を置き換えず、確認結果と引き継ぎ報告を区別する。
@@ -15,10 +15,10 @@ Memo: 仕様正本を置き換えず、確認結果と引き継ぎ報告を区�
 | Item（項目） | Value（値） |
 |---|---|
 | Document ID（文書ID） | CURRENT-001 |
-| Version（バージョン） | 0.5 |
+| Version（バージョン） | 0.6 |
 | Status（ステータス） | Review |
 | Created Date（作成日） | 2026-10-08 |
-| Last Updated（最終更新日） | 2026-10-12 |
+| Last Updated（最終更新日） | 2026-10-13 |
 | Owner（管理者） | Takashi Oikawa |
 | Related Documents（関連文書） | [AGENTS.md](../AGENTS.md) / [CONSTITUTION.md](../CONSTITUTION.md) / [README.md](../README.md) / [設計書一覧](../docs/design/README.md) / [CHANGELOG.md](../CHANGELOG.md) |
 
@@ -62,6 +62,18 @@ Memo: 仕様正本を置き換えず、確認結果と引き継ぎ報告を区�
 - 本日のGitHub記録は本書とCHANGELOGの2ファイルだけを対象とする。文書2件のcommit後は、残る15ファイル（追跡13・未追跡2）をMac miniの未commit作業ツリーに保全する。アプリコード、README、仕様書、ガイド、初期作成SQLは今回GitHubへ反映しない。文書記録のcommitを新アプリの公開予定SHAとして扱わない。
 - Aiven ConsoleとVercel設定画面はCursorの確認ではログイン画面だった。本番DBの構造・制約・件数、公開aliasの適用SHA、Production Branch、自動反映、停止・再開操作、Mac miniの既存ローカルDBは未確認である。既存の利用可能なログインセッション・接続情報で読み取り確認する。秘密値をチャットや文書へ記録しない。
 
+2026-10-13の終了時点は次のとおりである。以下は本番実行の承認ではない。
+
+- 設計担当によるRepository外の修正版実行案の実物レビューはPASS。最終ZIPのSHA-256、実差分、変更bashブロックの構文、提出されたSQL受信結果を確認済み。既存アプリレビューPASSを維持し、レビューを再実行していない。
+- 設計担当は保全15ファイルの実SHA-256が既存レビューZIPの保全一覧と一致することを直接確認した。着手時HEADとローカル `origin/main` は `ac11b671ce6bc2247bb45add023dcf6ad9f570ab`、branchは `main`、ahead/behindは0、stageは空。GitHubの最新SHAは今回再取得していない。Cursorの利用者提供報告も追跡13・未追跡2、保全一覧一致であり、同報告は更新時刻確認まででハッシュ再計算は行っていない。既存ハッシュ記録は `/Users/takashioikawa/BakaUpArea/dokoTsubu-platform/stop-confirm-stdin-fix-20261013/dokotsubu-plan-stop-confirm-stdin-20261013/git/preservation-sha256.txt`（2026-10-13 15:12:50 +0900）。
+- 既存の利用者画面証拠ではVercelのProduction Currentは `ac11b67`、Production Branchは `main`、mainの自動反映とPause Projectを確認済み。Aiven service `mysql-dokotsubu` とdatabase `dokotsubu` の存在も既存証拠を再利用する。今回の新規実測として扱わない。
+- Cursorの利用者提供報告（2026-10-13）では、Projectの環境変数の表示先はProductionのみ、Preview／Development／Pre-productionのフィルタ結果は0件。値は未読取、Sharedタブは未読取。これは現在の割当であり、他の接続元の不存在や移行中の再接続防止を保証しない。
+- 同報告では、Vercel公式文書の「Resuming a project」で正式名称 `Resume Project`、Settings → GeneralのPause Project節またはバナーからの導線、Production deploymentの提供再開という適用範囲を確認した。停止中の実ボタン表示と再開動作は未確認。証拠は <https://vercel.com/docs/projects/managing-projects#pausing-a-project>（文書最終更新2026-08-11、確認2026-10-13）。
+- 本番4テーブル `USERS`／`MUTTERS`／`SPRING_SESSION`／`SPRING_SESSION_ATTRIBUTES` の列・制約・ENGINEと、全接続・EVENT・transaction閲覧に必要な権限は未読取。`SHOW GRANTS`、`PROCESS`、EVENT一覧、`@@GLOBAL.event_scheduler`、`information_schema.INNODB_TRX`の確認も未了。過去のローカル実測とAiven DDLスパイクPASSで代替しない。件数は移行実行時に測定する。
+- 同報告ではAiven Consoleはログイン画面。Mac miniに `.local-secrets/mysql.cnf`／`.local-secrets/aiven-dokotsubu.env`、MySQL login path、`AIVEN_TOKEN`はなく、`mysql`クライアントはある。新しいtokenは発行していない。既存のAivenログインまたは既存接続ファイルが次作業の前提である。秘密値は文書へ記録しない。
+- Production以外のdeployment、GUI、スクリプト、Spring Session期限切れ清掃、MySQL EVENTの書込みを移行中に停止維持する方法は不足している。Pause Projectによる配信停止だけではDB書込み停止成立としない。実行案§4.3の停止維持フラグは未成立のまま扱う。
+- 本番開始条件は不足。本番DB移行、初期化、Session無効化、停止・再開・公開は未実施。アプリ等15ファイルは未commitのまま保全する。本日のGitHub記録対象はCURRENTとCHANGELOGの2ファイルに限り、その文書commitを新アプリの公開承認commitにしない。
+
 ## 3. Confirmed Decisions（確定事項）
 
 詳細と値定義は[設計書一覧](../docs/design/README.md)および各仕様正本を参照する。
@@ -81,7 +93,7 @@ Memo: 仕様正本を置き換えず、確認結果と引き継ぎ報告を区�
 | USERS／MUTTERSの論理削除・日時管理 | コード実装済み。独立検証DBで確認済み。本番未適用 | [データ設計](../docs/design/03_DATA_AND_SECURITY_DESIGN.md) |
 | GENDER／AGE_FEELINGの登録画面・DB保存 | コード実装済み。独立検証DBで確認済み。本番未適用 | [要件定義](../docs/design/02_REQUIREMENTS_DEFINITION.md)・[画面設計](../docs/design/04_UI_AND_FLOW_DESIGN.md) |
 | Geminiコメント生成へのプロフィール利用 | コード実装済み。独立検証DBで送信構成と実API 1件を確認済み。本番未適用 | [Gemini仕様](../docs/specs/GEMINI_INTEGRATION_SPEC.md) |
-| Target Schemaへの移行・既存データ初期化・既存Session無効化 | 未実施。修正版実行案はRepository外。Aivenの実測と公開操作の確認が未了のため、本番工程は開始しない | [移行設計](../docs/design/06_OPERATION_AND_HANDOFF.md) §5.7 |
+| Target Schemaへの移行・既存データ初期化・既存Session無効化 | 未実施。Repository外の修正版実行案レビューPASS。本番構造・権限の実測と書込み停止維持方法が不足しているため、本番工程は開始しない | [移行設計](../docs/design/06_OPERATION_AND_HANDOFF.md) §5.7 |
 | 配布用WAR・初期作成SQL・設定サンプル・ZIP・Release公開 | 初期作成SQLはMac miniの作業ツリーへ復元済み、未追跡・未commit・未push。空の環境専用。配布用WAR・設定サンプル・ZIP・Releaseは未作成・未公開 | [配布準備ガイド](../docs/STUDENT_DISTRIBUTION_GUIDE.md) |
 | 配布版の新規導入・起動・対象機能確認 | 未検証 | [配布準備ガイド](../docs/STUDENT_DISTRIBUTION_GUIDE.md) |
 | 最新環境構築手順どおりのローカル起動・Login入口 | 独立検証環境のport 18081で確認済み。手順書の既定port 8080と既存運用DBでは未確認 | [環境構築手順書](../docs/ENVIRONMENT_SETUP_GUIDE.md) |
@@ -91,10 +103,11 @@ Memo: 仕様正本を置き換えず、確認結果と引き継ぎ報告を区�
 
 ## 5. Current Target / Next（現在対象・次作業）
 
-- 現在対象：本日のレビュー結果・未完了事項・再開位置を本書とCHANGELOGに記録する。利用者の明示指示により、この文書2件だけをcommit／通常pushし、GitHub上の実物と対象SHAのValidate Documents成功を確認して本日の作業を終了する。アプリ改修の公開は含めない。
-- 次回の最初：CursorでMac miniのroot・branch・HEAD・fetch後origin/main・GitHub main・stage・未commit差分を確認する。文書記録後に残す15ファイルの内容を保全し、本書の現在状態と照合してから再開する。作業ツリーをcleanにするために実装差分を破棄しない。
-- 次作業：修正版実行案の上記レビュー指摘を一括修正し、実物を再レビューする。Aiven／Vercelの利用可能な既存セッションと接続手段で未確認事項を解消する。アプリのcommit／pushと公開予定SHAは、その工程の明示指示で確定する。`cbfa174e`および本日の文書記録commitを新アプリの公開対象にしない。
-- DB移行、既存データ初期化、Session無効化、停止・再起動、手動deploy、配布資材作成は未実施。今回の文書記録には含めない。
+- 現在対象：2026-10-13の確認結果・本番開始条件の不足・再開位置を本書とCHANGELOGに記録する。利用者の明示指示により文書2件だけをcommit／通常pushし、GitHub上の実物と対象SHAのValidate Documents成功を確認して本日の作業を終了する。
+- 本日は文書記録をもって終了し、次回はこのチャットを継続する。次回の最初：文書記録後のGit状態と保全15ファイルを現在状態へ照合する。作業ツリーをcleanにするために実装差分を破棄しない。既存レビューと確認済み証拠は再利用する。
+- 次作業：利用者の既存Aivenログインまたは既存接続ファイルを利用可能にし、本番4テーブルの構造・ENGINEと必要権限など不足するメタ情報を読み取り専用で一括確認する。その結果に基づき書込み停止の維持方法を確定する。
+- 公開承認commitの確定、アプリのcommit／push、DB移行・停止・再開・公開は別途承認後の工程とする。件数測定と停止後の書込み停止確認は移行実行時に行う。今回の文書commitおよび `cbfa174e` を新アプリの公開対象として扱わない。
+- 配布資材作成は未実施であり、今回の文書記録には含めない。
 
 ## 6. Maintenance（運用）
 
