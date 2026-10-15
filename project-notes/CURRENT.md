@@ -3,7 +3,7 @@ Program Name: dokoTsubu-platform CURRENT
 Language: Markdown
 Function: 現在状態・確定事項・残作業・現在対象・次作業の記録
 Created: 2026-10-08
-Last Updated: 2026-10-13
+Last Updated: 2026-10-15
 Author: Takashi Oikawa
 AI: ChatGPT（原稿）/ Cursor（配置）
 Memo: 仕様正本を置き換えず、確認結果と引き継ぎ報告を区別する。
@@ -15,10 +15,10 @@ Memo: 仕様正本を置き換えず、確認結果と引き継ぎ報告を区�
 | Item（項目） | Value（値） |
 |---|---|
 | Document ID（文書ID） | CURRENT-001 |
-| Version（バージョン） | 0.6 |
+| Version（バージョン） | 0.7 |
 | Status（ステータス） | Review |
 | Created Date（作成日） | 2026-10-08 |
-| Last Updated（最終更新日） | 2026-10-13 |
+| Last Updated（最終更新日） | 2026-10-15 |
 | Owner（管理者） | Takashi Oikawa |
 | Related Documents（関連文書） | [AGENTS.md](../AGENTS.md) / [CONSTITUTION.md](../CONSTITUTION.md) / [README.md](../README.md) / [設計書一覧](../docs/design/README.md) / [CHANGELOG.md](../CHANGELOG.md) |
 
@@ -74,6 +74,16 @@ Memo: 仕様正本を置き換えず、確認結果と引き継ぎ報告を区�
 - Production以外のdeployment、GUI、スクリプト、Spring Session期限切れ清掃、MySQL EVENTの書込みを移行中に停止維持する方法は不足している。Pause Projectによる配信停止だけではDB書込み停止成立としない。実行案§4.3の停止維持フラグは未成立のまま扱う。
 - 本番開始条件は不足。本番DB移行、初期化、Session無効化、停止・再開・公開は未実施。アプリ等15ファイルは未commitのまま保全する。本日のGitHub記録対象はCURRENTとCHANGELOGの2ファイルに限り、その文書commitを新アプリの公開承認commitにしない。
 
+2026-10-15のMac mini実測は次のとおりである。着手時HEADは `4fd7e68de9903f6577925dd184e92b8843b13df6`、branchは `main` である。Gemini生成成功確認とAiven・本番対応は、この記録をもって保留のままとする。
+
+- Cursor実測：127.0.0.1:3306に存在していなかった `dokotsubu` を、空環境用SQLとSession用SQLで新規作成した。Target Schemaは一致した。既存データの削除・上書きはない。
+- ローカル8080で起動し、登録プロフィール保存、ログイン、投稿保存、本人投稿の論理削除、ログアウトを確認した。
+- 既存のMavenビルドは成功し、`git diff --check` は成功した。設計担当はログイン画面、`.gitignore` 差分、秘密設定の配置・権限・Git除外、保全15ファイルのハッシュ一致を直接確認した。
+- アプリコードの追加変更はない。`.gitignore` には `.local-ops/` の除外とコードヘッダを追加済みで、未commitである。
+- Geminiはキー未入手のため、利用者指示で生成成功確認を保留する。Aiven・本番対応も保留し、追加調査・問い合わせは進めない。
+- Aiven接続設定とCAは作成済みだが1045で拒否された。本番構造・権限は未読取である。Vercelの秘密値は取得できず、Macとの一致は未確認である。
+- 保全15ファイルと `.gitignore` 差分を維持する。commit／pushは未実施である。
+
 ## 3. Confirmed Decisions（確定事項）
 
 詳細と値定義は[設計書一覧](../docs/design/README.md)および各仕様正本を参照する。
@@ -90,23 +100,23 @@ Memo: 仕様正本を置き換えず、確認結果と引き継ぎ報告を区�
 
 | 対象 | 状態 | 参照正本 |
 |---|---|---|
-| USERS／MUTTERSの論理削除・日時管理 | コード実装済み。独立検証DBで確認済み。本番未適用 | [データ設計](../docs/design/03_DATA_AND_SECURITY_DESIGN.md) |
-| GENDER／AGE_FEELINGの登録画面・DB保存 | コード実装済み。独立検証DBで確認済み。本番未適用 | [要件定義](../docs/design/02_REQUIREMENTS_DEFINITION.md)・[画面設計](../docs/design/04_UI_AND_FLOW_DESIGN.md) |
-| Geminiコメント生成へのプロフィール利用 | コード実装済み。独立検証DBで送信構成と実API 1件を確認済み。本番未適用 | [Gemini仕様](../docs/specs/GEMINI_INTEGRATION_SPEC.md) |
-| Target Schemaへの移行・既存データ初期化・既存Session無効化 | 未実施。Repository外の修正版実行案レビューPASS。本番構造・権限の実測と書込み停止維持方法が不足しているため、本番工程は開始しない | [移行設計](../docs/design/06_OPERATION_AND_HANDOFF.md) §5.7 |
+| USERS／MUTTERSの論理削除・日時管理 | コード実装済み。2026-10-08の独立検証DBで確認済み。2026-10-15のMac mini新規ローカル `dokotsubu`（127.0.0.1:3306）とローカル8080で、本人投稿の論理削除を確認した。本番未適用 | [データ設計](../docs/design/03_DATA_AND_SECURITY_DESIGN.md) |
+| GENDER／AGE_FEELINGの登録画面・DB保存 | コード実装済み。2026-10-08の独立検証DBで確認済み。2026-10-15のローカル8080で登録プロフィール保存を確認した。本番未適用 | [要件定義](../docs/design/02_REQUIREMENTS_DEFINITION.md)・[画面設計](../docs/design/04_UI_AND_FLOW_DESIGN.md) |
+| Geminiコメント生成へのプロフィール利用 | コード実装済み。2026-10-08の独立検証DBで送信構成と実API 1件を確認済み。2026-10-15のローカル8080での生成成功確認は、キー未入手のため利用者指示で保留する。追加調査・再試行は進めない。本番未適用 | [Gemini仕様](../docs/specs/GEMINI_INTEGRATION_SPEC.md) |
+| Target Schemaへの移行・既存データ初期化・既存Session無効化 | 本番対応は保留。Aiven接続設定とCAは作成済みだが1045で拒否された。本番構造・権限は未読取。Vercelの秘密値は取得できず、Macとの一致は未確認。追加調査・問い合わせは進めない。本番工程は開始しない | [移行設計](../docs/design/06_OPERATION_AND_HANDOFF.md) §5.7 |
 | 配布用WAR・初期作成SQL・設定サンプル・ZIP・Release公開 | 初期作成SQLはMac miniの作業ツリーへ復元済み、未追跡・未commit・未push。空の環境専用。配布用WAR・設定サンプル・ZIP・Releaseは未作成・未公開 | [配布準備ガイド](../docs/STUDENT_DISTRIBUTION_GUIDE.md) |
 | 配布版の新規導入・起動・対象機能確認 | 未検証 | [配布準備ガイド](../docs/STUDENT_DISTRIBUTION_GUIDE.md) |
-| 最新環境構築手順どおりのローカル起動・Login入口 | 独立検証環境のport 18081で確認済み。手順書の既定port 8080と既存運用DBでは未確認 | [環境構築手順書](../docs/ENVIRONMENT_SETUP_GUIDE.md) |
-| 登録→ログイン→投稿→ログアウトの通し操作・3人の独立した同時操作 | 通し操作と3つの独立Sessionは独立検証DBで確認済み。3人の同時操作は未確認。本番では未確認 | [運用手順書](../docs/DEPLOYMENT_AND_OPERATION_GUIDE.md) |
+| 最新環境構築手順どおりのローカル起動・Login入口 | 2026-10-08は独立検証環境のport 18081で確認済み。2026-10-15に既定port 8080で、存在していなかった `dokotsubu` を空環境用SQLとSession用SQLにより新規作成して起動を確認した。Target Schemaは一致。既存データの削除・上書きはない | [環境構築手順書](../docs/ENVIRONMENT_SETUP_GUIDE.md) |
+| 登録→ログイン→投稿→ログアウトの通し操作・3人の独立した同時操作 | 2026-10-08の独立検証DBでは通し操作と3つの独立Sessionを確認済み。3人の同時操作は未確認。2026-10-15のローカル8080で、登録プロフィール保存、ログイン、投稿保存、本人投稿の論理削除、ログアウトを確認した。本番は未確認。Gemini生成成功確認は保留 | [運用手順書](../docs/DEPLOYMENT_AND_OPERATION_GUIDE.md) |
 
 公開入口と空欄エラー等の限定確認を、通し操作・同時操作の成功として扱わない。同じブラウザの複数タブはSessionを共有するため、独立した複数人の確認にならない。
 
 ## 5. Current Target / Next（現在対象・次作業）
 
-- 現在対象：2026-10-13の確認結果・本番開始条件の不足・再開位置を本書とCHANGELOGに記録する。利用者の明示指示により文書2件だけをcommit／通常pushし、GitHub上の実物と対象SHAのValidate Documents成功を確認して本日の作業を終了する。
-- 本日は文書記録をもって終了し、次回はこのチャットを継続する。次回の最初：文書記録後のGit状態と保全15ファイルを現在状態へ照合する。作業ツリーをcleanにするために実装差分を破棄しない。既存レビューと確認済み証拠は再利用する。
-- 次作業：利用者の既存Aivenログインまたは既存接続ファイルを利用可能にし、本番4テーブルの構造・ENGINEと必要権限など不足するメタ情報を読み取り専用で一括確認する。その結果に基づき書込み停止の維持方法を確定する。
-- 公開承認commitの確定、アプリのcommit／push、DB移行・停止・再開・公開は別途承認後の工程とする。件数測定と停止後の書込み停止確認は移行実行時に行う。今回の文書commitおよび `cbfa174e` を新アプリの公開対象として扱わない。
+- 現在対象：2026-10-15のローカル動作結果を本書とCHANGELOGへ記録し、Gemini生成成功確認とAiven・本番対応を保留として固定する。
+- 文書記録後もcommit／pushは行わない。保全15ファイルと `.gitignore` 差分は維持し、作業ツリーをcleanにするために破棄しない。
+- 次作業としてGemini生成成功確認、Aiven調査、本番構造・権限の読取、Vercel秘密値の取得、それらの問い合わせを進めない。再開は利用者の明示指示があるときだけとする。
+- 公開承認commitの確定、アプリのcommit／push、DB移行・停止・再開・公開は別途承認後の工程とする。今回の文書記録を新アプリの公開対象として扱わない。
 - 配布資材作成は未実施であり、今回の文書記録には含めない。
 
 ## 6. Maintenance（運用）

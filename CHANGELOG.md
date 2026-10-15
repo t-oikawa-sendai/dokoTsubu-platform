@@ -3,7 +3,7 @@ Program Name: dokoTsubu-platform CHANGELOG
 Language: Markdown
 Function: dokoTsubu-platformの変更履歴正本
 Created: 2026-09-11
-Last Updated: 2026-10-13
+Last Updated: 2026-10-15
 Author: Takashi Oikawa
 AI: Cursor Grok 4.7
 Memo: Canonical Templateから新設したRepository固有履歴正本。過去Application履歴は推測して追加しない。Runtime側に CHANGELOG_TEMPLATE.md は作成しない。
@@ -18,7 +18,7 @@ Memo: Canonical Templateから新設したRepository固有履歴正本。過去A
 | Version（バージョン） | 0.1 |
 | Status（ステータス） | Draft |
 | Created Date（作成日） | 2026-09-11 |
-| Last Updated（最終更新日） | 2026-10-13 |
+| Last Updated（最終更新日） | 2026-10-15 |
 | Owner（管理者） | Takashi Oikawa |
 | Related Documents（関連文書） | /CONSTITUTION.md / /AGENTS.md / /docs/design/README.md |
 
@@ -59,6 +59,7 @@ Governance導入Baselineは、Governance導入成功後に記録する。
 
 | Version | Date | Document | Category | Changes | Author |
 |---|---|---|---|---|---|
+| 0.7 | 2026-10-15 | `/project-notes/CURRENT.md` / `/CHANGELOG.md` | Changed | Mac miniの127.0.0.1:3306へ空の `dokotsubu` を新規作成し、ローカル8080で登録・ログイン・投稿・本人論理削除・ログアウトを確認した記録を追加した。Gemini生成成功確認はキー未入手のため保留、Aivenは1045拒否で本番構造・権限は未読取、Vercel秘密値は未取得のまま追加調査を止める。保全15ファイルと `.gitignore` 差分は未commitのまま維持する | Takashi Oikawa |
 | 0.6 | 2026-10-13 | `/project-notes/CURRENT.md` / `/CHANGELOG.md` | Changed | 修正版実行案レビューPASS、設計担当の保全15ファイル実ハッシュ一致、既存証拠とCursor報告の確認範囲を記録した。本番構造・権限と書込み停止維持方法の不足を維持し、次作業を既存Aivenアクセス確保からの最小読取確認へ更新した。GitHub記録は文書2件だけとし、アプリ15ファイルの未commit保全と本番未実施を維持する | Takashi Oikawa |
 | 0.5 | 2026-10-12 | `/project-notes/CURRENT.md` / `/CHANGELOG.md` | Changed | レビューZIP本体の実差分・17ファイルのハッシュ一致と、既存コードのレビューPASS維持を記録した。実行案は構造用dumpのCREATE TABLE拒否等が残るため要修正。本番の未確認事項と次回の開始位置を記録し、GitHub反映対象をこの文書2件に限定した。残る15ファイルはMac miniの未commit作業ツリーに保全する | Takashi Oikawa |
 | 0.4 | 2026-10-12 | `/project-notes/CURRENT.md` | Changed | Mac mini の開始 HEAD `9ca037c04b4e35ec203c725e8529cb3737f9c5f2` の作業ツリーへ、レビュー済み差分を復元した。未 commit、未 push。`cbfa174e` はこの clone では取得していない。45 件の試験は 2026-10-08 の独立環境の過去結果であり、今回の Mac mini の試験結果ではない。本番移行と公開反映は未実施。CURRENT を Version 0.4 / Review にした | Takashi Oikawa |
