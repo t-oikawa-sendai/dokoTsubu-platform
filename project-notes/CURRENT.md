@@ -11,7 +11,11 @@ Memo: 仕様正本を置き換えず、確認結果と引き継ぎ報告を区�
 
 # Current Project State（現在状態）
 
+<details>
+<summary>Document Info（文書情報）｜CURRENT-001｜0.7｜Review</summary>
+
 <!-- Document Info（文書情報） -->
+
 | Item（項目） | Value（値） |
 |---|---|
 | Document ID（文書ID） | CURRENT-001 |
@@ -21,6 +25,8 @@ Memo: 仕様正本を置き換えず、確認結果と引き継ぎ報告を区�
 | Last Updated（最終更新日） | 2026-10-15 |
 | Owner（管理者） | Takashi Oikawa |
 | Related Documents（関連文書） | [AGENTS.md](../AGENTS.md) / [CONSTITUTION.md](../CONSTITUTION.md) / [README.md](../README.md) / [設計書一覧](../docs/design/README.md) / [CHANGELOG.md](../CHANGELOG.md) |
+
+</details>
 
 ## 1. Repository（対象）
 

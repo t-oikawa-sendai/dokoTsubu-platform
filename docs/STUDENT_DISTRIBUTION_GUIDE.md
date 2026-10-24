@@ -1,6 +1,10 @@
 # Student Distribution and Setup Guide（生徒向け配布・導入手順書）
 
+<details>
+<summary>Document Info（文書情報）｜STUDENT-DISTRIBUTION-001｜0.1｜Draft</summary>
+
 <!-- Document Info（文書情報） -->
+
 | Item（項目） | Value（値） |
 |---|---|
 | Document ID（文書ID） | STUDENT-DISTRIBUTION-001 |
@@ -10,6 +14,8 @@
 | Last Updated（最終更新日） | 2026-10-07 |
 | Owner（管理者） | Takashi Oikawa |
 | Related Documents（関連文書） | [Project README](../README.md) / [Design Documents Index（設計書一覧）](./design/README.md) / [02_REQUIREMENTS_DEFINITION.md](./design/02_REQUIREMENTS_DEFINITION.md) / [03_DATA_AND_SECURITY_DESIGN.md](./design/03_DATA_AND_SECURITY_DESIGN.md) / [Environment Setup Guide（環境構築手順書）](./ENVIRONMENT_SETUP_GUIDE.md) / [Deployment and Operation Guide（デプロイ・運用手順書）](./DEPLOYMENT_AND_OPERATION_GUIDE.md) |
+
+</details>
 
 > 修正完了版のDokoTsubu3を生徒が各自のPCで起動するための準備文書です。実行用ZIP、Domain table初期作成SQL、設定サンプルは未作成であり、本書の導入手順は配布版で未検証です。現行アプリには設計確定済み・未実装の仕様が残っています。本書の整備ではアプリ改修・DB移行・ZIP作成・公開を行いません。
 

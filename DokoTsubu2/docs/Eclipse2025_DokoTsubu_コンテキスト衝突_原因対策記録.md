@@ -1,6 +1,10 @@
 # Eclipse2025環境における DokoTsubu コンテキスト衝突 原因・対策記録
 
+<details>
+<summary>Document Info（文書情報）｜LEGACY-003｜0.1｜Draft</summary>
+
 <!-- Document Info（文書情報） -->
+
 | Item（項目） | Value（値） |
 |---|---|
 | Document ID（文書ID） | LEGACY-003 |
@@ -10,6 +14,8 @@
 | Last Updated（最終更新日） | 2026-09-12 |
 | Owner（管理者） | Takashi Oikawa |
 | Related Documents（関連文書） | None |
+
+</details>
 
 ## 最終結論（先に結論）
 今回の問題は、旧 `DokoTsubu` と新 `DokoTsubu2` を同一 Eclipse2025 ワークスペース内で共存させた際に、Tomcat 上で **`/dokoTsubu` のコンテキストが衝突し得る状態**になっていたことである。  

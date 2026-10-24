@@ -1,6 +1,10 @@
 # Operation and Handoff Design（運用・詳細設計引き継ぎ）
 
+<details>
+<summary>Document Info（文書情報）｜OPS-001｜1.9｜Review</summary>
+
 <!-- Document Info（文書情報） -->
+
 | Item（項目） | Value（値） |
 |---|---|
 | Document ID（文書ID） | OPS-001 |
@@ -10,6 +14,8 @@
 | Last Updated（最終更新日） | 2026-10-05 |
 | Owner（管理者） | Takashi Oikawa |
 | Related Documents（関連文書） | [Project README](../../README.md) / [README.md](./README.md) / [01_REQUEST_DEFINITION.md](./01_REQUEST_DEFINITION.md) / [03_DATA_AND_SECURITY_DESIGN.md](./03_DATA_AND_SECURITY_DESIGN.md) / [05_ARCHITECTURE_DESIGN.md](./05_ARCHITECTURE_DESIGN.md) / [ENVIRONMENT_SETUP_GUIDE.md](../ENVIRONMENT_SETUP_GUIDE.md) / [DEPLOYMENT_AND_OPERATION_GUIDE.md](../DEPLOYMENT_AND_OPERATION_GUIDE.md) |
+
+</details>
 
 ---
 

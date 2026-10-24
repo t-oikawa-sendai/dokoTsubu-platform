@@ -11,7 +11,11 @@ Memo: 状態一覧はMILESTONES.mdを正とする。本ファイルは採否理�
 
 # Initial Milestone Record（マイルストーン初回記録）
 
+<details>
+<summary>Document Info（文書情報）｜NOTES-MEET-20260927-001｜0.1｜Draft</summary>
+
 <!-- Document Info（文書情報） -->
+
 | Item（項目） | Value（値） |
 |---|---|
 | Document ID（文書ID） | NOTES-MEET-20260927-001 |
@@ -21,6 +25,8 @@ Memo: 状態一覧はMILESTONES.mdを正とする。本ファイルは採否理�
 | Last Updated（最終更新日） | 2026-09-27 |
 | Owner（管理者） | Takashi Oikawa |
 | Related Documents（関連文書） | [MILESTONES.md](../MILESTONES.md) / [02_REQUIREMENTS_DEFINITION.md](../../docs/design/02_REQUIREMENTS_DEFINITION.md) |
+
+</details>
 
 ---
 

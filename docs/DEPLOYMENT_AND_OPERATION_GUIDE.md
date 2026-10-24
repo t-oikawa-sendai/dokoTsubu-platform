@@ -1,6 +1,10 @@
 # Deployment and Operation Guide（デプロイ・運用手順書）
 
+<details>
+<summary>Document Info（文書情報）｜DEPLOY-001｜0.2｜Review</summary>
+
 <!-- Document Info（文書情報） -->
+
 | Item（項目） | Value（値） |
 |---|---|
 | Document ID（文書ID） | DEPLOY-001 |
@@ -10,6 +14,8 @@
 | Last Updated（最終更新日） | 2026-10-05 |
 | Owner（管理者） | Takashi Oikawa |
 | Related Documents（関連文書） | [Project README](../README.md) / [Design Documents Index（設計書一覧）](./design/README.md) / [Architecture Design（アーキテクチャ設計）](./design/05_ARCHITECTURE_DESIGN.md) / [Operation and Handoff Design（運用・詳細設計引き継ぎ）](./design/06_OPERATION_AND_HANDOFF.md) / [Environment Setup Guide（環境構築手順書）](./ENVIRONMENT_SETUP_GUIDE.md) / [Gemini Integration Specification（Gemini連携仕様書）](./specs/GEMINI_INTEGRATION_SPEC.md) / [CHANGELOG.md](../CHANGELOG.md) |
+
+</details>
 
 ---
 

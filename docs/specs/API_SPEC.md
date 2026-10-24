@@ -1,6 +1,10 @@
 # API Specification（API仕様書）
 
+<details>
+<summary>Document Info（文書情報）｜API-SPEC-001｜0.1｜Draft</summary>
+
 <!-- Document Info（文書情報） -->
+
 | Item（項目） | Value（値） |
 |---|---|
 | Document ID（文書ID） | API-SPEC-001 |
@@ -10,6 +14,8 @@
 | Last Updated（最終更新日） | 2026-10-05 |
 | Owner（管理者） | Takashi Oikawa |
 | Related Documents（関連文書） | [Project README](../../README.md) / [Design Documents Index（設計書一覧）](../design/README.md) / [02_REQUIREMENTS_DEFINITION.md](../design/02_REQUIREMENTS_DEFINITION.md) / [03_DATA_AND_SECURITY_DESIGN.md](../design/03_DATA_AND_SECURITY_DESIGN.md) / [04_UI_AND_FLOW_DESIGN.md](../design/04_UI_AND_FLOW_DESIGN.md) / [GEMINI_INTEGRATION_SPEC.md](./GEMINI_INTEGRATION_SPEC.md) |
+
+</details>
 
 ---
 

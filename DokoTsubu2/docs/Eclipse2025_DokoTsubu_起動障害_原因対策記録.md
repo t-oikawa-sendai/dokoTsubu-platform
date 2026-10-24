@@ -1,6 +1,10 @@
 # Eclipse2025環境における DokoTsubu 起動障害 原因・対策記録
 
+<details>
+<summary>Document Info（文書情報）｜LEGACY-004｜0.1｜Draft</summary>
+
 <!-- Document Info（文書情報） -->
+
 | Item（項目） | Value（値） |
 |---|---|
 | Document ID（文書ID） | LEGACY-004 |
@@ -10,6 +14,8 @@
 | Last Updated（最終更新日） | 2026-09-12 |
 | Owner（管理者） | Takashi Oikawa |
 | Related Documents（関連文書） | None |
+
+</details>
 
 ## 最終結論（先に結論）
 今回の障害の主因は、dokoTsubu-platform（DokoTsubu2）の Java Build Path に Tomcat Server Runtime が正しく入っておらず、Servlet API を解決できない状態だったことである。  

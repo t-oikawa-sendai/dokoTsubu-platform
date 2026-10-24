@@ -11,7 +11,11 @@ Memo: 状態はMILESTONES.mdを正とする。passwordとhashは記録しない�
 
 # FR-004 Mutter List Completion（つぶやき一覧完了記録）
 
+<details>
+<summary>Document Info（文書情報）｜NOTES-MEET-20260929-004｜0.1｜Draft</summary>
+
 <!-- Document Info（文書情報） -->
+
 | Item（項目） | Value（値） |
 |---|---|
 | Document ID（文書ID） | NOTES-MEET-20260929-004 |
@@ -21,6 +25,8 @@ Memo: 状態はMILESTONES.mdを正とする。passwordとhashは記録しない�
 | Last Updated（最終更新日） | 2026-09-29 |
 | Owner（管理者） | Takashi Oikawa |
 | Related Documents（関連文書） | [MILESTONES.md](../MILESTONES.md) / [02_REQUIREMENTS_DEFINITION.md](../../docs/design/02_REQUIREMENTS_DEFINITION.md) |
+
+</details>
 
 ---
 

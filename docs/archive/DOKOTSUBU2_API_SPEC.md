@@ -1,6 +1,10 @@
 # どこつぶ API仕様書 (DokoTsubu API Specification)
 
+<details>
+<summary>Document Info（文書情報）｜LEGACY-006｜0.1｜Draft</summary>
+
 <!-- Document Info（文書情報） -->
+
 | Item（項目） | Value（値） |
 |---|---|
 | Document ID（文書ID） | LEGACY-006 |
@@ -10,6 +14,8 @@
 | Last Updated（最終更新日） | 2026-09-12 |
 | Owner（管理者） | Takashi Oikawa |
 | Related Documents（関連文書） | None |
+
+</details>
 
 **作成日 (Created):** 2024-06-15  
 **最終更新 (Last Updated):** 2026-04-01  

@@ -1,6 +1,10 @@
 # Gemini Integration Specification（Gemini連携仕様書）
 
+<details>
+<summary>Document Info（文書情報）｜GEMINI-SPEC-001｜0.1｜Draft</summary>
+
 <!-- Document Info（文書情報） -->
+
 | Item（項目） | Value（値） |
 |---|---|
 | Document ID（文書ID） | GEMINI-SPEC-001 |
@@ -10,6 +14,8 @@
 | Last Updated（最終更新日） | 2026-10-05 |
 | Owner（管理者） | Takashi Oikawa |
 | Related Documents（関連文書） | [Project README](../../README.md) / [Design Documents Index（設計書一覧）](../design/README.md) / [02_REQUIREMENTS_DEFINITION.md](../design/02_REQUIREMENTS_DEFINITION.md) / [03_DATA_AND_SECURITY_DESIGN.md](../design/03_DATA_AND_SECURITY_DESIGN.md) / [05_ARCHITECTURE_DESIGN.md](../design/05_ARCHITECTURE_DESIGN.md) / [API_SPEC.md](./API_SPEC.md) |
+
+</details>
 
 ---
 

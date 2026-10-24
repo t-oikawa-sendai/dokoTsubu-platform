@@ -1,6 +1,10 @@
 # DokoTsubu（どこつぶ）
 
+<details>
+<summary>Document Info（文書情報）｜PROJECT-README-001｜0.6｜Review</summary>
+
 <!-- Document Info（文書情報） -->
+
 | Item（項目） | Value（値） |
 |---|---|
 | Document ID（文書ID） | PROJECT-README-001 |
@@ -10,6 +14,8 @@
 | Last Updated（最終更新日） | 2026-10-08 |
 | Owner（管理者） | Takashi Oikawa |
 | Related Documents（関連文書） | [Design Documents Index（設計書一覧）](./docs/design/README.md) / [API Specification（API仕様書）](./docs/specs/API_SPEC.md) / [Gemini Integration Specification（Gemini連携仕様書）](./docs/specs/GEMINI_INTEGRATION_SPEC.md) / [Environment Setup Guide（環境構築手順書）](./docs/ENVIRONMENT_SETUP_GUIDE.md) / [Deployment and Operation Guide（デプロイ・運用手順書）](./docs/DEPLOYMENT_AND_OPERATION_GUIDE.md) / [CHANGELOG.md](./CHANGELOG.md) |
+
+</details>
 
 > シンプルなつぶやき共有Webアプリケーション (Simple Microblogging Web Application)
 

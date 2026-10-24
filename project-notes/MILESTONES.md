@@ -11,7 +11,11 @@ Memo: FR-005つぶやき投稿とFR-009 Geminiコメント生成の完了Evidenc
 
 # Milestones（マイルストーン）
 
+<details>
+<summary>Document Info（文書情報）｜NOTES-MILESTONES-001｜0.1｜Draft</summary>
+
 <!-- Document Info（文書情報） -->
+
 | Item（項目） | Value（値） |
 |---|---|
 | Document ID（文書ID） | NOTES-MILESTONES-001 |
@@ -21,6 +25,8 @@ Memo: FR-005つぶやき投稿とFR-009 Geminiコメント生成の完了Evidenc
 | Last Updated（最終更新日） | 2026-09-29 |
 | Owner（管理者） | Takashi Oikawa |
 | Related Documents（関連文書） | [02_REQUIREMENTS_DEFINITION.md](../docs/design/02_REQUIREMENTS_DEFINITION.md) / [2026-09-27-milestones-initial-record.md](./meetings/2026-09-27-milestones-initial-record.md) / [2026-09-27-fr002-login-completion.md](./meetings/2026-09-27-fr002-login-completion.md) / [2026-09-27-fr003-logout-completion.md](./meetings/2026-09-27-fr003-logout-completion.md) / [2026-09-29-fr004-mutter-list-completion.md](./meetings/2026-09-29-fr004-mutter-list-completion.md) / [2026-09-29-fr005-fr009-mutter-post-gemini-completion.md](./meetings/2026-09-29-fr005-fr009-mutter-post-gemini-completion.md) |
+
+</details>
 
 ---
 

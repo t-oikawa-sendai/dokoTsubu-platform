@@ -11,7 +11,11 @@ Memo: Canonical Templateから新設したRepository固有履歴正本。過去A
 
 # CHANGELOG
 
+<details>
+<summary>Document Info（文書情報）｜CHANGELOG-001｜0.1｜Draft</summary>
+
 <!-- Document Info（文書情報） -->
+
 | Item（項目） | Value（値） |
 |---|---|
 | Document ID（文書ID） | CHANGELOG-001 |
@@ -21,6 +25,8 @@ Memo: Canonical Templateから新設したRepository固有履歴正本。過去A
 | Last Updated（最終更新日） | 2026-10-15 |
 | Owner（管理者） | Takashi Oikawa |
 | Related Documents（関連文書） | /CONSTITUTION.md / /AGENTS.md / /docs/design/README.md |
+
+</details>
 
 ---
 

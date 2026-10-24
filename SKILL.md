@@ -1,6 +1,10 @@
 # SKILL.md - Technical Standards & Execution Skills
 
+<details>
+<summary>Document Info（文書情報）｜LEGACY-002｜0.1｜Draft</summary>
+
 <!-- Document Info（文書情報） -->
+
 | Item（項目） | Value（値） |
 |---|---|
 | Document ID（文書ID） | LEGACY-002 |
@@ -10,6 +14,8 @@
 | Last Updated（最終更新日） | 2026-09-12 |
 | Owner（管理者） | Takashi Oikawa |
 | Related Documents（関連文書） | None |
+
+</details>
 
 ## 1. Mandatory Code Header Comments
 Every new or modified handwritten code file must include a header comment. You must preserve the field names, order, and strictly enforce the author name as "Takashi Oikawa".
