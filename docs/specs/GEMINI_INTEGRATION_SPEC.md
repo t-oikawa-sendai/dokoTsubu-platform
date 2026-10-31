@@ -1,14 +1,14 @@
 # Gemini Integration Specification（Gemini連携仕様書）
 
 <details>
-<summary>Document Info（文書情報）｜GEMINI-SPEC-001｜0.2｜Draft</summary>
+<summary>Document Info（文書情報）｜GEMINI-SPEC-001｜0.3｜Draft</summary>
 
 <!-- Document Info（文書情報） -->
 
 | Item（項目） | Value（値） |
 |---|---|
 | Document ID（文書ID） | GEMINI-SPEC-001 |
-| Version（バージョン） | 0.2 |
+| Version（バージョン） | 0.3 |
 | Status（ステータス） | Draft |
 | Created Date（作成日） | 2026-10-05 |
 | Last Updated（最終更新日） | 2026-10-31 |
@@ -38,7 +38,7 @@ Version 3（`DokoTsubu3/`）の Gemini 連携を定義する。
 |---|---|
 | Trigger（呼び出し契機） | `POST /Main` の投稿成功後 |
 | Invocation（呼び出し方式） | 同期呼び出し |
-| Caller（呼び出し元） | Post Service → Gemini Client |
+| Caller（呼び出し元） | Post Service（役割名。実装は `MutterService.post`）→ Gemini Client |
 | Profile Source（プロフィール取得元） | Gemini 生成時に DB から有効 User（`USERS.DELETED_AT IS NULL`）の `GENDER` / `AGE_FEELING` を取得する。Session からは取得しない |
 | Output（出力） | 短い日本語コメント。`aiMsg` として SCR-005 に表示する |
 
@@ -107,6 +107,7 @@ Profile の扱い:
 
 | Case（ケース） | Behavior（動作） |
 |---|---|
+| 有効 User のプロフィールを取得できない | 投稿は残し、Gemini を呼び出さず失敗文を返す |
 | API key または model が未設定 | Gemini を呼び出さず、失敗文を返す |
 | 通信エラー・タイムアウト・HTTP エラー | 失敗文を返す |
 | 応答が空、または text を取得できない | 失敗文を返す |

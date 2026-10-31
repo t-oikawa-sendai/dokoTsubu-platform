@@ -1,17 +1,17 @@
 # Architecture Design（アーキテクチャ設計）
 
 <details>
-<summary>Document Info（文書情報）｜ARCH-001｜1.8｜Review</summary>
+<summary>Document Info（文書情報）｜ARCH-001｜1.10｜Review</summary>
 
 <!-- Document Info（文書情報） -->
 
 | Item（項目） | Value（値） |
 |---|---|
 | Document ID（文書ID） | ARCH-001 |
-| Version（バージョン） | 1.8 |
+| Version（バージョン） | 1.10 |
 | Status（ステータス） | Review |
 | Created Date（作成日） | 2026-06-21 |
-| Last Updated（最終更新日） | 2026-10-05 |
+| Last Updated（最終更新日） | 2026-10-31 |
 | Owner（管理者） | Takashi Oikawa |
 | Related Documents（関連文書） | [Project README](../../README.md) / [README.md](./README.md) / [02_REQUIREMENTS_DEFINITION.md](./02_REQUIREMENTS_DEFINITION.md) / [03_DATA_AND_SECURITY_DESIGN.md](./03_DATA_AND_SECURITY_DESIGN.md) / [06_OPERATION_AND_HANDOFF.md](./06_OPERATION_AND_HANDOFF.md) / [API_SPEC.md](../specs/API_SPEC.md) / [GEMINI_INTEGRATION_SPEC.md](../specs/GEMINI_INTEGRATION_SPEC.md) / [DEPLOYMENT_AND_OPERATION_GUIDE.md](../DEPLOYMENT_AND_OPERATION_GUIDE.md) |
 
@@ -78,45 +78,25 @@ Phase 1 対象外として次を導入しない。
 
 ### 5.1 System Architecture Diagram（システム構成図）
 
-```text
-Browser
-  ↓
-Vercel
-  ↓
-Spring Boot / embedded Tomcat
-  Controller → Service → DAO (JDBC)
-  ↓
-Aiven MySQL
-
-Post Service
-  ↓
-Gemini Client
-  ↓
-Gemini API
-```
+配置図を Mermaid の `flowchart` で表す。
 
 ```mermaid
-flowchart TB
+flowchart LR
   BR[Browser]
-  VC[Vercel]
-  APP[Spring Boot / embedded Tomcat]
-  C[Spring MVC Controller]
-  S[Service]
-  D[DAO JDBC]
+  subgraph VC[Vercel]
+    APP[Spring Boot / embedded Tomcat]
+    C[Spring MVC Controller]
+    S[Service]
+    PS[Post Service: MutterService.post]
+    D[DAO: JDBC]
+    G[Gemini Client]
+  end
   DB[(Aiven MySQL)]
-  PS[Post Service]
-  G[Gemini Client]
   API[Gemini API]
 
-  BR --> VC
-  VC --> APP
-  APP --> C
-  C --> S
-  S --> D
-  D --> DB
-  C --> PS
-  PS --> G
-  G --> API
+  BR --> APP --> C
+  C --> S --> D --> DB
+  C --> PS --> G --> API
 ```
 
 ### 5.2 Application Architecture（アプリケーション構成）
@@ -190,11 +170,39 @@ dokoTsubu-platform/
 | Item（項目） | Design（設計） |
 |---|---|
 | API | Gemini generateContent。HTTPS REST 同期呼び出し |
-| Trigger | 投稿成功後に Post Service から呼び出す |
 | Model | `gemini-3.5-flash-lite`。`temperature` / `top_p` / `top_k` は明示指定しない |
-| Profile Source | Gemini 生成時に DB から有効 User の `GENDER` / `AGE_FEELING` を取得する |
-| Failure | 失敗しても投稿は rollback しない |
 | API key | Spring 外部設定 `DOKOTSUBU_GEMINI_API_KEY` から取得する。ソースおよび Git 管理ファイルへ実値を書かない |
+
+投稿成功後の処理と、プロフィール取得不可の場合を示す。
+
+```mermaid
+sequenceDiagram
+  participant C as MainController
+  participant P as Post Service（MutterService.post）
+  participant M as MutterDAO
+  participant U as UserDAO
+  participant G as Gemini Client
+
+  C->>P: post(userId, text)
+  P->>M: create(userId, text)
+  alt 投稿保存に失敗
+    M-->>P: false
+    P-->>C: null（aiMsgなし）
+  else 投稿保存に成功
+    M-->>P: true
+    P->>U: findActiveProfileByUserId(userId)
+    alt 有効Userのプロフィールを取得できない
+      U-->>P: null
+      P-->>C: 失敗文（aiMsg。Geminiを呼び出さない）
+    else プロフィールを取得できる
+      U-->>P: GENDER・AGE_FEELING
+      P->>G: generateShortComment(text, profile)
+      G-->>P: コメントまたは失敗文
+      P-->>C: aiMsg
+    end
+    Note over P,G: Geminiの失敗時も保存済み投稿をrollbackしない
+  end
+```
 
 固定絶対パス JSON 設定は廃止し、Spring external configuration へ移す。送信データと prompt は [GEMINI_INTEGRATION_SPEC.md](../specs/GEMINI_INTEGRATION_SPEC.md) を参照。
 

@@ -1,17 +1,17 @@
 # Operation and Handoff Design（運用・詳細設計引き継ぎ）
 
 <details>
-<summary>Document Info（文書情報）｜OPS-001｜1.9｜Review</summary>
+<summary>Document Info（文書情報）｜OPS-001｜1.11｜Review</summary>
 
 <!-- Document Info（文書情報） -->
 
 | Item（項目） | Value（値） |
 |---|---|
 | Document ID（文書ID） | OPS-001 |
-| Version（バージョン） | 1.9 |
+| Version（バージョン） | 1.11 |
 | Status（ステータス） | Review |
 | Created Date（作成日） | 2026-06-21 |
-| Last Updated（最終更新日） | 2026-10-05 |
+| Last Updated（最終更新日） | 2026-10-31 |
 | Owner（管理者） | Takashi Oikawa |
 | Related Documents（関連文書） | [Project README](../../README.md) / [README.md](./README.md) / [01_REQUEST_DEFINITION.md](./01_REQUEST_DEFINITION.md) / [03_DATA_AND_SECURITY_DESIGN.md](./03_DATA_AND_SECURITY_DESIGN.md) / [05_ARCHITECTURE_DESIGN.md](./05_ARCHITECTURE_DESIGN.md) / [ENVIRONMENT_SETUP_GUIDE.md](../ENVIRONMENT_SETUP_GUIDE.md) / [DEPLOYMENT_AND_OPERATION_GUIDE.md](../DEPLOYMENT_AND_OPERATION_GUIDE.md) |
 
@@ -76,7 +76,7 @@
 | HO-002 | Legacy 不整合 | Legacy 文書の不整合をそのまま実装しない。正本は `docs/design/` |
 | HO-003 | 秘密情報 | secrets を Git へ入れない。実値を source / 文書に書かない。ローカルは `.local-secrets/`。Vercel は Environment Variables。DB 設定名は `DOKOTSUBU_DB_URL` / `DOKOTSUBU_DB_USERNAME` / `DOKOTSUBU_DB_PASSWORD`。Gemini API key の設定名は `DOKOTSUBU_GEMINI_API_KEY` |
 | HO-004 | 外部設定 | DB 接続情報と Gemini API key（`DOKOTSUBU_GEMINI_API_KEY`）を Spring 外部設定へ移す。絶対パス JSON は使わない |
-| HO-005 | DB 実体 | Development は現行ローカル MySQL。Production は Aiven MySQL。Schema `dokotsubu`、Domain tables `USERS` / `MUTTERS`、`MUTTERS.TEXT VARCHAR(255)`、FK なし。移行完了後の構造は同一。2026-09-28 の Aiven 実接続スパイクで現行 DDL・JDBC・FR-001・FR-002 が変更なしで動作することを確認済み。この結果は Target Schema 適用済みを意味しない。Schema 移行時に、既存 `USERS` / `MUTTERS` の Domain データを初期化し、Target Schema へ変更する。実施は Application 停止中とする。table rename / schema rename / `TEXT` 長変更 / FK 追加は行わない |
+| HO-005 | DB 実体 | Development は現行ローカル MySQL。Production は Aiven MySQL。Schema `dokotsubu`、Domain tables `USERS` / `MUTTERS`、`MUTTERS.TEXT VARCHAR(255)`、FK なし。移行完了後の構造は同一。2026-09-28 の Aiven 実接続スパイクで現行 DDL・JDBC・FR-001・FR-002 が変更なしで動作することを確認済み。この結果は Target Schema 適用済みを意味しない。Schema 移行の工程は §5.7 を正とする。table rename / schema rename / `TEXT` 長変更 / FK 追加は行わない |
 | HO-006 | 認証基盤 | Spring Security 認証基盤は導入しない。Application API は `HttpSession` を維持する。Vercel 公開用に Session 保存先を Spring Session JDBC + Aiven MySQL へ外部化する。Spring Session 用テーブルは domain table とは分ける |
 | HO-007 | 永続化 | JPA / Hibernate / Spring Data へ置換しない。JDBC を維持する |
 
@@ -152,38 +152,46 @@
 
 対象 Schema は `dokotsubu`、対象 Domain tables は `USERS` / `MUTTERS` である。Target Schema の定義は [03_DATA_AND_SECURITY_DESIGN.md](./03_DATA_AND_SECURITY_DESIGN.md) を正とする。
 
-#### 5.7.1 Migration Preconditions（移行の前提条件）
+移行の活動を Mermaid の `stateDiagram-v2` の分岐・合流で表す。実際のデータ初期化や Schema 変更は、この文書更新では実行しない。
 
-- Application 停止中に実施する
-- 実際のデータ初期化や Schema 変更は、この文書更新では実行しない
+```mermaid
+stateDiagram-v2
+  state "Applicationを停止" as Stop
+  state "最終バックアップを取得し、取得結果と復元手順を確認" as Backup
+  state "MUTTERSの既存Domainデータを初期化" as InitMutters
+  state "USERSの既存Domainデータを初期化（既存Userは引き継がない）" as InitUsers
+  state "Target Schemaへ変更" as MigrateSchema
+  state "Spring Session JDBCに残る既存Sessionを無効化" as InvalidateSession
+  state "新しいApplicationでサービス再開" as Resume
+  state Fork <<fork>>
+  state Join <<join>>
 
-#### 5.7.2 Domain Data Initialization（Domain データ初期化）
+  [*] --> Stop
+  Stop --> Backup
+  Backup --> Fork
+  Fork --> InitMutters
+  Fork --> InitUsers
+  Fork --> InvalidateSession
+  InitMutters --> Join
+  InitUsers --> Join
+  InvalidateSession --> Join
+  Join --> MigrateSchema
+  MigrateSchema --> Resume
+  Resume --> [*]
+```
 
-- Schema 移行時に、既存 `USERS` / `MUTTERS` の Domain データを初期化する
-- `MUTTERS` の既存 Domain データを初期化する
-- `USERS` の既存 Domain データを初期化する
-- 既存 User は移行後へ引き継がない
+[CURRENT.md](../../project-notes/CURRENT.md) の 2026-10-31 実施記録では、初期化と Session 無効化を順次行った後に Schema を変更した。上図の並行実施を示すものではない。
 
-#### 5.7.3 Schema Migration（Schema 変更）
+#### 5.7.1 Schema Migration（Schema 変更）
 
-- Target Schema へ変更する
 - 承認済みの Schema 変更は、論理削除、`CREATED_AT` / `UPDATED_AT` / `DELETED_AT`、`GENDER`、`AGE_FEELING` に限る
 - table rename / schema rename / `TEXT` 長変更 / FK 追加は行わない
 
-#### 5.7.4 Password Policy（password 方針）
+#### 5.7.2 Password Policy（password 方針）
 
 - 旧 password 移行は行わない
 - 移行後の新規 User は、登録時から BCrypt hash を保存する
 - 平文 password 認証との互換処理は作らない
-
-#### 5.7.5 Session Invalidation（Session 無効化）
-
-- Spring Session JDBC に残る既存 Session を、サービス再開前に無効化する
-
-#### 5.7.6 Service Resume Conditions（サービス再開条件）
-
-- Domain データ初期化、Target Schema への変更、既存 Session の無効化が完了していること
-- その後、新しい Application でサービスを再開する
 
 ---
 
@@ -199,6 +207,6 @@
 
 1. `DokoTsubu2` を機能基準とし、Legacy 不整合を実装しない。`DokoTsubu2/` は Phase 1 実装で変更しない。例外は秘密情報除去のみとする。Spring Boot Application は `DokoTsubu3/` に新規作成し、`DokoTsubu2` のソースを一括コピーして開始しない。必要な機能を設計正本に従い段階的に `DokoTsubu3` へ実装する
 2. secrets を Git / source に入れず、DB / Gemini 設定を外部化する。ローカルは `.local-secrets/`、Vercel は Environment Variables
-3. Development DB は現行ローカル MySQL、Production DB は Aiven MySQL。Schema `dokotsubu`、Domain tables `USERS` / `MUTTERS`、`TEXT VARCHAR(255)`、FK なし。Schema 移行時に、既存 `USERS` / `MUTTERS` の Domain データを初期化し、Target Schema へ変更する。実施は Application 停止中とする。table rename / schema rename / `TEXT` 長変更 / FK 追加は行わない
+3. Development DB は現行ローカル MySQL、Production DB は Aiven MySQL。Schema `dokotsubu`、Domain tables `USERS` / `MUTTERS`、`TEXT VARCHAR(255)`、FK なし。Schema 移行の工程は §5.7 を正とする。table rename / schema rename / `TEXT` 長変更 / FK 追加は行わない
 4. Spring Security 認証基盤と JPA 系を追加しない。`POST /Main`、`POST /UpdateMutter`、`POST /DeleteMutter` の CSRF 照合は Spring MVC Interceptor と Session 保存型 token で行う。Vercel 公開用に Session 保存先を Spring Session JDBC で Aiven MySQL へ外部化し、Application API は `HttpSession` を維持する。公開先は Vercel とし、Cloud Run は採用しない
-5. Schema 移行時に、既存 `USERS` / `MUTTERS` の Domain データを初期化する。Application 停止中に、`MUTTERS` の既存 Domain データと `USERS` の既存 Domain データを初期化する。旧 password 移行は行わない。Target Schema へ変更する。Spring Session JDBC に残る既存 Session をサービス再開前に無効化し、その後、新しい Application でサービスを再開する。実際のデータ初期化や Schema 変更は、この文書更新では実行しない
+5. Schema 移行時の停止、最終バックアップ、Domain データ初期化、Target Schema への変更、既存 Session の無効化、サービス再開条件は §5.7 を正とする。旧 password の扱いは §5.7.2 を正とする。実際のデータ初期化や Schema 変更は、この文書更新では実行しない

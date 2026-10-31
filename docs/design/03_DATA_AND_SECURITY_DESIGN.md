@@ -1,17 +1,17 @@
 # Data and Security Design（データ・セキュリティ設計）
 
 <details>
-<summary>Document Info（文書情報）｜DATA-001｜1.9｜Review</summary>
+<summary>Document Info（文書情報）｜DATA-001｜1.10｜Review</summary>
 
 <!-- Document Info（文書情報） -->
 
 | Item（項目） | Value（値） |
 |---|---|
 | Document ID（文書ID） | DATA-001 |
-| Version（バージョン） | 1.9 |
+| Version（バージョン） | 1.10 |
 | Status（ステータス） | Review |
 | Created Date（作成日） | 2026-06-21 |
-| Last Updated（最終更新日） | 2026-10-05 |
+| Last Updated（最終更新日） | 2026-10-31 |
 | Owner（管理者） | Takashi Oikawa |
 | Related Documents（関連文書） | [Project README](../../README.md) / [README.md](./README.md) / [02_REQUIREMENTS_DEFINITION.md](./02_REQUIREMENTS_DEFINITION.md) / [05_ARCHITECTURE_DESIGN.md](./05_ARCHITECTURE_DESIGN.md) / [06_OPERATION_AND_HANDOFF.md](./06_OPERATION_AND_HANDOFF.md) / [API_SPEC.md](../specs/API_SPEC.md) / [GEMINI_INTEGRATION_SPEC.md](../specs/GEMINI_INTEGRATION_SPEC.md) |
 
@@ -212,23 +212,25 @@ erDiagram
 
 ### 5.4 Data Lifecycle（データライフサイクル）
 
-#### 日時管理
+#### 日時管理・論理削除・User 論理削除時の整合性
 
-| Column | 設計仕様 |
-|---|---|
-| CREATED_AT | レコード作成時に設定する。通常更新では変更しない |
-| UPDATED_AT | 作成時にも設定する。レコード内容更新時に更新する。論理削除時にも更新する |
-| DELETED_AT | 有効状態は NULL。論理削除時に削除日時を設定する |
+`USERS` / `MUTTERS` に共通する状態と日時の更新、および User 論理削除時の関連投稿の扱いを示す。
 
-#### 論理削除と有効データ
+```mermaid
+stateDiagram-v2
+  state "有効（DELETED_AT IS NULL）" as Active
+  state "論理削除済み" as Deleted
 
-- `USERS` / `MUTTERS` は論理削除とする
-- 通常処理の有効判定は `DELETED_AT IS NULL` とする
-- 通常の投稿削除は `MUTTERS.DELETED_AT` を設定する論理削除とし、物理 DELETE は実行しない
+  [*] --> Active: 作成 / CREATED_AT・UPDATED_ATを設定、DELETED_ATはNULL
+  Active --> Active: 内容更新 / UPDATED_ATを更新、CREATED_ATは維持
+  Active --> Deleted: 論理削除 / DELETED_ATに削除日時、UPDATED_ATを更新
 
-#### User 論理削除時の整合性
-
-User を論理削除状態に変更する処理が実行される場合は、`USERS.DELETED_AT` を設定すると同時に、その `USER_ID` を持つ有効な `MUTTERS` も論理削除状態にする。この 2 処理は、データ整合性上、同一 DB トランザクションで扱う。
+  note right of Deleted
+    通常の投稿削除では物理DELETEを実行しない。
+    User論理削除時はUSERS.DELETED_ATと、そのUSER_IDを持つ有効な
+    MUTTERS.DELETED_ATを同一DBトランザクションで設定する。
+  end note
+```
 
 今回は次を作らない。
 

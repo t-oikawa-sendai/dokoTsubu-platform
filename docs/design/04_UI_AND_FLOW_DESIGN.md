@@ -1,14 +1,14 @@
 # UI and Flow Design（UI・フロー設計）
 
 <details>
-<summary>Document Info（文書情報）｜UI-001｜1.4｜Review</summary>
+<summary>Document Info（文書情報）｜UI-001｜1.5｜Review</summary>
 
 <!-- Document Info（文書情報） -->
 
 | Item（項目） | Value（値） |
 |---|---|
 | Document ID（文書ID） | UI-001 |
-| Version（バージョン） | 1.4 |
+| Version（バージョン） | 1.5 |
 | Status（ステータス） | Review |
 | Created Date（作成日） | 2026-06-21 |
 | Last Updated（最終更新日） | 2026-10-31 |
@@ -124,41 +124,38 @@ Phase 1 で現行から変える表示:
 - 投稿成功時は SCR-005 に `aiMsg` を載せる
 
 ```mermaid
-flowchart TD
-  SCR001[SCR-001 ログイン入口]
-  SCR002[SCR-002 登録]
-  SCR003[SCR-003 登録完了]
-  SCR004[SCR-004 ログイン結果]
-  SCR005[SCR-005 メイン]
-  SCR006[SCR-006 編集]
-  SCR007[SCR-007 ログアウト]
+stateDiagram-v2
+  state "SCR-001 ログイン入口" as SCR001
+  state "SCR-002 登録" as SCR002
+  state "SCR-003 登録完了" as SCR003
+  state "SCR-004 ログイン結果" as SCR004
+  state "SCR-005 メイン" as SCR005
+  state "SCR-006 編集" as SCR006
+  state "SCR-007 ログアウト" as SCR007
 
-  SCR001 -->|GET /Register| SCR002
-  SCR001 -->|POST /Login| SCR004
-  SCR001 -->|GET /Login| SCR001
-  SCR002 -->|POST /Register 成功| SCR003
-  SCR002 -->|POST /Register 失敗| SCR002
+  [*] --> SCR001
+  SCR001 --> SCR002: GET /Register
+  SCR001 --> SCR004: POST /Login
+  SCR001 --> SCR001: GET /Login
+  SCR002 --> SCR003: POST /Register 成功
+  SCR002 --> SCR002: POST /Register 失敗
   SCR003 --> SCR001
-  SCR004 -->|成功 GET /Main| SCR005
-  SCR004 -->|失敗| SCR001
-  SCR005 -->|GET /Logout| SCR007
-  SCR005 -->|POST /Main| SCR005
-  SCR005 -->|GET /SearchMutter| SCR005
-  SCR005 -->|GET /UpdateMutter 本人| SCR006
-  SCR005 -->|POST /DeleteMutter 本人| SCR005
-  SCR006 -->|POST 成功| SCR005
-  SCR006 -->|POST 失敗| SCR006
+  SCR004 --> SCR005: 成功後 GET /Main
+  SCR004 --> SCR001: 失敗
+  SCR005 --> SCR007: GET /Logout
+  SCR005 --> SCR005: POST /Main（投稿成功時はaiMsg）
+  SCR005 --> SCR005: GET /SearchMutter
+  SCR005 --> SCR006: GET /UpdateMutter 本人
+  SCR005 --> SCR005: POST /DeleteMutter 本人
+  SCR006 --> SCR005: POST /UpdateMutter 成功
+  SCR006 --> SCR006: POST /UpdateMutter 失敗
   SCR007 --> SCR001
+
+  note right of SCR005
+    /Main、/SearchMutter、/UpdateMutter、/DeleteMutterはログイン必須。
+    未ログイン時はSpring MVCの共通機構でログイン入口へ誘導する。
+  end note
 ```
-
-ログイン必須の入口:
-
-- `/Main`
-- `/SearchMutter`
-- `/UpdateMutter`
-- `/DeleteMutter`
-
-未ログイン時はログイン入口へ誘導する。判定は Spring MVC の共通機構で行う。
 
 ### 5.3 Wireframes and Layout Policy（主要画面のワイヤーフレーム・レイアウト方針）
 
