@@ -3,10 +3,10 @@
  * Language: Java
  * Function: Insert a user into USERS and select one user by NAME
  * Created: 2026-09-13
- * Last Updated: 2026-09-13
+ * Last Updated: 2026-10-08
  * Author: Takashi Oikawa
- * AI: Cursor Grok 4.6
- * Memo: Phase 1 DokoTsubu3. Register INSERT unchanged. Login SELECT by NAME only.
+ * AI: Cursor Grok 4.7
+ * Memo: Phase 1 DokoTsubu3. Register stores profile and timestamps. Login and profile reads require DELETED_AT IS NULL.
  */
 
 package dokotsubu.dao;
@@ -23,6 +23,7 @@ import org.springframework.stereotype.Repository;
 
 import dokotsubu.model.RegisterResult;
 import dokotsubu.model.UserCredential;
+import dokotsubu.model.UserProfile;
 
 @Repository
 public class UserDAO {
@@ -40,12 +41,15 @@ public class UserDAO {
         this.dbPassword = dbPassword;
     }
 
-    public RegisterResult registerUser(String name, String hashedPassword) {
-        String sql = "INSERT INTO USERS (NAME, PASS) VALUES (?, ?)";
+    public RegisterResult registerUser(String name, String hashedPassword, UserProfile profile) {
+        String sql = "INSERT INTO USERS (NAME, PASS, GENDER, AGE_FEELING, CREATED_AT, UPDATED_AT, DELETED_AT) "
+                + "VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL)";
         try (Connection conn = DriverManager.getConnection(jdbcUrl, dbUsername, dbPassword);
                 PreparedStatement pStmt = conn.prepareStatement(sql)) {
             pStmt.setString(1, name);
             pStmt.setString(2, hashedPassword);
+            pStmt.setString(3, profile.getGender());
+            pStmt.setString(4, profile.getAgeFeeling());
             int result = pStmt.executeUpdate();
             if (result != 1) {
                 return RegisterResult.DB_ERROR;
@@ -60,7 +64,7 @@ public class UserDAO {
     }
 
     public UserCredential findByName(String name) {
-        String sql = "SELECT ID, NAME, PASS FROM USERS WHERE NAME = ?";
+        String sql = "SELECT ID, NAME, PASS FROM USERS WHERE NAME = ? AND DELETED_AT IS NULL";
         try (Connection conn = DriverManager.getConnection(jdbcUrl, dbUsername, dbPassword);
                 PreparedStatement pStmt = conn.prepareStatement(sql)) {
             pStmt.setString(1, name);
@@ -72,6 +76,27 @@ public class UserDAO {
                         rs.getInt("ID"),
                         rs.getString("NAME"),
                         rs.getString("PASS"));
+            }
+        } catch (SQLException e) {
+            return null;
+        }
+    }
+
+    public UserProfile findActiveProfileByUserId(int userId) {
+        String sql = "SELECT GENDER, AGE_FEELING FROM USERS WHERE ID = ? AND DELETED_AT IS NULL";
+        try (Connection conn = DriverManager.getConnection(jdbcUrl, dbUsername, dbPassword);
+                PreparedStatement pStmt = conn.prepareStatement(sql)) {
+            pStmt.setInt(1, userId);
+            try (ResultSet rs = pStmt.executeQuery()) {
+                if (!rs.next()) {
+                    return null;
+                }
+                String gender = rs.getString("GENDER");
+                String ageFeeling = rs.getString("AGE_FEELING");
+                if (!UserProfile.isAllowedGender(gender) || !UserProfile.isAllowedAgeFeeling(ageFeeling)) {
+                    return null;
+                }
+                return new UserProfile(gender, ageFeeling);
             }
         } catch (SQLException e) {
             return null;

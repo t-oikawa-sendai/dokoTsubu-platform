@@ -12,14 +12,14 @@ Memo: 仕様正本を置き換えず、確認結果と引き継ぎ報告を区�
 # Current Project State（現在状態）
 
 <details>
-<summary>Document Info（文書情報）｜CURRENT-001｜0.9｜Review</summary>
+<summary>Document Info（文書情報）｜CURRENT-001｜1.0｜Review</summary>
 
 <!-- Document Info（文書情報） -->
 
 | Item（項目） | Value（値） |
 |---|---|
 | Document ID（文書ID） | CURRENT-001 |
-| Version（バージョン） | 0.9 |
+| Version（バージョン） | 1.0 |
 | Status（ステータス） | Review |
 | Created Date（作成日） | 2026-10-08 |
 | Last Updated（最終更新日） | 2026-10-31 |
@@ -33,7 +33,7 @@ Memo: 仕様正本を置き換えず、確認結果と引き継ぎ報告を区�
 - Repository：`t-oikawa-sendai/dokoTsubu-platform`
 - URL：<https://github.com/t-oikawa-sendai/dokoTsubu-platform>
 - Local Workspace：`/Users/takashioikawa/Dev/dokoTsubu-platform`
-- Branch：`main`
+- Default Branch：`main`（今回の作業ブランチは §2 を参照）
 - 現行アプリ：`DokoTsubu3/`
 - 比較基準：`DokoTsubu2/`
 - 初版の確認基準コミット：`be40616da5a3332f8e844498d7f8f97c6ba71a4c`。本書追加前の基準であり、以後の最新HEADを表すものではない。
@@ -90,6 +90,16 @@ Memo: 仕様正本を置き換えず、確認結果と引き継ぎ報告を区�
 - Aiven接続設定とCAは作成済みだが1045で拒否された。本番構造・権限は未読取である。Vercelの秘密値は取得できず、Macとの一致は未確認である。
 - 保全15ファイルと `.gitignore` 差分を維持する。commit／pushは未実施である。
 
+2026-10-31のVersion 3本番作業の現在状態は次のとおりである。上記の過去の保留は、利用者が既存DB移行と本番公開までを明示的に依頼したため、今回の作業範囲には適用しない。
+
+- 着手時の本clone `main`、`origin/main`、GitHub `main` は `a8d2ee0d927a58b57a36221fa1cb5871f2a44ce9` で一致し、作業ツリーはcleanだった。既存のVersion 3実装は保全ブランチ `preserve/pre-sync-main-cbfa174` にあり、現行mainとは分岐している。
+- 作業ブランチ `codex/version3-production` に、保全コミット `cbfa174ea17b60cad5e2114837f49e767f5d7ab6` からVersion 3配下の9ファイルだけを取り込んだ。`DokoTsubu1_5/` とVersion 3以外の差分は取り込まない。`mvn -q -DskipTests package` と `git diff --check` は成功。今回の機能試験は未実施であり、2026-10-08の45件を今回の結果とはしない。
+- Vercel Productionは `main` の `a8d2ee0` を `Ready` として公開中。Project Rootは `DokoTsubu3`、Framework PresetはContainer。DB・Geminiの環境変数はProductionだけにあり、Shared変数は未連結。Pause Projectの操作は表示されているが、停止は未実行。
+- Aiven `mysql-dokotsubu` は稼働中。`dokotsubu` に読み取り接続し、`USERS` 6件、`MUTTERS` 27件、Spring Session 2テーブルは0件を確認。4テーブルはInnoDB。Domain 2テーブルは旧3列構造、追加予定列なし、FK・trigger・eventなし。`PROCESS`／`EVENT`／`ALTER`等の権限を確認した。event schedulerはON。確認時のDB接続表示は自分の照会だけで、将来の書込み停止を保証しない。
+- Git管理外の事前バックアップに加え、Vercel ProductionをPause Projectで停止し、公開入口の503 `DEPLOYMENT_PAUSED`、他のDBクライアントなし、Domain eventなし、実行中transactionなし、件数6／27／0／0を確認した。停止後の最終バックアップは `.local-secrets/backups/dokotsubu-final-pre-migration-2026-10-31.sql`（6575 bytes、権限600、SHA-256 `70de30bc9499bc7e8a34c8658f93e2c303546e9b21eafc17f2a78afe1c1819b3`）。4テーブルの定義・データとdump完了印を確認した。復元操作自体は未実施。Aiven自動バックアップの最新Fullは2026-10-30 14:36:12 UTC。Freeプランのfork不可を踏まえ、手元dumpを復旧手段とする。
+- 利用者は既存User 6件・Mutter 27件の初期化を明示承認した。停止中に `MUTTERS`、`USERS`、旧Spring Sessionの順でデータを初期化し、`USERS`／`MUTTERS` にTarget Schemaの列を追加した。移行後は4テーブルとも0件。追加列の型・NULL条件とInnoDBを確認した。table rename／schema rename／TEXT長変更／FK追加は行っていない。
+- Version 3のcommit・push・本番公開とVercel再開は、この記録時点で未実施。今回のAiven接続確認時にパスワードが操作ログへ表示されたため、利用者による認証情報の変更とVercel設定の整合確認が必要である。秘密値は本書へ記録しない。
+
 ## 3. Confirmed Decisions（確定事項）
 
 詳細と値定義は[設計書一覧](../docs/design/README.md)および各仕様正本を参照する。
@@ -108,9 +118,9 @@ Memo: 仕様正本を置き換えず、確認結果と引き継ぎ報告を区�
 |---|---|---|
 | USERS／MUTTERSの論理削除・日時管理 | コード実装済み。2026-10-08の独立検証DBで確認済み。2026-10-15のMac mini新規ローカル `dokotsubu`（127.0.0.1:3306）とローカル8080で、本人投稿の論理削除を確認した。本番未適用 | [データ設計](../docs/design/03_DATA_AND_SECURITY_DESIGN.md) |
 | GENDER／AGE_FEELINGの登録画面・DB保存 | コード実装済み。2026-10-08の独立検証DBで確認済み。2026-10-15のローカル8080で登録プロフィール保存を確認した。本番未適用 | [要件定義](../docs/design/02_REQUIREMENTS_DEFINITION.md)・[画面設計](../docs/design/04_UI_AND_FLOW_DESIGN.md) |
-| Geminiコメント生成へのプロフィール利用 | コード実装済み。2026-10-08の独立検証DBで送信構成と実API 1件を確認済み。2026-10-15のローカル8080での生成成功確認は、キー未入手のため利用者指示で保留する。追加調査・再試行は進めない。本番未適用 | [Gemini仕様](../docs/specs/GEMINI_INTEGRATION_SPEC.md) |
-| Target Schemaへの移行・既存データ初期化・既存Session無効化 | 本番対応は保留。Aiven接続設定とCAは作成済みだが1045で拒否された。本番構造・権限は未読取。Vercelの秘密値は取得できず、Macとの一致は未確認。追加調査・問い合わせは進めない。本番工程は開始しない | [移行設計](../docs/design/06_OPERATION_AND_HANDOFF.md) §5.7 |
-| 配布用WAR・初期作成SQL・設定サンプル・ZIP・Release公開 | 初期作成SQLはMac miniの作業ツリーへ復元済み、未追跡・未commit・未push。空の環境専用。配布用WAR・設定サンプル・ZIP・Releaseは未作成・未公開 | [配布準備ガイド](../docs/STUDENT_DISTRIBUTION_GUIDE.md) |
+| Geminiコメント生成へのプロフィール利用 | コード実装済み。2026-10-08の独立検証DBで送信構成と実API 1件を確認済み。2026-10-15のローカル生成確認は当時保留。2026-10-31に利用者が本番作業を再開したが、今回の生成確認は未実施。本番未適用 | [Gemini仕様](../docs/specs/GEMINI_INTEGRATION_SPEC.md) |
+| Target Schemaへの移行・既存データ初期化・既存Session無効化 | 2026-10-31に停止後の最終バックアップを保存し、利用者承認の上で初期化・Schema変更・Session無効化を実施。移行後4テーブル0件、追加列を確認済み | [移行設計](../docs/design/06_OPERATION_AND_HANDOFF.md) §5.7 |
+| 配布用WAR・初期作成SQL・設定サンプル・ZIP・Release公開 | 空の環境専用の初期作成SQLは今回の作業ブランチにあり、未追跡・未commit・未push。配布用WAR・設定サンプル・ZIP・Releaseは未作成・未公開。今回の本番DB移行には初期作成SQLを使用しない | [配布準備ガイド](../docs/STUDENT_DISTRIBUTION_GUIDE.md) |
 | 配布版の新規導入・起動・対象機能確認 | 未検証 | [配布準備ガイド](../docs/STUDENT_DISTRIBUTION_GUIDE.md) |
 | 最新環境構築手順どおりのローカル起動・Login入口 | 2026-10-08は独立検証環境のport 18081で確認済み。2026-10-15に既定port 8080で、存在していなかった `dokotsubu` を空環境用SQLとSession用SQLにより新規作成して起動を確認した。Target Schemaは一致。既存データの削除・上書きはない | [環境構築手順書](../docs/ENVIRONMENT_SETUP_GUIDE.md) |
 | 登録→ログイン→投稿→ログアウトの通し操作・3人の独立した同時操作 | 2026-10-08の独立検証DBでは通し操作と3つの独立Sessionを確認済み。3人の同時操作は未確認。2026-10-15のローカル8080で、登録プロフィール保存、ログイン、投稿保存、本人投稿の論理削除、ログアウトを確認した。本番は未確認。Gemini生成成功確認は保留 | [運用手順書](../docs/DEPLOYMENT_AND_OPERATION_GUIDE.md) |
@@ -119,14 +129,21 @@ Memo: 仕様正本を置き換えず、確認結果と引き継ぎ報告を区�
 
 ## 5. Current Target / Next（現在対象・次作業）
 
+### 2026-10-31 Version 3の現在対象
+
+- 保全ブランチのVersion 3機能だけを現行mainへ取り込み、既存Aiven DBを設計済みTarget Schemaへ移行してVercel本番へ公開する。Version 1.5は授業用サンプルソースであり、本作業の対象外。
+- 次にVersion 3差分と文書のcommit前レビューを終え、GitHub mainへ反映してVercel Productionの新しいdeploymentを確認する。その後に公開を再開し、公開入口とGitHub main／ローカルHEADの一致を確認する。
+
+### 2026-10-31 Version 1.5の配置記録（過去）
+
 - 2026-10-31の利用者承認により、Spring Bootの授業用サンプルソースをVersion 1.5とし、本Repositoryの `DokoTsubu1_5/` へ配置した。`回答.zip` の外側を採用し、内側の重複プロジェクトと `target/` は収録しない。
 - ZIPのSHA-256は `5b24d7e8d9c6fb4e6eba9b94c1b1642dd83dceda34f7948e061872cc6bb115eb`。ソース・設定・テスト・Maven Wrapperは原本のまま保持する。Eclipse設定とHELP.mdも展開時は保持するが、原本の.gitignoreに従いGit登録対象から除外する。
 - 配置時の作業用cloneは `/workspace/scratch/d62bd46d69ba/dokoTsubu-platform`。開始時はmain、HEADとorigin/mainは `a309661e80c0b08db7be488a1e2efa3726589246` で一致し、未commit変更はなかった。当時未確認だったMac側の本cloneは、2026-10-31に早送り同期し、HEADとorigin/mainが `f7ceff8347e136d025c910953febb300be4f899c` で一致した。同期直後の未commit差分・未追跡ファイルはなかった。
 - 既存V1・V2・V3、DB、デプロイ構成は変更しない。Version 3の設計をVersion 1.5へ転用しない。
 - Version 1の表記は「JSP・サーブレットを使用する授業基本版（旧版）」、Version 1.5の表記は「Spring Bootを使用する授業用サンプルソース（動作確認対象外）」とする。
-- Version 1.5の原本配置はGitHubへ反映済みで、2026-10-31に本cloneへ同期した。Version 1.5のビルド・起動・DB・画面試験は未実施で、利用者指示により動作確認は行わない。公開アプリのデプロイは今回の対象外である。
+- Version 1.5の原本配置はGitHubへ反映済みで、2026-10-31に本cloneへ同期した。Version 1.5のビルド・起動・DB・画面試験は未実施で、利用者指示により動作確認は行わない。当時のVersion 1.5配置作業では、公開アプリのデプロイは対象外だった。
 
-### 2026-10-15時点の保留事項（継続）
+### 2026-10-15時点の保留事項（過去の記録）
 
 - 現在対象：2026-10-15のローカル動作結果を本書とCHANGELOGへ記録し、Gemini生成成功確認とAiven・本番対応を保留として固定する。
 - 文書記録後もcommit／pushは行わない。保全15ファイルと `.gitignore` 差分は維持し、作業ツリーをcleanにするために破棄しない。

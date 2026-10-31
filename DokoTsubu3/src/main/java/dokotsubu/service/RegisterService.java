@@ -3,10 +3,10 @@
  * Language: Java
  * Function: Hash a password with BCrypt and request user registration
  * Created: 2026-09-13
- * Last Updated: 2026-09-13
+ * Last Updated: 2026-10-08
  * Author: Takashi Oikawa
- * AI: Cursor Grok 4.6
- * Memo: Phase 1 DokoTsubu3. DAO receives username and hash only.
+ * AI: Cursor Grok 4.7
+ * Memo: Phase 1 DokoTsubu3. DAO receives username, BCrypt hash, and profile codes.
  */
 
 package dokotsubu.service;
@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import dokotsubu.dao.UserDAO;
 import dokotsubu.model.RegisterResult;
+import dokotsubu.model.UserProfile;
 
 @Service
 public class RegisterService {
@@ -27,8 +28,8 @@ public class RegisterService {
         this.userDAO = userDAO;
     }
 
-    public RegisterResult register(String username, String password) {
+    public RegisterResult register(String username, String password, UserProfile profile) {
         String hashedPassword = passwordEncoder.encode(password);
-        return userDAO.registerUser(username, hashedPassword);
+        return userDAO.registerUser(username, hashedPassword, profile);
     }
 }

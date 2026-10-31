@@ -3,10 +3,10 @@ Program Name: registerView.jsp
 Language: JSP
 Function: User registration screen (SCR-002)
 Created: 2026-09-13
-Last Updated: 2026-09-13
+Last Updated: 2026-10-08
 Author: Takashi Oikawa
-AI: Cursor Grok 4.6
-Memo: Phase 1 DokoTsubu3 GET /Register view only
+AI: Cursor Grok 4.7
+Memo: Phase 1 DokoTsubu3 SCR-002. Gender defaults to PRIVATE. Age feeling starts unselected.
 --%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
@@ -46,6 +46,28 @@ String errorMsg = (String) request.getAttribute("errorMsg");
           <div class="dt-field">
             <label class="dt-field__label" for="dt-password">パスワード</label>
             <input id="dt-password" class="dt-field__input" type="password" name="password" autocomplete="new-password">
+          </div>
+
+          <div class="dt-field">
+            <label class="dt-field__label" for="dt-gender">性別</label>
+            <select id="dt-gender" class="dt-field__input" name="gender">
+              <option value="MALE">男性</option>
+              <option value="FEMALE">女性</option>
+              <option value="OTHER">その他</option>
+              <option value="PRIVATE" selected>ヒミツ</option>
+            </select>
+          </div>
+
+          <div class="dt-field">
+            <label class="dt-field__label" for="dt-age-feeling">年齢感覚</label>
+            <select id="dt-age-feeling" class="dt-field__input" name="ageFeeling">
+              <option value="" selected></option>
+              <option value="YOUNG">若い</option>
+              <option value="FAIRLY_YOUNG">そこそこ若い</option>
+              <option value="MIDDLE">中年</option>
+              <option value="PRE_SENIOR">高齢者の少し手前</option>
+              <option value="SENIOR">がっつり高齢者</option>
+            </select>
           </div>
 
           <div class="dt-actions">

@@ -1,17 +1,17 @@
 # API Specification（API仕様書）
 
 <details>
-<summary>Document Info（文書情報）｜API-SPEC-001｜0.1｜Draft</summary>
+<summary>Document Info（文書情報）｜API-SPEC-001｜0.2｜Draft</summary>
 
 <!-- Document Info（文書情報） -->
 
 | Item（項目） | Value（値） |
 |---|---|
 | Document ID（文書ID） | API-SPEC-001 |
-| Version（バージョン） | 0.1 |
+| Version（バージョン） | 0.2 |
 | Status（ステータス） | Draft |
 | Created Date（作成日） | 2026-10-05 |
-| Last Updated（最終更新日） | 2026-10-05 |
+| Last Updated（最終更新日） | 2026-10-31 |
 | Owner（管理者） | Takashi Oikawa |
 | Related Documents（関連文書） | [Project README](../../README.md) / [Design Documents Index（設計書一覧）](../design/README.md) / [02_REQUIREMENTS_DEFINITION.md](../design/02_REQUIREMENTS_DEFINITION.md) / [03_DATA_AND_SECURITY_DESIGN.md](../design/03_DATA_AND_SECURITY_DESIGN.md) / [04_UI_AND_FLOW_DESIGN.md](../design/04_UI_AND_FLOW_DESIGN.md) / [GEMINI_INTEGRATION_SPEC.md](./GEMINI_INTEGRATION_SPEC.md) |
 
@@ -24,8 +24,8 @@
 Version 3（`DokoTsubu3/`）の Spring MVC アプリケーションエンドポイントを定義する。
 
 - 本書は Version 3 の Target Specification（目標仕様）である
-- 設計確定済み・未実装の仕様を含む（`gender` / `ageFeeling` の登録項目、論理削除、論理削除条件による有効データ判定）
-- 現在の実装状況は [Project README](../../README.md) の「2.2 Feature Comparison（機能比較）」を参照する
+- `gender` / `ageFeeling` の登録項目、論理削除、論理削除条件による有効データ判定を定義する
+- 実装状況と本番への反映状況は [Project README](../../README.md) と [CURRENT.md](../../project-notes/CURRENT.md) を参照する
 - 要件の正は [02_REQUIREMENTS_DEFINITION.md](../design/02_REQUIREMENTS_DEFINITION.md) の FR-001〜FR-009、API-001〜API-007 とする
 - 本書は設計正本と矛盾する内容を持たない。矛盾がある場合は `docs/design/` を正とする
 - 外部公開 REST API は無い

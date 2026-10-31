@@ -3,10 +3,10 @@
  * Language: Java
  * Function: Return the mutter list, search mutters by keyword, save a mutter before asking Gemini, and find, update, or delete an owned mutter
  * Created: 2026-09-29
- * Last Updated: 2026-09-29
+ * Last Updated: 2026-10-08
  * Author: Takashi Oikawa
- * AI: Cursor
- * Memo: Phase 1 DokoTsubu3 FR-004, FR-005, FR-006, FR-007, FR-008, and FR-009. Gemini runs only after INSERT succeeds. No rollback. Edit and delete pass mutter id and login user id to DAO.
+ * AI: Cursor Grok 4.7
+ * Memo: Phase 1 DokoTsubu3. Gemini runs only after INSERT succeeds, using the active user's DB profile. No rollback.
  */
 
 package dokotsubu.service;
@@ -17,16 +17,20 @@ import org.springframework.stereotype.Service;
 
 import dokotsubu.client.GeminiClient;
 import dokotsubu.dao.MutterDAO;
+import dokotsubu.dao.UserDAO;
 import dokotsubu.model.Mutter;
+import dokotsubu.model.UserProfile;
 
 @Service
 public class MutterService {
 
     private final MutterDAO mutterDAO;
+    private final UserDAO userDAO;
     private final GeminiClient geminiClient;
 
-    public MutterService(MutterDAO mutterDAO, GeminiClient geminiClient) {
+    public MutterService(MutterDAO mutterDAO, UserDAO userDAO, GeminiClient geminiClient) {
         this.mutterDAO = mutterDAO;
+        this.userDAO = userDAO;
         this.geminiClient = geminiClient;
     }
 
@@ -42,7 +46,11 @@ public class MutterService {
         if (!mutterDAO.create(userId, text)) {
             return null;
         }
-        return geminiClient.generateShortComment(text);
+        UserProfile profile = userDAO.findActiveProfileByUserId(userId);
+        if (profile == null) {
+            return GeminiClient.FAILURE_MESSAGE;
+        }
+        return geminiClient.generateShortComment(text, profile);
     }
 
     public Mutter findOwned(int id, int userId) {

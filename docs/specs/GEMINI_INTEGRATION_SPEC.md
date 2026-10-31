@@ -1,17 +1,17 @@
 # Gemini Integration Specification（Gemini連携仕様書）
 
 <details>
-<summary>Document Info（文書情報）｜GEMINI-SPEC-001｜0.1｜Draft</summary>
+<summary>Document Info（文書情報）｜GEMINI-SPEC-001｜0.2｜Draft</summary>
 
 <!-- Document Info（文書情報） -->
 
 | Item（項目） | Value（値） |
 |---|---|
 | Document ID（文書ID） | GEMINI-SPEC-001 |
-| Version（バージョン） | 0.1 |
+| Version（バージョン） | 0.2 |
 | Status（ステータス） | Draft |
 | Created Date（作成日） | 2026-10-05 |
-| Last Updated（最終更新日） | 2026-10-05 |
+| Last Updated（最終更新日） | 2026-10-31 |
 | Owner（管理者） | Takashi Oikawa |
 | Related Documents（関連文書） | [Project README](../../README.md) / [Design Documents Index（設計書一覧）](../design/README.md) / [02_REQUIREMENTS_DEFINITION.md](../design/02_REQUIREMENTS_DEFINITION.md) / [03_DATA_AND_SECURITY_DESIGN.md](../design/03_DATA_AND_SECURITY_DESIGN.md) / [05_ARCHITECTURE_DESIGN.md](../design/05_ARCHITECTURE_DESIGN.md) / [API_SPEC.md](./API_SPEC.md) |
 
@@ -24,8 +24,8 @@
 Version 3（`DokoTsubu3/`）の Gemini 連携を定義する。
 
 - 本書は Version 3 の Target Specification（目標仕様）である
-- `GENDER` / `AGE_FEELING` の Gemini 送信、およびそのための DB からの Profile 取得は設計確定済み・未実装である
-- 現在の実装状況は [Project README](../../README.md) の「2.2 Feature Comparison（機能比較）」を参照する
+- `GENDER` / `AGE_FEELING` の Gemini 送信、およびそのための DB からの Profile 取得を定義する
+- 実装状況と本番への反映状況は [Project README](../../README.md) と [CURRENT.md](../../project-notes/CURRENT.md) を参照する
 - 要件の正は [02_REQUIREMENTS_DEFINITION.md](../design/02_REQUIREMENTS_DEFINITION.md) の FR-009 とする
 - 本書は設計正本と矛盾する内容を持たない。矛盾がある場合は `docs/design/` を正とする
 - DokoTsubu2 の旧 AI 設定仕様（`docs/archive/DOKOTSUBU2_AI_CONFIGURATION_SPEC.md`）は現行正本ではない。固定絶対パスの設定ファイルは使用しない

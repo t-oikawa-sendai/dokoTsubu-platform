@@ -3,10 +3,10 @@
  * Language: Java
  * Function: Select mutters in ID descending order, search mutter text, insert one mutter, and select, update, or delete one owned mutter
  * Created: 2026-09-29
- * Last Updated: 2026-09-29
+ * Last Updated: 2026-10-08
  * Author: Takashi Oikawa
- * AI: Cursor
- * Memo: Phase 1 DokoTsubu3 FR-004, FR-005, FR-006, FR-007, and FR-008. List and search also return USER_ID. Owned select, UPDATE, and DELETE always use ID and USER_ID.
+ * AI: Cursor Grok 4.7
+ * Memo: Phase 1 DokoTsubu3. Active rows require DELETED_AT IS NULL. Owned update and logical delete also require an active user.
  */
 
 package dokotsubu.dao;
@@ -45,6 +45,7 @@ public class MutterDAO {
         String sql = "SELECT m.ID, m.USER_ID, u.NAME, m.TEXT "
                 + "FROM MUTTERS m "
                 + "JOIN USERS u ON m.USER_ID = u.ID "
+                + "WHERE m.DELETED_AT IS NULL AND u.DELETED_AT IS NULL "
                 + "ORDER BY m.ID DESC";
         try (Connection conn = DriverManager.getConnection(jdbcUrl, dbUsername, dbPassword);
                 PreparedStatement pStmt = conn.prepareStatement(sql);
@@ -67,7 +68,7 @@ public class MutterDAO {
         String sql = "SELECT m.ID, m.USER_ID, u.NAME, m.TEXT "
                 + "FROM MUTTERS m "
                 + "JOIN USERS u ON m.USER_ID = u.ID "
-                + "WHERE m.TEXT LIKE ? "
+                + "WHERE m.TEXT LIKE ? AND m.DELETED_AT IS NULL AND u.DELETED_AT IS NULL "
                 + "ORDER BY m.ID DESC";
         try (Connection conn = DriverManager.getConnection(jdbcUrl, dbUsername, dbPassword);
                 PreparedStatement pStmt = conn.prepareStatement(sql)) {
@@ -88,11 +89,13 @@ public class MutterDAO {
     }
 
     public boolean create(int userId, String text) {
-        String sql = "INSERT INTO MUTTERS(USER_ID, TEXT) VALUES(?, ?)";
+        String sql = "INSERT INTO MUTTERS (USER_ID, TEXT, CREATED_AT, UPDATED_AT, DELETED_AT) "
+                + "SELECT u.ID, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL "
+                + "FROM USERS u WHERE u.ID = ? AND u.DELETED_AT IS NULL";
         try (Connection conn = DriverManager.getConnection(jdbcUrl, dbUsername, dbPassword);
                 PreparedStatement pStmt = conn.prepareStatement(sql)) {
-            pStmt.setInt(1, userId);
-            pStmt.setString(2, text);
+            pStmt.setString(1, text);
+            pStmt.setInt(2, userId);
             return pStmt.executeUpdate() == 1;
         } catch (SQLException e) {
             return false;
@@ -103,7 +106,7 @@ public class MutterDAO {
         String sql = "SELECT m.ID, m.USER_ID, u.NAME, m.TEXT "
                 + "FROM MUTTERS m "
                 + "JOIN USERS u ON m.USER_ID = u.ID "
-                + "WHERE m.ID = ? AND m.USER_ID = ?";
+                + "WHERE m.ID = ? AND m.USER_ID = ? AND m.DELETED_AT IS NULL AND u.DELETED_AT IS NULL";
         try (Connection conn = DriverManager.getConnection(jdbcUrl, dbUsername, dbPassword);
                 PreparedStatement pStmt = conn.prepareStatement(sql)) {
             pStmt.setInt(1, id);
@@ -124,7 +127,10 @@ public class MutterDAO {
     }
 
     public boolean update(int id, int userId, String text) {
-        String sql = "UPDATE MUTTERS SET TEXT = ? WHERE ID = ? AND USER_ID = ?";
+        String sql = "UPDATE MUTTERS m "
+                + "INNER JOIN USERS u ON m.USER_ID = u.ID "
+                + "SET m.TEXT = ?, m.UPDATED_AT = CURRENT_TIMESTAMP "
+                + "WHERE m.ID = ? AND m.USER_ID = ? AND m.DELETED_AT IS NULL AND u.DELETED_AT IS NULL";
         try (Connection conn = DriverManager.getConnection(jdbcUrl, dbUsername, dbPassword);
                 PreparedStatement pStmt = conn.prepareStatement(sql)) {
             pStmt.setString(1, text);
@@ -137,7 +143,10 @@ public class MutterDAO {
     }
 
     public boolean delete(int id, int userId) {
-        String sql = "DELETE FROM MUTTERS WHERE ID = ? AND USER_ID = ?";
+        String sql = "UPDATE MUTTERS m "
+                + "INNER JOIN USERS u ON m.USER_ID = u.ID "
+                + "SET m.DELETED_AT = CURRENT_TIMESTAMP, m.UPDATED_AT = CURRENT_TIMESTAMP "
+                + "WHERE m.ID = ? AND m.USER_ID = ? AND m.DELETED_AT IS NULL AND u.DELETED_AT IS NULL";
         try (Connection conn = DriverManager.getConnection(jdbcUrl, dbUsername, dbPassword);
                 PreparedStatement pStmt = conn.prepareStatement(sql)) {
             pStmt.setInt(1, id);

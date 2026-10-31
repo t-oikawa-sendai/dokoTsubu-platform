@@ -1,14 +1,14 @@
 # DokoTsubu（どこつぶ）
 
 <details>
-<summary>Document Info（文書情報）｜PROJECT-README-001｜0.8｜Review</summary>
+<summary>Document Info（文書情報）｜PROJECT-README-001｜0.9｜Review</summary>
 
 <!-- Document Info（文書情報） -->
 
 | Item（項目） | Value（値） |
 |---|---|
 | Document ID（文書ID） | PROJECT-README-001 |
-| Version（バージョン） | 0.8 |
+| Version（バージョン） | 0.9 |
 | Status（ステータス） | Review |
 | Created Date（作成日） | 2024-06-15 |
 | Last Updated（最終更新日） | 2026-10-31 |
@@ -77,10 +77,10 @@ Java Webアプリケーションの基本的なMVCアーキテクチャを起点
 | CSRF | ― | ― | ― | ○ |
 | Spring Session JDBC | ― | ― | ― | ○ |
 
-Version 3 で設計確定済み・未実装の項目:
+Version 3 では、次の設計済み機能の実装を `DokoTsubu3/` に含む。本番DBへの移行と公開への反映状況は [CURRENT.md](./project-notes/CURRENT.md) を参照する。
 
-- `USERS` / `MUTTERS` の論理削除（現行の投稿削除は物理削除）
-- User プロフィール `GENDER` / `AGE_FEELING` の登録項目追加
+- `USERS` / `MUTTERS` の論理削除と日時管理
+- User プロフィール `GENDER` / `AGE_FEELING` の登録・保存
 - Gemini コメント生成への User プロフィール利用
 
 確定仕様は [Design Documents Index（設計書一覧）](./docs/design/README.md) を正とする。

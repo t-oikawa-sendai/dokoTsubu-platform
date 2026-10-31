@@ -3,10 +3,10 @@
  * Language: Java
  * Function: Call Gemini generateContent and return a short Japanese comment
  * Created: 2026-09-29
- * Last Updated: 2026-09-29
+ * Last Updated: 2026-10-08
  * Author: Takashi Oikawa
  * AI: Cursor Grok 4.7
- * Memo: Phase 1 DokoTsubu3 FR-009. API key is a header only. Sampling parameters are omitted. Failures return the fixed message.
+ * Memo: Phase 1 DokoTsubu3 FR-009. Prompt includes display names only. API key is a header only. Sampling parameters are omitted.
  */
 
 package dokotsubu.client;
@@ -23,13 +23,14 @@ import org.springframework.http.client.JdkClientHttpRequestFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
 
+import dokotsubu.model.UserProfile;
 import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.ObjectMapper;
 
 @Component
 public class GeminiClient {
 
-    static final String FAILURE_MESSAGE = "本日AIお休みさせていただいております。。。";
+    public static final String FAILURE_MESSAGE = "本日AIお休みさせていただいております。。。";
 
     private static final int MAX_COMMENT_CODE_POINTS = 50;
     private static final Duration HTTP_TIMEOUT = Duration.ofSeconds(30);
@@ -57,8 +58,8 @@ public class GeminiClient {
         this.objectMapper = new ObjectMapper();
     }
 
-    public String generateShortComment(String mutterText) {
-        if (isBlank(apiKey) || isBlank(model)) {
+    public String generateShortComment(String mutterText, UserProfile profile) {
+        if (profile == null || isBlank(apiKey) || isBlank(model)) {
             return FAILURE_MESSAGE;
         }
         String safeText = mutterText == null ? "" : mutterText;
@@ -67,7 +68,7 @@ public class GeminiClient {
                     .uri(URI.create(endpoint()))
                     .header("x-goog-api-key", apiKey)
                     .contentType(MediaType.APPLICATION_JSON)
-                    .body(requestJson(safeText))
+                    .body(requestJson(safeText, profile))
                     .retrieve()
                     .body(String.class);
             String comment = extractComment(responseBody);
@@ -87,14 +88,29 @@ public class GeminiClient {
                 + ":generateContent";
     }
 
-    private String requestJson(String userText) {
-        Map<String, Object> part = Map.of("text", PROMPT_PREFIX + userText);
+    private String requestJson(String userText, UserProfile profile) {
+        Map<String, Object> part = Map.of("text", promptText(userText, profile));
         Map<String, Object> content = Map.of("parts", List.of(part));
         Map<String, Object> generationConfig = Map.of("maxOutputTokens", 64);
         Map<String, Object> root = Map.of(
                 "contents", List.of(content),
                 "generationConfig", generationConfig);
         return objectMapper.writeValueAsString(root);
+    }
+
+    private String promptText(String userText, UserProfile profile) {
+        StringBuilder prompt = new StringBuilder(PROMPT_PREFIX);
+        prompt.append("性別と年齢感覚は、回答の表現・バリエーション調整の参考情報として扱ってください。");
+        if (profile.isPrivateGender()) {
+            prompt.append("性別を推測しないでください。");
+        }
+        prompt.append("年齢感覚は自己申告の感覚であり、実年齢ではありません。実年齢として扱わないでください。");
+        prompt.append("性別と年齢感覚から、性格、職業、能力、価値観、その他プロフィールに存在しない属性を決めつけたり推定したりしないでください。");
+        prompt.append("\n\n");
+        prompt.append("性別: ").append(profile.genderDisplayName()).append('\n');
+        prompt.append("年齢感覚: ").append(profile.ageFeelingDisplayName()).append("\n\n");
+        prompt.append(userText);
+        return prompt.toString();
     }
 
     private String extractComment(String jsonBody) {

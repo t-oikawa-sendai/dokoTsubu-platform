@@ -12,14 +12,14 @@ Memo: Canonical Templateから新設したRepository固有履歴正本。過去A
 # CHANGELOG
 
 <details>
-<summary>Document Info（文書情報）｜CHANGELOG-001｜0.3｜Draft</summary>
+<summary>Document Info（文書情報）｜CHANGELOG-001｜0.4｜Draft</summary>
 
 <!-- Document Info（文書情報） -->
 
 | Item（項目） | Value（値） |
 |---|---|
 | Document ID（文書ID） | CHANGELOG-001 |
-| Version（バージョン） | 0.3 |
+| Version（バージョン） | 0.4 |
 | Status（ステータス） | Draft |
 | Created Date（作成日） | 2026-09-11 |
 | Last Updated（最終更新日） | 2026-10-31 |
@@ -65,6 +65,7 @@ Governance導入Baselineは、Governance導入成功後に記録する。
 
 | Version | Date | Document | Category | Changes | Author |
 |---|---|---|---|---|---|
+| 0.4 | 2026-10-31 | `DokoTsubu3/` / `README.md` / `docs/specs/API_SPEC.md` / `docs/specs/GEMINI_INTEGRATION_SPEC.md` / `project-notes/CURRENT.md` / `CHANGELOG.md` | Changed | 保全ブランチのVersion 3機能9ファイルを作業ブランチへ選択的に取り込み、Maven buildと差分検査に成功。READMEと仕様書の「未実装」を実装状態と本番反映状態が混同されない記載へ修正。Aiven旧構造・件数とVercel現行公開SHAを確認し、Productionを停止。停止後の最終バックアップを保存し、利用者承認の上で既存User 6件・Mutter 27件と旧Sessionを初期化してTarget Schemaへ変更。commit・push・公開再開はこの記録時点で未実施 | Takashi Oikawa |
 | 0.3 | 2026-10-31 | `README.md` / `project-notes/CURRENT.md` / `CHANGELOG.md` | Fixed | Version 1.5を授業用サンプルソースと明記し、動作確認を残作業から除外。Mac側の本cloneへの同期完了を記録し、READMEを0.8、CURRENTを0.9へ更新 | Takashi Oikawa |
 | 1.5 | 2026-10-31 | `DokoTsubu1_5/` / `README.md` / `project-notes/CURRENT.md` | Added | 利用者承認によりSpring Boot授業用サンプルソースをVersion 1.5として新規配置。回答.zipの外側を採用し、重複プロジェクトとtargetを除外。原本ソースを保持し、README 0.7・CURRENT 0.8へ更新。Version 1は授業基本版（旧版）と明記。READMEの作業記録を整理。ビルド・起動は未実施 | Takashi Oikawa |
 | 0.7 | 2026-10-15 | `/project-notes/CURRENT.md` / `/CHANGELOG.md` | Changed | Mac miniの127.0.0.1:3306へ空の `dokotsubu` を新規作成し、ローカル8080で登録・ログイン・投稿・本人論理削除・ログアウトを確認した記録を追加した。Gemini生成成功確認はキー未入手のため保留、Aivenは1045拒否で本番構造・権限は未読取、Vercel秘密値は未取得のまま追加調査を止める。保全15ファイルと `.gitignore` 差分は未commitのまま維持する | Takashi Oikawa |
