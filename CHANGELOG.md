@@ -12,14 +12,14 @@ Memo: Canonical Templateから新設したRepository固有履歴正本。過去A
 # CHANGELOG
 
 <details>
-<summary>Document Info（文書情報）｜CHANGELOG-001｜0.11｜Draft</summary>
+<summary>Document Info（文書情報）｜CHANGELOG-001｜0.12｜Draft</summary>
 
 <!-- Document Info（文書情報） -->
 
 | Item（項目） | Value（値） |
 |---|---|
 | Document ID（文書ID） | CHANGELOG-001 |
-| Version（バージョン） | 0.11 |
+| Version（バージョン） | 0.12 |
 | Status（ステータス） | Draft |
 | Created Date（作成日） | 2026-09-11 |
 | Last Updated（最終更新日） | 2026-10-31 |
@@ -65,6 +65,7 @@ Governance導入Baselineは、Governance導入成功後に記録する。
 
 | Version | Date | Document | Category | Changes | Author |
 |---|---|---|---|---|---|
+| 0.12 | 2026-10-31 | `docs/uml/class-diagram.puml` / `docs/uml/database-er.puml` → `docs/archive/uml/` / `CHANGELOG.md` | Moved | Codex が DokoTsubu2 専用の旧 PlantUML 図2件を `docs/archive/uml/` へ移動。図の内容と Application は変更しない。公開対象は DokoTsubu3 のため、DokoTsubu2 の動作確認は本整理の対象外 | Takashi Oikawa |
 | 0.11 | 2026-10-31 | `docs/design/05_ARCHITECTURE_DESIGN.md` / `docs/design/06_OPERATION_AND_HANDOFF.md` / `docs/design/FOR_LEDGER.md` / `docs/design/README.md` / `CHANGELOG.md` | Changed | 利用者 Takashi Oikawa が F-001〜F-024 の採番と FROZEN 分類を承認し、F-025（Application 停止後・Domain 初期化前の最終バックアップ取得、取得結果と復元手順の確認）を内容確認後に承認。Codex が UML-05 を「3工程並行→合流後に Schema 変更」へ修正し、未検証の但し書きを削除。GOV-01・GOV-02・ARCH-02・ARCH-03・GOV-03 の指摘を修正。利用者承認により、06 HO-005・§7の3と5の重複した移行記述を、意味を変えず §5.7（旧passwordは §5.7.2）への参照に置換した旨を記録 | Takashi Oikawa |
 | 0.10 | 2026-10-31 | `docs/design/03_DATA_AND_SECURITY_DESIGN.md` / `docs/design/04_UI_AND_FLOW_DESIGN.md` / `docs/design/05_ARCHITECTURE_DESIGN.md` / `docs/design/06_OPERATION_AND_HANDOFF.md` / `docs/specs/GEMINI_INTEGRATION_SPEC.md` / `docs/design/FOR_LEDGER.md` / `docs/design/README.md` / `CHANGELOG.md` | Changed | Codex が UML-01〜05の対象箇所を状態図・配置図・シーケンス図・活動図へ置換。移行前の最終バックアップ工程とプロフィール取得不可の分岐を追加。台帳の参照先を更新し、F-025を登録。並行するDB操作は実行未検証と明記 | Takashi Oikawa |
 | 0.9 | 2026-10-31 | `docs/design/FOR_LEDGER.md` / `docs/design/README.md` / `CHANGELOG.md` | Added | Codex が UML-01〜05の対象箇所について、既存設計本文を正本としたF/O/R分類・所在台帳案を追加。既存設計本文、アプリ、DBは変更しない | Takashi Oikawa |
