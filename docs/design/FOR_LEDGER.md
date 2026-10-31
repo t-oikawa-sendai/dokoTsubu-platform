@@ -1,13 +1,13 @@
 # F/O/R Classification Ledger（仕様分類台帳）
 
 <details>
-<summary>Document Info（文書情報）｜FOR-LEDGER-001｜0.3｜Review</summary>
+<summary>Document Info（文書情報）｜FOR-LEDGER-001｜1.0｜Approved</summary>
 
 | Item（項目） | Value（値） |
 |---|---|
 | Document ID（文書ID） | FOR-LEDGER-001 |
-| Version（バージョン） | 0.3 |
-| Status（ステータス） | Review |
+| Version（バージョン） | 1.0 |
+| Status（ステータス） | Approved |
 | Created Date（作成日） | 2026-10-31 |
 | Last Updated（最終更新日） | 2026-10-31 |
 | Owner（管理者） | Takashi Oikawa |

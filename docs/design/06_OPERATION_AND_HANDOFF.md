@@ -1,15 +1,15 @@
 # Operation and Handoff Design（運用・詳細設計引き継ぎ）
 
 <details>
-<summary>Document Info（文書情報）｜OPS-001｜1.11｜Review</summary>
+<summary>Document Info（文書情報）｜OPS-001｜1.12｜Approved</summary>
 
 <!-- Document Info（文書情報） -->
 
 | Item（項目） | Value（値） |
 |---|---|
 | Document ID（文書ID） | OPS-001 |
-| Version（バージョン） | 1.11 |
-| Status（ステータス） | Review |
+| Version（バージョン） | 1.12 |
+| Status（ステータス） | Approved |
 | Created Date（作成日） | 2026-06-21 |
 | Last Updated（最終更新日） | 2026-10-31 |
 | Owner（管理者） | Takashi Oikawa |

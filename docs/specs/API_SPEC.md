@@ -1,15 +1,15 @@
 # API Specification（API仕様書）
 
 <details>
-<summary>Document Info（文書情報）｜API-SPEC-001｜0.2｜Draft</summary>
+<summary>Document Info（文書情報）｜API-SPEC-001｜1.0｜Approved</summary>
 
 <!-- Document Info（文書情報） -->
 
 | Item（項目） | Value（値） |
 |---|---|
 | Document ID（文書ID） | API-SPEC-001 |
-| Version（バージョン） | 0.2 |
-| Status（ステータス） | Draft |
+| Version（バージョン） | 1.0 |
+| Status（ステータス） | Approved |
 | Created Date（作成日） | 2026-10-05 |
 | Last Updated（最終更新日） | 2026-10-31 |
 | Owner（管理者） | Takashi Oikawa |

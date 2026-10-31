@@ -1,15 +1,15 @@
 # UI and Flow Design（UI・フロー設計）
 
 <details>
-<summary>Document Info（文書情報）｜UI-001｜1.5｜Review</summary>
+<summary>Document Info（文書情報）｜UI-001｜1.6｜Approved</summary>
 
 <!-- Document Info（文書情報） -->
 
 | Item（項目） | Value（値） |
 |---|---|
 | Document ID（文書ID） | UI-001 |
-| Version（バージョン） | 1.5 |
-| Status（ステータス） | Review |
+| Version（バージョン） | 1.6 |
+| Status（ステータス） | Approved |
 | Created Date（作成日） | 2026-06-21 |
 | Last Updated（最終更新日） | 2026-10-31 |
 | Owner（管理者） | Takashi Oikawa |

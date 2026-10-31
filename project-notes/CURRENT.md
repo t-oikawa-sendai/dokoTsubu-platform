@@ -12,15 +12,15 @@ Memo: 仕様正本を置き換えず、確認結果と引き継ぎ報告を区�
 # Current Project State（現在状態）
 
 <details>
-<summary>Document Info（文書情報）｜CURRENT-001｜1.3｜Review</summary>
+<summary>Document Info（文書情報）｜CURRENT-001｜1.4｜Approved</summary>
 
 <!-- Document Info（文書情報） -->
 
 | Item（項目） | Value（値） |
 |---|---|
 | Document ID（文書ID） | CURRENT-001 |
-| Version（バージョン） | 1.3 |
-| Status（ステータス） | Review |
+| Version（バージョン） | 1.4 |
+| Status（ステータス） | Approved |
 | Created Date（作成日） | 2026-10-08 |
 | Last Updated（最終更新日） | 2026-10-31 |
 | Owner（管理者） | Takashi Oikawa |
@@ -58,7 +58,7 @@ Memo: 仕様正本を置き換えず、確認結果と引き継ぎ報告を区�
 - 今回のMac miniの確認は、`DokoTsubu3` の `mvn -B package` がBUILD SUCCESS（2026-10-12 21:44:35 +0900）であること、`python3 scripts/validate-docs.py` がPASS（終了値 0）であること、`git diff --check` が終了値 0 であることである。提出時点の差分は復元した17ファイルに限られる。既存DBと本番を使う機能試験は実行していない。45件の成功は、今回の試験結果にしない。
 - 本番DBのTarget Schema移行、既存データ初期化、Session無効化、手動deploy、配布用ZIP、設定サンプル、Releaseは今回実施していない。
 - 修正版の移行・公開実行案はRepository外の `/Users/takashioikawa/BakaUpArea/dokoTsubu-platform/dokotsubu-migration-deployment-plan-20261012.md` にある。Aivenの構造・制約・件数、公開aliasの適用SHA、Production Branch、自動反映、停止・再開の操作は未確認である。
-- 配布準備ガイドはDraft。実行用ZIP、配布用WAR、設定サンプルは未作成。配布版の導入・起動は未検証。
+- 2026-10-12時点の配布準備ガイドはDraft。実行用ZIP、配布用WAR、設定サンプルは未作成。配布版の導入・起動は未検証。
 
 2026-10-12の終了時レビューと記録範囲は次のとおりである。
 
@@ -91,6 +91,8 @@ Memo: 仕様正本を置き換えず、確認結果と引き継ぎ報告を区�
 - 保全15ファイルと `.gitignore` 差分を維持する。commit／pushは未実施である。
 
 2026-10-31のVersion 3本番作業の現在状態は次のとおりである。上記の過去の保留は、利用者が既存DB移行と本番公開までを明示的に依頼したため、今回の作業範囲には適用しない。
+
+利用者はVersion 3の現行文書16件を完成版として承認した。Document Infoと設計書一覧をApprovedへ揃えた。これは配布用ZIP等の未作成や個別の本番操作試験の未確認を完了とする判断ではない。
 
 - 着手時の本clone `main`、`origin/main`、GitHub `main` は `a8d2ee0d927a58b57a36221fa1cb5871f2a44ce9` で一致し、作業ツリーはcleanだった。既存のVersion 3実装は保全ブランチ `preserve/pre-sync-main-cbfa174` にあり、現行mainとは分岐している。
 - 作業ブランチ `codex/version3-production` に、保全コミット `cbfa174ea17b60cad5e2114837f49e767f5d7ab6` からVersion 3配下の9ファイルだけを取り込んだ。`DokoTsubu1_5/` とVersion 3以外の差分は取り込まない。`mvn -q -DskipTests package` と `git diff --check` は成功。今回の機能試験は未実施であり、2026-10-08の45件を今回の結果とはしない。

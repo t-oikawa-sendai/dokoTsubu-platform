@@ -1,17 +1,17 @@
 # Request Definition（要求定義）
 
 <details>
-<summary>Document Info（文書情報）｜REQ-001｜1.5｜Review</summary>
+<summary>Document Info（文書情報）｜REQ-001｜1.6｜Approved</summary>
 
 <!-- Document Info（文書情報） -->
 
 | Item（項目） | Value（値） |
 |---|---|
 | Document ID（文書ID） | REQ-001 |
-| Version（バージョン） | 1.5 |
-| Status（ステータス） | Review |
+| Version（バージョン） | 1.6 |
+| Status（ステータス） | Approved |
 | Created Date（作成日） | 2026-06-21 |
-| Last Updated（最終更新日） | 2026-10-05 |
+| Last Updated（最終更新日） | 2026-10-31 |
 | Owner（管理者） | Takashi Oikawa |
 | Related Documents（関連文書） | [Project README](../../README.md) / [README.md](./README.md) / [02_REQUIREMENTS_DEFINITION.md](./02_REQUIREMENTS_DEFINITION.md) / [03_DATA_AND_SECURITY_DESIGN.md](./03_DATA_AND_SECURITY_DESIGN.md) / [06_OPERATION_AND_HANDOFF.md](./06_OPERATION_AND_HANDOFF.md) |
 

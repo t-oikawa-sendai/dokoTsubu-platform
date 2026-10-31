@@ -12,15 +12,15 @@ Memo: Canonical Templateから新設したRepository固有履歴正本。過去A
 # CHANGELOG
 
 <details>
-<summary>Document Info（文書情報）｜CHANGELOG-001｜0.12｜Draft</summary>
+<summary>Document Info（文書情報）｜CHANGELOG-001｜1.0｜Approved</summary>
 
 <!-- Document Info（文書情報） -->
 
 | Item（項目） | Value（値） |
 |---|---|
 | Document ID（文書ID） | CHANGELOG-001 |
-| Version（バージョン） | 0.12 |
-| Status（ステータス） | Draft |
+| Version（バージョン） | 1.0 |
+| Status（ステータス） | Approved |
 | Created Date（作成日） | 2026-09-11 |
 | Last Updated（最終更新日） | 2026-10-31 |
 | Owner（管理者） | Takashi Oikawa |
@@ -65,6 +65,22 @@ Governance導入Baselineは、Governance導入成功後に記録する。
 
 | Version | Date | Document | Category | Changes | Author |
 |---|---|---|---|---|---|
+| 1.0 | 2026-10-31 | `README.md` | Changed | Version 3文書を完成版として承認。StatusをApprovedへ更新し、生徒向け配布準備の文書承認と配布資材未作成を区別 | Takashi Oikawa |
+| 1.0 | 2026-10-31 | `CHANGELOG.md` | Changed | Version 3現行文書16件の承認履歴を記録し、StatusをApprovedへ更新 | Takashi Oikawa |
+| 1.4 | 2026-10-31 | `project-notes/CURRENT.md` | Changed | StatusをApprovedへ更新。文書16件の承認と、配布資材・個別試験の残作業を区別 | Takashi Oikawa |
+| 1.13 | 2026-10-31 | `docs/design/README.md` | Changed | Statusと設計正本01〜06の一覧をApprovedへ更新 | Takashi Oikawa |
+| 1.6 | 2026-10-31 | `docs/design/01_REQUEST_DEFINITION.md` | Changed | Version 3要求定義を完成版として承認。StatusをApprovedへ更新 | Takashi Oikawa |
+| 1.6 | 2026-10-31 | `docs/design/02_REQUIREMENTS_DEFINITION.md` | Changed | Version 3要件定義を完成版として承認。StatusをApprovedへ更新 | Takashi Oikawa |
+| 1.11 | 2026-10-31 | `docs/design/03_DATA_AND_SECURITY_DESIGN.md` | Changed | Version 3データ・セキュリティ設計を完成版として承認。StatusをApprovedへ更新。F/O/R分類変更なし | Takashi Oikawa |
+| 1.6 | 2026-10-31 | `docs/design/04_UI_AND_FLOW_DESIGN.md` | Changed | Version 3画面・フロー設計を完成版として承認。StatusをApprovedへ更新。F/O/R分類変更なし | Takashi Oikawa |
+| 1.11 | 2026-10-31 | `docs/design/05_ARCHITECTURE_DESIGN.md` | Changed | Version 3構成設計を完成版として承認。StatusをApprovedへ更新。F/O/R分類変更なし | Takashi Oikawa |
+| 1.12 | 2026-10-31 | `docs/design/06_OPERATION_AND_HANDOFF.md` | Changed | Version 3運用・引き継ぎ設計を完成版として承認。StatusをApprovedへ更新。F/O/R分類変更なし | Takashi Oikawa |
+| 1.0 | 2026-10-31 | `docs/design/FOR_LEDGER.md` | Changed | UML-01〜05のF/O/R台帳を完成版として承認。分類とIDは維持 | Takashi Oikawa |
+| 1.0 | 2026-10-31 | `docs/specs/API_SPEC.md` | Changed | Version 3 API仕様書を完成版として承認。StatusをApprovedへ更新 | Takashi Oikawa |
+| 1.0 | 2026-10-31 | `docs/specs/GEMINI_INTEGRATION_SPEC.md` | Changed | Version 3 Gemini仕様書を完成版として承認。StatusをApprovedへ更新 | Takashi Oikawa |
+| 1.0 | 2026-10-31 | `docs/ENVIRONMENT_SETUP_GUIDE.md` | Changed | Version 3環境構築手順書を完成版として承認。空環境専用の初期作成SQLの所在と既存DBへの不適用を明記 | Takashi Oikawa |
+| 1.0 | 2026-10-31 | `docs/DEPLOYMENT_AND_OPERATION_GUIDE.md` | Changed | Version 3デプロイ・運用手順書を完成版として承認。2026-10-31の本番移行・公開・Aiven読取確認を現行状態へ反映し、10月4日の記録を履歴として維持。初期作成SQLの空環境限定も明記 | Takashi Oikawa |
+| 1.0 | 2026-10-31 | `docs/STUDENT_DISTRIBUTION_GUIDE.md` | Changed | 生徒向け配布準備手順書を完成版として承認。初期作成SQLの実在を反映し、配布資材未作成・実機未検証を維持 | Takashi Oikawa |
 | 0.12 | 2026-10-31 | `docs/uml/class-diagram.puml` / `docs/uml/database-er.puml` → `docs/archive/uml/` / `CHANGELOG.md` | Moved | Codex が DokoTsubu2 専用の旧 PlantUML 図2件を `docs/archive/uml/` へ移動。図の内容と Application は変更しない。公開対象は DokoTsubu3 のため、DokoTsubu2 の動作確認は本整理の対象外 | Takashi Oikawa |
 | 0.11 | 2026-10-31 | `docs/design/05_ARCHITECTURE_DESIGN.md` / `docs/design/06_OPERATION_AND_HANDOFF.md` / `docs/design/FOR_LEDGER.md` / `docs/design/README.md` / `CHANGELOG.md` | Changed | 利用者 Takashi Oikawa が F-001〜F-024 の採番と FROZEN 分類を承認し、F-025（Application 停止後・Domain 初期化前の最終バックアップ取得、取得結果と復元手順の確認）を内容確認後に承認。Codex が UML-05 を「3工程並行→合流後に Schema 変更」へ修正し、未検証の但し書きを削除。GOV-01・GOV-02・ARCH-02・ARCH-03・GOV-03 の指摘を修正。利用者承認により、06 HO-005・§7の3と5の重複した移行記述を、意味を変えず §5.7（旧passwordは §5.7.2）への参照に置換した旨を記録 | Takashi Oikawa |
 | 0.10 | 2026-10-31 | `docs/design/03_DATA_AND_SECURITY_DESIGN.md` / `docs/design/04_UI_AND_FLOW_DESIGN.md` / `docs/design/05_ARCHITECTURE_DESIGN.md` / `docs/design/06_OPERATION_AND_HANDOFF.md` / `docs/specs/GEMINI_INTEGRATION_SPEC.md` / `docs/design/FOR_LEDGER.md` / `docs/design/README.md` / `CHANGELOG.md` | Changed | Codex が UML-01〜05の対象箇所を状態図・配置図・シーケンス図・活動図へ置換。移行前の最終バックアップ工程とプロフィール取得不可の分岐を追加。台帳の参照先を更新し、F-025を登録。並行するDB操作は実行未検証と明記 | Takashi Oikawa |

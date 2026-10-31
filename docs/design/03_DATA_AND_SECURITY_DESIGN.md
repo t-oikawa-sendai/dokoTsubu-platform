@@ -1,15 +1,15 @@
 # Data and Security Design（データ・セキュリティ設計）
 
 <details>
-<summary>Document Info（文書情報）｜DATA-001｜1.10｜Review</summary>
+<summary>Document Info（文書情報）｜DATA-001｜1.11｜Approved</summary>
 
 <!-- Document Info（文書情報） -->
 
 | Item（項目） | Value（値） |
 |---|---|
 | Document ID（文書ID） | DATA-001 |
-| Version（バージョン） | 1.10 |
-| Status（ステータス） | Review |
+| Version（バージョン） | 1.11 |
+| Status（ステータス） | Approved |
 | Created Date（作成日） | 2026-06-21 |
 | Last Updated（最終更新日） | 2026-10-31 |
 | Owner（管理者） | Takashi Oikawa |

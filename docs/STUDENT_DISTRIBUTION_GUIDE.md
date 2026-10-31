@@ -1,23 +1,23 @@
 # Student Distribution and Setup Guide（生徒向け配布・導入手順書）
 
 <details>
-<summary>Document Info（文書情報）｜STUDENT-DISTRIBUTION-001｜0.1｜Draft</summary>
+<summary>Document Info（文書情報）｜STUDENT-DISTRIBUTION-001｜1.0｜Approved</summary>
 
 <!-- Document Info（文書情報） -->
 
 | Item（項目） | Value（値） |
 |---|---|
 | Document ID（文書ID） | STUDENT-DISTRIBUTION-001 |
-| Version（バージョン） | 0.1 |
-| Status（ステータス） | Draft |
+| Version（バージョン） | 1.0 |
+| Status（ステータス） | Approved |
 | Created Date（作成日） | 2026-10-07 |
-| Last Updated（最終更新日） | 2026-10-07 |
+| Last Updated（最終更新日） | 2026-10-31 |
 | Owner（管理者） | Takashi Oikawa |
 | Related Documents（関連文書） | [Project README](../README.md) / [Design Documents Index（設計書一覧）](./design/README.md) / [02_REQUIREMENTS_DEFINITION.md](./design/02_REQUIREMENTS_DEFINITION.md) / [03_DATA_AND_SECURITY_DESIGN.md](./design/03_DATA_AND_SECURITY_DESIGN.md) / [Environment Setup Guide（環境構築手順書）](./ENVIRONMENT_SETUP_GUIDE.md) / [Deployment and Operation Guide（デプロイ・運用手順書）](./DEPLOYMENT_AND_OPERATION_GUIDE.md) |
 
 </details>
 
-> 修正完了版のDokoTsubu3を生徒が各自のPCで起動するための準備文書です。実行用ZIP、Domain table初期作成SQL、設定サンプルは未作成であり、本書の導入手順は配布版で未検証です。現行アプリには設計確定済み・未実装の仕様が残っています。本書の整備ではアプリ改修・DB移行・ZIP作成・公開を行いません。
+> DokoTsubu3を生徒が各自のPCで起動するための配布準備手順書です。空の環境専用のDomain table初期作成SQLはRepositoryにあります。実行用ZIP、配布用WAR、設定サンプルは未作成であり、本書の導入手順は配布版で未検証です。本書の承認は、配布資材の完成や配布版の実機検証を意味しません。
 
 生徒側で必要なのはJava 21、MySQL、ブラウザです。各自のローカルDBを使います。Geminiコメントを使う場合は、各自のAPIキーとインターネット接続を用意します。実行用WAR（起動できるアプリ本体）を配布するため、生徒側のビルドは不要です。
 
@@ -32,10 +32,10 @@
 | ZIP内のパス | 内容 | 準備状況 |
 |---|---|---|
 | `DokoTsubu3/dokotsubu.war` | 修正完了版をビルドした実行用WAR | 配布版は未作成 |
-| `DokoTsubu3/db/create-student-db.sql` | 空の環境に `dokotsubu` とTarget Schemaの `USERS`／`MUTTERS` を作成 | 新規作成が必要 |
+| `DokoTsubu3/db/create-student-db.sql` | 空の環境に `dokotsubu` とTarget Schemaの `USERS`／`MUTTERS` を作成 | Repositoryに作成済み。配布版との整合確認が必要 |
 | `DokoTsubu3/db/spring-session-mysql.sql` | ログイン状態を保存する2テーブルを作成 | 既存。配布版との整合確認が必要 |
 | `DokoTsubu3/student.properties.example` | 接続設定の空欄サンプル | 新規作成が必要 |
-| `STUDENT_GUIDE.md` | 配布時に確定した本手順書 | 現在はDraft |
+| `STUDENT_GUIDE.md` | 本書を基に作成する配布版の手順書 | 配布版は未作成。本書はApproved |
 | `.gitignore` | `.local-secrets/` をGit管理から除外 | 既存 |
 
 生徒の設定ファイル `.local-secrets/student.properties` は、生徒が展開後に作成します。講師の設定ファイル、APIキー、DBパスワード、既存ユーザー・投稿データをZIPに含めません。
@@ -55,7 +55,7 @@ macOSの配置は `/Users/＜ユーザー名＞/Dev/dokoTsubu-platform/` とし�
 ### 1.3 配布までの手順
 
 1. アプリ修正と対象検証を完了し、配布するコミット、ZIPの版、対応OS、MySQLの版を確定します。
-2. 確定設計に沿って、生徒向けのDB初期作成SQLと秘密値を含まない設定サンプルをCursorが作成します。初期作成SQLは空の環境専用とし、既存データの削除・初期化を含めません。講師環境の移行用SQLを、生徒の新規導入に使わせません。
+2. 既存の生徒向けDB初期作成SQLを確認し、秘密値を含まない設定サンプルを作成します。初期作成SQLは空の環境専用とし、既存データの削除・初期化を含めません。講師環境の移行用SQLを、生徒の新規導入に使わせません。
 3. `DokoTsubu3` で既存ビルドを実行します。
 
    ```bash
@@ -223,7 +223,7 @@ java -jar dokotsubu.war --spring.config.additional-location=file:../.local-secre
 - 初期作成SQL、設定サンプル、本書のファイル名・配置。
 - 上記手順による新規導入・設定ファイル読み込み・起動・対象機能の実機確認結果。
 
-現在のRepositoryにはDomain table用の初期作成SQLがありません。本書の作成を、配布資材の完成や実機検証の完了として扱いません。
+Domain table用の初期作成SQLは `DokoTsubu3/db/create-student-db.sql` にあります。本書の承認を、配布資材の完成や実機検証の完了として扱いません。
 
 ---
 

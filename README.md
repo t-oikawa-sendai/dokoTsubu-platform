@@ -1,15 +1,15 @@
 # DokoTsubu（どこつぶ）
 
 <details>
-<summary>Document Info（文書情報）｜PROJECT-README-001｜0.11｜Review</summary>
+<summary>Document Info（文書情報）｜PROJECT-README-001｜1.0｜Approved</summary>
 
 <!-- Document Info（文書情報） -->
 
 | Item（項目） | Value（値） |
 |---|---|
 | Document ID（文書ID） | PROJECT-README-001 |
-| Version（バージョン） | 0.11 |
-| Status（ステータス） | Review |
+| Version（バージョン） | 1.0 |
+| Status（ステータス） | Approved |
 | Created Date（作成日） | 2024-06-15 |
 | Last Updated（最終更新日） | 2026-10-31 |
 | Owner（管理者） | Takashi Oikawa |
@@ -141,7 +141,7 @@ Version 3 のメイン画面（2026-10-31 提供画像の縮小版）。登録�
 | Gemini Integration（Gemini連携） | [docs/specs/GEMINI_INTEGRATION_SPEC.md](./docs/specs/GEMINI_INTEGRATION_SPEC.md) |
 | Environment Setup（環境構築） | [docs/ENVIRONMENT_SETUP_GUIDE.md](./docs/ENVIRONMENT_SETUP_GUIDE.md) |
 | Deployment / Operation（デプロイ・運用） | [docs/DEPLOYMENT_AND_OPERATION_GUIDE.md](./docs/DEPLOYMENT_AND_OPERATION_GUIDE.md) |
-| Student Distribution（生徒向け配布準備） | [docs/STUDENT_DISTRIBUTION_GUIDE.md](./docs/STUDENT_DISTRIBUTION_GUIDE.md)。Draft。配布資材は未作成、導入手順は未検証 |
+| Student Distribution（生徒向け配布準備） | [docs/STUDENT_DISTRIBUTION_GUIDE.md](./docs/STUDENT_DISTRIBUTION_GUIDE.md)。文書はApproved。配布資材は未作成、導入手順は未検証 |
 | Current State（現在状態・残作業） | [project-notes/CURRENT.md](./project-notes/CURRENT.md) |
 | Change History（変更履歴） | [CHANGELOG.md](./CHANGELOG.md) |
 | Legacy Documents（旧文書） | `docs/archive/`。DokoTsubu2 時点の文書。現行正本ではない |

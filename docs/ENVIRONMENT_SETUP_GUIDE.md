@@ -1,17 +1,17 @@
 # Environment Setup Guide（環境構築手順書）
 
 <details>
-<summary>Document Info（文書情報）｜ENV-001｜0.1｜Draft</summary>
+<summary>Document Info（文書情報）｜ENV-001｜1.0｜Approved</summary>
 
 <!-- Document Info（文書情報） -->
 
 | Item（項目） | Value（値） |
 |---|---|
 | Document ID（文書ID） | ENV-001 |
-| Version（バージョン） | 0.1 |
-| Status（ステータス） | Draft |
+| Version（バージョン） | 1.0 |
+| Status（ステータス） | Approved |
 | Created Date（作成日） | 2026-10-05 |
-| Last Updated（最終更新日） | 2026-10-05 |
+| Last Updated（最終更新日） | 2026-10-31 |
 | Owner（管理者） | Takashi Oikawa |
 | Related Documents（関連文書） | [Project README](../README.md) / [Design Documents Index（設計書一覧）](./design/README.md) / [03_DATA_AND_SECURITY_DESIGN.md](./design/03_DATA_AND_SECURITY_DESIGN.md) / [06_OPERATION_AND_HANDOFF.md](./design/06_OPERATION_AND_HANDOFF.md) / [Deployment and Operation Guide（デプロイ・運用手順書）](./DEPLOYMENT_AND_OPERATION_GUIDE.md) |
 
@@ -61,7 +61,7 @@ Application は `DokoTsubu3/` にある。
 | Domain tables | `USERS` / `MUTTERS` |
 | Session tables | `SPRING_SESSION` / `SPRING_SESSION_ATTRIBUTES` |
 
-- Domain table の構造は [03_DATA_AND_SECURITY_DESIGN.md](./design/03_DATA_AND_SECURITY_DESIGN.md) を正とする。Domain table 用 DDL は本 Repository に無い。構造を推測して作らない
+- Domain table の構造は [03_DATA_AND_SECURITY_DESIGN.md](./design/03_DATA_AND_SECURITY_DESIGN.md) を正とする。空の環境専用の初期作成SQLは `DokoTsubu3/db/create-student-db.sql` にある。既存DBへ再適用せず、構造を推測して作らない
 - Session table は `DokoTsubu3/db/spring-session-mysql.sql` で作成する。Application 起動時の自動作成は無効である。既存 table には再適用しない
 - Target Schema への移行手順は [06_OPERATION_AND_HANDOFF.md](./design/06_OPERATION_AND_HANDOFF.md) を正とする。本書の手順では Schema 変更・データ初期化を行わない
 
