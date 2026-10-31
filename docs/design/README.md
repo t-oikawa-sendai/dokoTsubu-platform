@@ -14,17 +14,17 @@ README Writing Policy（README作成方針）
 -->
 
 <details>
-<summary>Document Info（文書情報）｜README-001｜1.8｜Review</summary>
+<summary>Document Info（文書情報）｜README-001｜1.9｜Review</summary>
 
 <!-- Document Info（文書情報） -->
 
 | Item（項目） | Value（値） |
 |---|---|
 | Document ID（文書ID） | README-001 |
-| Version（バージョン） | 1.8 |
+| Version（バージョン） | 1.9 |
 | Status（ステータス） | Review |
 | Created Date（作成日） | 2026-06-21 |
-| Last Updated（最終更新日） | 2026-10-05 |
+| Last Updated（最終更新日） | 2026-10-31 |
 | Owner（管理者） | Takashi Oikawa |
 | Related Documents（関連文書） | docs/standards/DESIGN_DOCUMENT_STANDARD.md / [Project README](../../README.md) / [API_SPEC.md](../specs/API_SPEC.md) / [GEMINI_INTEGRATION_SPEC.md](../specs/GEMINI_INTEGRATION_SPEC.md) / [ENVIRONMENT_SETUP_GUIDE.md](../ENVIRONMENT_SETUP_GUIDE.md) / [DEPLOYMENT_AND_OPERATION_GUIDE.md](../DEPLOYMENT_AND_OPERATION_GUIDE.md) / [CHANGELOG.md](../../CHANGELOG.md)（リポジトリルート） |
 
@@ -48,9 +48,9 @@ README Writing Policy（README作成方針）
 
 ## 1. Project Overview（プロジェクト・機能の概要）
 
-`dokoTsubu-platform` は、つぶやき共有アプリ「どこつぶ」のリポジトリである。`DokoTsubu2/` は現行 Application の正本であり、Phase 1 の機能・挙動比較基準として保持する。
+`dokoTsubu-platform` は、つぶやき共有アプリ「どこつぶ」のリポジトリである。`DokoTsubu3/` は現行公開版である。`DokoTsubu2/` は移行元の Servlet 版であり、Phase 1 の機能・挙動比較基準として保持する。ほかの設計書で「現行 DokoTsubu2」と記す箇所は、Phase 1 設計時の移行元を指し、現在の公開版を指さない。
 
-Phase 1 では `DokoTsubu2/` を直接 Spring Boot 化しない。新規 `DokoTsubu3/` を Spring Boot 版 Application の実装先とし、`DokoTsubu2` の現行機能・挙動を基準として移行する。登録・ログイン・ログアウト・一覧・投稿・検索・編集・削除・Gemini コメント生成は維持する。
+Phase 1 では `DokoTsubu2/` を直接 Spring Boot 化せず、新規 `DokoTsubu3/` を Spring Boot 版 Application の実装先とした。`DokoTsubu2` の機能・挙動を基準として移行し、登録・ログイン・ログアウト・一覧・投稿・検索・編集・削除・Gemini コメント生成を維持する設計とした。
 
 ---
 
@@ -84,7 +84,7 @@ Phase 1 では `DokoTsubu2/` を直接 Spring Boot 化しない。新規 `DokoTs
 | [01_REQUEST_DEFINITION.md](./01_REQUEST_DEFINITION.md) | Request Definition（要求定義） | Review | 1.5 | Takashi Oikawa |
 | [02_REQUIREMENTS_DEFINITION.md](./02_REQUIREMENTS_DEFINITION.md) | Requirements Definition（要件定義） | Review | 1.5 | Takashi Oikawa |
 | [03_DATA_AND_SECURITY_DESIGN.md](./03_DATA_AND_SECURITY_DESIGN.md) | Data and Security Design（データ・セキュリティ設計） | Review | 1.9 | Takashi Oikawa |
-| [04_UI_AND_FLOW_DESIGN.md](./04_UI_AND_FLOW_DESIGN.md) | UI and Flow Design（UI・フロー設計） | Review | 1.3 | Takashi Oikawa |
+| [04_UI_AND_FLOW_DESIGN.md](./04_UI_AND_FLOW_DESIGN.md) | UI and Flow Design（UI・フロー設計） | Review | 1.4 | Takashi Oikawa |
 | [05_ARCHITECTURE_DESIGN.md](./05_ARCHITECTURE_DESIGN.md) | Architecture Design（アーキテクチャ設計） | Review | 1.8 | Takashi Oikawa |
 | [06_OPERATION_AND_HANDOFF.md](./06_OPERATION_AND_HANDOFF.md) | Operation and Handoff Design（運用・詳細設計引き継ぎ） | Review | 1.9 | Takashi Oikawa |
 
@@ -103,8 +103,8 @@ Related Specifications and Guides（関連仕様・運用文書）:
 
 ## 5. Overall Design Policy（設計上の全体方針・前提）
 
-- `DokoTsubu2/` は現行 Application の正本・機能比較基準として保持する。Phase 1 では直接 Spring Boot 化しない
-- Phase 1 の Spring Boot 版実装先は新規 `DokoTsubu3/`。`DokoTsubu2` の現行機能・挙動を基準として移行する
+- `DokoTsubu2/` は移行元の Servlet 版・機能比較基準として保持する。Phase 1 では直接 Spring Boot 化しない
+- Phase 1 の Spring Boot 版実装先は `DokoTsubu3/`。`DokoTsubu2` の機能・挙動を基準として移行した現行公開版である
 - Spring Boot / Spring MVC / JSP / JDBC / MySQL / Gemini API
 - WAR + embedded Tomcat。外部 Tomcat 必須にはしない
 - Spring Security 認証基盤、JPA / Hibernate、Spring Data、Thymeleaf は導入しない
@@ -131,8 +131,8 @@ Related Specifications and Guides（関連仕様・運用文書）:
 | Term / Abbreviation（用語・略語） | Definition（定義） |
 |---|---|
 | dokoTsubu-platform | 本リポジトリ名 |
-| DokoTsubu2 | 現行 Servlet版。Phase 1 の機能・挙動比較基準 |
-| DokoTsubu3 | Phase 1 で新規作成する Spring Boot 版 |
+| DokoTsubu2 | 移行元の Servlet 版。Phase 1 の機能・挙動比較基準 |
+| DokoTsubu3 | Phase 1 で新規作成した Spring Boot 版。現行公開版 |
 | どこつぶ / DokoTsubu | アプリ名。外部 URL の context path は `/dokoTsubu` |
 | Phase 1 | Spring Boot 移行フェーズ |
 | Legacy 文書 | `docs/archive/` 配下の DokoTsubu2 時点の文書。参照のみ |

@@ -1,17 +1,17 @@
 # UI and Flow Design（UI・フロー設計）
 
 <details>
-<summary>Document Info（文書情報）｜UI-001｜1.3｜Review</summary>
+<summary>Document Info（文書情報）｜UI-001｜1.4｜Review</summary>
 
 <!-- Document Info（文書情報） -->
 
 | Item（項目） | Value（値） |
 |---|---|
 | Document ID（文書ID） | UI-001 |
-| Version（バージョン） | 1.3 |
+| Version（バージョン） | 1.4 |
 | Status（ステータス） | Review |
 | Created Date（作成日） | 2026-06-21 |
-| Last Updated（最終更新日） | 2026-10-05 |
+| Last Updated（最終更新日） | 2026-10-31 |
 | Owner（管理者） | Takashi Oikawa |
 | Related Documents（関連文書） | [Project README](../../README.md) / [README.md](./README.md) / [02_REQUIREMENTS_DEFINITION.md](./02_REQUIREMENTS_DEFINITION.md) / [03_DATA_AND_SECURITY_DESIGN.md](./03_DATA_AND_SECURITY_DESIGN.md) / [05_ARCHITECTURE_DESIGN.md](./05_ARCHITECTURE_DESIGN.md) / [API_SPEC.md](../specs/API_SPEC.md) |
 
@@ -91,13 +91,27 @@ Phase 1 で現行から変える表示:
 
 #### Screenshots（画面スクリーンショット）
 
-画面の参考画像である。画面仕様は上表と [02_REQUIREMENTS_DEFINITION.md](./02_REQUIREMENTS_DEFINITION.md) を正とする。
+画面の参考画像である。画面仕様は上表と [02_REQUIREMENTS_DEFINITION.md](./02_REQUIREMENTS_DEFINITION.md) を正とする。SCR-002・SCR-004・SCR-005は2026-10-31に利用者から提供された画像であり、一連の同一アカウントの操作記録ではない。
 
 ##### SCR-001 ログイン入口
 
 ![SCR-001 ログイン入口（DokoTsubu Ver.3.0）](./screenshots/full/login-screen.png)
 
+##### SCR-002 ユーザー登録
+
+入力中の例。選択中の値は初期値を示さず、登録完了も示さない。
+
+![SCR-002 ユーザー登録（入力中の例）](./screenshots/full/register-screen.png)
+
+##### SCR-004 ログイン結果
+
+ログイン成功時の表示例。SCR-001のログイン入口とは別画面である。
+
+![SCR-004 ログイン結果（成功時）](./screenshots/full/login-result-screen.png)
+
 ##### SCR-005 メイン
+
+投稿・検索・一覧・AIコメントの表示例。画面下部は画像の範囲外である。
 
 ![SCR-005 メイン（DokoTsubu Ver.3.0）](./screenshots/full/main-screen.png)
 

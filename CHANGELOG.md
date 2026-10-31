@@ -12,14 +12,14 @@ Memo: Canonical Templateから新設したRepository固有履歴正本。過去A
 # CHANGELOG
 
 <details>
-<summary>Document Info（文書情報）｜CHANGELOG-001｜0.7｜Draft</summary>
+<summary>Document Info（文書情報）｜CHANGELOG-001｜0.8｜Draft</summary>
 
 <!-- Document Info（文書情報） -->
 
 | Item（項目） | Value（値） |
 |---|---|
 | Document ID（文書ID） | CHANGELOG-001 |
-| Version（バージョン） | 0.7 |
+| Version（バージョン） | 0.8 |
 | Status（ステータス） | Draft |
 | Created Date（作成日） | 2026-09-11 |
 | Last Updated（最終更新日） | 2026-10-31 |
@@ -65,6 +65,7 @@ Governance導入Baselineは、Governance導入成功後に記録する。
 
 | Version | Date | Document | Category | Changes | Author |
 |---|---|---|---|---|---|
+| 0.8 | 2026-10-31 | `README.md` / `docs/design/README.md` / `docs/design/04_UI_AND_FLOW_DESIGN.md` / `docs/design/screenshots/` / `CHANGELOG.md` | Changed | 利用者提供のVersion 3現行画面3枚を画面設計書へ配置。登録画面は入力中、ログイン結果は成功時、メイン画面は表示範囲の例と明記。既存メイン画像と縮小版を最新画像に更新し、Root READMEへ縮小版を掲載。設計書一覧のVersion 2「現行」表記を移行元・比較基準へ修正し、Version 3を現行公開版と明記。画面仕様・機能は変更しない | Takashi Oikawa |
 | 0.7 | 2026-10-31 | `README.md` / `project-notes/CURRENT.md` / `CHANGELOG.md` | Changed | README §2.1のVersion 2・3の位置付けと§6の設計・実装・レビュー担当を利用者指示に合わせて修正。利用者の「動作確認OK」報告と、公開画面の応答・本番DBの登録投稿データとプロフィール保存の読み取り結果をCURRENTへ記録。個別の本番操作試験範囲は未特定 | Takashi Oikawa |
 | 0.6 | 2026-10-31 | `project-notes/CURRENT.md` / `CHANGELOG.md` | Changed | Aiven DB利用者のパスワード再設定後、Vercel ProductionとGit管理外のローカル接続設定を更新。ローカルからのAiven読み取り接続を確認し、新環境変数でProductionを再デプロイ。source commit `0408c49` の新デプロイがReady・公開ドメイン割当となり、ログイン画面表示を確認。本番の登録・投稿・Gemini生成操作試験は未実施 | Takashi Oikawa |
 | 0.5 | 2026-10-31 | `project-notes/CURRENT.md` / `CHANGELOG.md` | Changed | Version 3本番移行・公開結果を追記。既存User 6件・Mutter 27件の初期化、Target Schema適用、GitHub main `27120a3` 反映、Vercel Production Ready、公開入口とプロフィール登録項目の表示を確認。本番の登録・投稿・Gemini生成操作試験は未実施。Aiven認証情報変更は残作業 | Takashi Oikawa |

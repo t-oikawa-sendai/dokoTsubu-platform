@@ -1,14 +1,14 @@
 # DokoTsubu（どこつぶ）
 
 <details>
-<summary>Document Info（文書情報）｜PROJECT-README-001｜0.10｜Review</summary>
+<summary>Document Info（文書情報）｜PROJECT-README-001｜0.11｜Review</summary>
 
 <!-- Document Info（文書情報） -->
 
 | Item（項目） | Value（値） |
 |---|---|
 | Document ID（文書ID） | PROJECT-README-001 |
-| Version（バージョン） | 0.10 |
+| Version（バージョン） | 0.11 |
 | Status（ステータス） | Review |
 | Created Date（作成日） | 2024-06-15 |
 | Last Updated（最終更新日） | 2026-10-31 |
@@ -102,6 +102,10 @@ Version 3 では、次の設計済み機能の実装を `DokoTsubu3/` に含む�
 | Session（セッション） | HttpSession API + Spring Session JDBC |
 | Hosting（公開先） | Vercel |
 | Production Database（本番DB） | Aiven MySQL |
+
+Version 3 のメイン画面（2026-10-31 提供画像の縮小版）。登録・ログイン結果を含む詳細画像は、画像のリンク先の画面設計書に掲載している。
+
+[![Version 3 メイン画面の縮小版](./docs/design/screenshots/thumbnail/main-screen.png)](./docs/design/04_UI_AND_FLOW_DESIGN.md)
 
 ---
 
