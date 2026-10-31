@@ -12,14 +12,14 @@ Memo: 仕様正本を置き換えず、確認結果と引き継ぎ報告を区�
 # Current Project State（現在状態）
 
 <details>
-<summary>Document Info（文書情報）｜CURRENT-001｜1.2｜Review</summary>
+<summary>Document Info（文書情報）｜CURRENT-001｜1.3｜Review</summary>
 
 <!-- Document Info（文書情報） -->
 
 | Item（項目） | Value（値） |
 |---|---|
 | Document ID（文書ID） | CURRENT-001 |
-| Version（バージョン） | 1.2 |
+| Version（バージョン） | 1.3 |
 | Status（ステータス） | Review |
 | Created Date（作成日） | 2026-10-08 |
 | Last Updated（最終更新日） | 2026-10-31 |
@@ -100,13 +100,14 @@ Memo: 仕様正本を置き換えず、確認結果と引き継ぎ報告を区�
 - 利用者は既存User 6件・Mutter 27件の初期化を明示承認した。停止中に `MUTTERS`、`USERS`、旧Spring Sessionの順でデータを初期化し、`USERS`／`MUTTERS` にTarget Schemaの列を追加した。移行後は4テーブルとも0件。追加列の型・NULL条件とInnoDBを確認した。table rename／schema rename／TEXT長変更／FK追加は行っていない。
 - Version 3の対象14ファイルをcommit `27120a39154b18bed7a8f6efa793b157b6881acb` としてGitHub `main`へ反映した。Vercel停止中の自動ビルドはBlockedとなったため、利用者承認を受けて再開し、本人確認後に同commitをProductionへ再デプロイした。新デプロイは2026-10-31 19:53 JSTにReadyとなり、公開ドメインへ割り当てられた。
 - 公開入口 `/dokoTsubu/Login` にログイン画面、`/dokoTsubu/Register` に性別・年齢感覚を含む登録画面が表示されることを確認した。登録・ログイン・投稿・論理削除・Gemini生成の本番操作試験は実施していない。今回のAiven接続確認時にパスワードが操作ログへ表示されたため、利用者がAivenのDB利用者 `avnadmin` のパスワードを再設定し、Vercel Productionの `DOKOTSUBU_DB_PASSWORD` とGit管理外のローカル秘密設定を更新した。新しいローカル設定によるAivenへの読み取り接続は成功。Vercelは同じsource commit `0408c49` を新環境変数で再デプロイし、2026-10-31 20:24:15 JSTにReady、公開ドメインへ割当済み。再デプロイ後のログイン画面表示も確認した。秘密値は本書へ記録しない。
+- 2026-10-31、利用者から「動作確認OK」と報告があった。個別の確認項目は報告されていない。今回の読み取り確認では、公開ログイン画面と登録画面がHTTP 200で応答し、本番DBに有効User 4件と有効Mutter 14件が存在した。確認時点の有効User 4件すべてに `GENDER` / `AGE_FEELING` が保存されていた。件数は変動する。Gemini生成、本人以外の編集・削除拒否、論理削除の本番操作は今回個別に確認していない。
 
 ## 3. Confirmed Decisions（確定事項）
 
 詳細と値定義は[設計書一覧](../docs/design/README.md)および各仕様正本を参照する。
 
 - USERS／MUTTERSは論理削除とし、CREATED_AT／UPDATED_AT／DELETED_ATを持つ。有効条件はDELETED_AT IS NULL。
-- USERSにGENDER／AGE_FEELINGを保存し、Geminiコメント生成に利用する。設計は確定済み。コードとDB列を本番へ適用済み。独立検証DBでは確認したが、今回の本番操作試験は未実施。
+- USERSにGENDER／AGE_FEELINGを保存し、Geminiコメント生成に利用する。設計は確定済み。コードとDB列を本番へ適用済み。独立検証DBでは確認済み。本番DBでプロフィール列の保存を読み取り確認したが、Geminiへの利用は今回個別に確認していない。
 - loginUserにはUser ID／User Nameだけを保存する。プロフィールはGemini生成時にDBから取得する。
 - USERS.NAMEのUNIQUEを維持し、論理削除済みの名前も再利用しない。
 - Userを論理削除する処理では関連Mutterも同一DBトランザクションで論理削除する。User削除画面・Controller・APIは今回追加しない。
@@ -117,14 +118,14 @@ Memo: 仕様正本を置き換えず、確認結果と引き継ぎ報告を区�
 
 | 対象 | 状態 | 参照正本 |
 |---|---|---|
-| USERS／MUTTERSの論理削除・日時管理 | コードとTarget Schemaを本番へ適用。2026-10-08の独立検証DBと2026-10-15のローカルで確認済み。本番の操作試験は未実施 | [データ設計](../docs/design/03_DATA_AND_SECURITY_DESIGN.md) |
-| GENDER／AGE_FEELINGの登録画面・DB保存 | コードとTarget Schemaを本番へ適用。公開登録画面の項目表示を確認。保存の本番操作試験は未実施 | [要件定義](../docs/design/02_REQUIREMENTS_DEFINITION.md)・[画面設計](../docs/design/04_UI_AND_FLOW_DESIGN.md) |
-| Geminiコメント生成へのプロフィール利用 | コードを本番へ適用。2026-10-08の独立検証DBで送信構成と実API 1件を確認済み。今回の本番生成確認は未実施 | [Gemini仕様](../docs/specs/GEMINI_INTEGRATION_SPEC.md) |
+| USERS／MUTTERSの論理削除・日時管理 | コードとTarget Schemaを本番へ適用。2026-10-08の独立検証DBと2026-10-15のローカルで確認済み。本番の論理削除操作は今回個別に確認していない | [データ設計](../docs/design/03_DATA_AND_SECURITY_DESIGN.md) |
+| GENDER／AGE_FEELINGの登録画面・DB保存 | コードとTarget Schemaを本番へ適用。公開登録画面の項目表示と、本番DBの有効User 4件すべてに両項目が保存されていることを確認 | [要件定義](../docs/design/02_REQUIREMENTS_DEFINITION.md)・[画面設計](../docs/design/04_UI_AND_FLOW_DESIGN.md) |
+| Geminiコメント生成へのプロフィール利用 | コードを本番へ適用。2026-10-08の独立検証DBで送信構成と実API 1件を確認済み。今回の本番生成とプロフィール利用は個別に確認していない | [Gemini仕様](../docs/specs/GEMINI_INTEGRATION_SPEC.md) |
 | Target Schemaへの移行・既存データ初期化・既存Session無効化 | 2026-10-31に停止後の最終バックアップを保存し、利用者承認の上で初期化・Schema変更・Session無効化を実施。移行後4テーブル0件、追加列を確認済み | [移行設計](../docs/design/06_OPERATION_AND_HANDOFF.md) §5.7 |
 | 配布用WAR・初期作成SQL・設定サンプル・ZIP・Release公開 | 空の環境専用の初期作成SQLはVersion 3のcommit `27120a3` でGitHub mainへ反映済み。配布用WAR・設定サンプル・ZIP・Releaseは未作成・未公開。今回の本番DB移行には初期作成SQLを使用していない | [配布準備ガイド](../docs/STUDENT_DISTRIBUTION_GUIDE.md) |
 | 配布版の新規導入・起動・対象機能確認 | 未検証 | [配布準備ガイド](../docs/STUDENT_DISTRIBUTION_GUIDE.md) |
 | 最新環境構築手順どおりのローカル起動・Login入口 | 2026-10-08は独立検証環境のport 18081で確認済み。2026-10-15に既定port 8080で、存在していなかった `dokotsubu` を空環境用SQLとSession用SQLにより新規作成して起動を確認した。Target Schemaは一致。既存データの削除・上書きはない | [環境構築手順書](../docs/ENVIRONMENT_SETUP_GUIDE.md) |
-| 登録→ログイン→投稿→ログアウトの通し操作・3人の独立した同時操作 | 2026-10-08の独立検証DBでは通し操作と3つの独立Sessionを確認済み。3人の同時操作は未確認。2026-10-15のローカル8080で、登録プロフィール保存、ログイン、投稿保存、本人投稿の論理削除、ログアウトを確認した。本番は未確認。Gemini生成成功確認は保留 | [運用手順書](../docs/DEPLOYMENT_AND_OPERATION_GUIDE.md) |
+| 登録→ログイン→投稿→ログアウトの通し操作・3人の独立した同時操作 | 2026-10-08の独立検証DBでは通し操作と3つの独立Sessionを確認済み。2026-10-15のローカル8080で登録・ログイン・投稿・本人論理削除・ログアウトを確認した。利用者から本番の「動作確認OK」報告あり。個別の確認項目、3人の同時操作、Gemini生成成功は今回未確認 | [運用手順書](../docs/DEPLOYMENT_AND_OPERATION_GUIDE.md) |
 
 公開入口と空欄エラー等の限定確認を、通し操作・同時操作の成功として扱わない。同じブラウザの複数タブはSessionを共有するため、独立した複数人の確認にならない。
 
@@ -133,7 +134,7 @@ Memo: 仕様正本を置き換えず、確認結果と引き継ぎ報告を区�
 ### 2026-10-31 Version 3の現在対象
 
 - 保全ブランチのVersion 3機能だけを現行mainへ取り込み、既存Aiven DBを設計済みTarget Schemaへ移行してVercel本番へ公開する。Version 1.5は授業用サンプルソースであり、本作業の対象外。
-- Version 3のDB移行・本番公開・接続パスワードの再設定と反映は実施済み。公開画面の表示とローカルからのDB読み取り接続まで確認した。登録・投稿・Gemini生成などの本番操作試験は今回実施していない。
+- Version 3のDB移行・本番公開・接続パスワードの再設定と反映は実施済み。利用者から「動作確認OK」と報告があった。公開画面の応答と本番DBの登録・投稿データ、プロフィール保存を読み取り確認した。個別の操作試験範囲は未特定である。
 
 ### 2026-10-31 Version 1.5の配置記録（過去）
 

@@ -1,14 +1,14 @@
 # DokoTsubu（どこつぶ）
 
 <details>
-<summary>Document Info（文書情報）｜PROJECT-README-001｜0.9｜Review</summary>
+<summary>Document Info（文書情報）｜PROJECT-README-001｜0.10｜Review</summary>
 
 <!-- Document Info（文書情報） -->
 
 | Item（項目） | Value（値） |
 |---|---|
 | Document ID（文書ID） | PROJECT-README-001 |
-| Version（バージョン） | 0.9 |
+| Version（バージョン） | 0.10 |
 | Status（ステータス） | Review |
 | Created Date（作成日） | 2024-06-15 |
 | Last Updated（最終更新日） | 2026-10-31 |
@@ -50,8 +50,8 @@ Java Webアプリケーションの基本的なMVCアーキテクチャを起点
 |---|---|---|
 | Version 1 | JSP・サーブレットを使用する授業基本版（旧版） | 別 Repository [t-oikawa-sendai/dokoTsubu](https://github.com/t-oikawa-sendai/dokoTsubu)（Version 1 の正本） |
 | Version 1.5 | Spring Bootを使用する授業用サンプルソース（動作確認対象外） | 本 Repository の `DokoTsubu1_5/` |
-| Version 2 | Version 1を基に機能追加した版 | 本 Repository の `DokoTsubu2/` |
-| Version 3 | Spring Bootへ移行した現行版 | 本 Repository の `DokoTsubu3/` |
+| Version 2 | Version 1 に MySQL・Gemini API を追加した版 | 本 Repository の `DokoTsubu2/` |
+| Version 3 | Version 2 を Spring Boot へ移行し、機能拡張した現行版 | 本 Repository の `DokoTsubu3/` |
 
 ### 2.2 Feature Comparison（機能比較）
 
@@ -151,4 +151,6 @@ AIはAGENTS.mdのRequired Reading Orderを守り、変更着手前に[CURRENT.md
 - **及川 孝志 (Takashi Oikawa)**
 - 作成開始: 2024-06-15
 - 最終更新: 2026-10-31
-- 設計、実装、レビューは AI が分担した
+- 設計：教材から引用
+- 実装：Cursor
+- レビュー：Claude Reviwer Project
