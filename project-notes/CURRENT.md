@@ -12,14 +12,14 @@ Memo: 仕様正本を置き換えず、確認結果と引き継ぎ報告を区�
 # Current Project State（現在状態）
 
 <details>
-<summary>Document Info（文書情報）｜CURRENT-001｜0.8｜Review</summary>
+<summary>Document Info（文書情報）｜CURRENT-001｜0.9｜Review</summary>
 
 <!-- Document Info（文書情報） -->
 
 | Item（項目） | Value（値） |
 |---|---|
 | Document ID（文書ID） | CURRENT-001 |
-| Version（バージョン） | 0.8 |
+| Version（バージョン） | 0.9 |
 | Status（ステータス） | Review |
 | Created Date（作成日） | 2026-10-08 |
 | Last Updated（最終更新日） | 2026-10-31 |
@@ -119,12 +119,12 @@ Memo: 仕様正本を置き換えず、確認結果と引き継ぎ報告を区�
 
 ## 5. Current Target / Next（現在対象・次作業）
 
-- 2026-10-31の利用者承認により、授業基礎版をVersion 1.5とし、本Repositoryの `DokoTsubu1_5/` へ配置する。`回答.zip` の外側を採用し、内側の重複プロジェクトと `target/` は収録しない。
+- 2026-10-31の利用者承認により、Spring Bootの授業用サンプルソースをVersion 1.5とし、本Repositoryの `DokoTsubu1_5/` へ配置した。`回答.zip` の外側を採用し、内側の重複プロジェクトと `target/` は収録しない。
 - ZIPのSHA-256は `5b24d7e8d9c6fb4e6eba9b94c1b1642dd83dceda34f7948e061872cc6bb115eb`。ソース・設定・テスト・Maven Wrapperは原本のまま保持する。Eclipse設定とHELP.mdも展開時は保持するが、原本の.gitignoreに従いGit登録対象から除外する。
-- 作業用cloneは `/workspace/scratch/d62bd46d69ba/dokoTsubu-platform`。開始時はmain、HEADとorigin/mainは `a309661e80c0b08db7be488a1e2efa3726589246` で一致、未commit変更なし。Mac側の作業ツリーは未確認であり、過去の保全差分には触れていない。
+- 配置時の作業用cloneは `/workspace/scratch/d62bd46d69ba/dokoTsubu-platform`。開始時はmain、HEADとorigin/mainは `a309661e80c0b08db7be488a1e2efa3726589246` で一致し、未commit変更はなかった。当時未確認だったMac側の本cloneは、2026-10-31に早送り同期し、HEADとorigin/mainが `f7ceff8347e136d025c910953febb300be4f899c` で一致した。同期直後の未commit差分・未追跡ファイルはなかった。
 - 既存V1・V2・V3、DB、デプロイ構成は変更しない。Version 3の設計をVersion 1.5へ転用しない。
-- Version 1の表記は「JSP・サーブレットを使用する授業基本版（旧版）」、Version 1.5の表記は「Spring Bootを使用する授業基本版（新版）」とする。
-- 配置とREADME整合化を実施した。利用者から今回の変更のcommit・push指示を受領した。GitHub反映結果はGit履歴で確認する。公開アプリのデプロイは今回の対象外である。Java 25が必要だが作業環境はJava 17のため、ビルド・起動・DB・画面試験は未実施。残作業はJava 25環境での動作確認とMac側への同期である。
+- Version 1の表記は「JSP・サーブレットを使用する授業基本版（旧版）」、Version 1.5の表記は「Spring Bootを使用する授業用サンプルソース（動作確認対象外）」とする。
+- Version 1.5の原本配置はGitHubへ反映済みで、2026-10-31に本cloneへ同期した。Version 1.5のビルド・起動・DB・画面試験は未実施で、利用者指示により動作確認は行わない。公開アプリのデプロイは今回の対象外である。
 
 ### 2026-10-15時点の保留事項（継続）
 
