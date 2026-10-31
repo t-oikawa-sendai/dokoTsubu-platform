@@ -12,14 +12,14 @@ Memo: 仕様正本を置き換えず、確認結果と引き継ぎ報告を区�
 # Current Project State（現在状態）
 
 <details>
-<summary>Document Info（文書情報）｜CURRENT-001｜1.1｜Review</summary>
+<summary>Document Info（文書情報）｜CURRENT-001｜1.2｜Review</summary>
 
 <!-- Document Info（文書情報） -->
 
 | Item（項目） | Value（値） |
 |---|---|
 | Document ID（文書ID） | CURRENT-001 |
-| Version（バージョン） | 1.1 |
+| Version（バージョン） | 1.2 |
 | Status（ステータス） | Review |
 | Created Date（作成日） | 2026-10-08 |
 | Last Updated（最終更新日） | 2026-10-31 |
@@ -99,7 +99,7 @@ Memo: 仕様正本を置き換えず、確認結果と引き継ぎ報告を区�
 - Git管理外の事前バックアップに加え、Vercel ProductionをPause Projectで停止し、公開入口の503 `DEPLOYMENT_PAUSED`、他のDBクライアントなし、Domain eventなし、実行中transactionなし、件数6／27／0／0を確認した。停止後の最終バックアップは `.local-secrets/backups/dokotsubu-final-pre-migration-2026-10-31.sql`（6575 bytes、権限600、SHA-256 `70de30bc9499bc7e8a34c8658f93e2c303546e9b21eafc17f2a78afe1c1819b3`）。4テーブルの定義・データとdump完了印を確認した。復元操作自体は未実施。Aiven自動バックアップの最新Fullは2026-10-30 14:36:12 UTC。Freeプランのfork不可を踏まえ、手元dumpを復旧手段とする。
 - 利用者は既存User 6件・Mutter 27件の初期化を明示承認した。停止中に `MUTTERS`、`USERS`、旧Spring Sessionの順でデータを初期化し、`USERS`／`MUTTERS` にTarget Schemaの列を追加した。移行後は4テーブルとも0件。追加列の型・NULL条件とInnoDBを確認した。table rename／schema rename／TEXT長変更／FK追加は行っていない。
 - Version 3の対象14ファイルをcommit `27120a39154b18bed7a8f6efa793b157b6881acb` としてGitHub `main`へ反映した。Vercel停止中の自動ビルドはBlockedとなったため、利用者承認を受けて再開し、本人確認後に同commitをProductionへ再デプロイした。新デプロイは2026-10-31 19:53 JSTにReadyとなり、公開ドメインへ割り当てられた。
-- 公開入口 `/dokoTsubu/Login` にログイン画面、`/dokoTsubu/Register` に性別・年齢感覚を含む登録画面が表示されることを確認した。登録・ログイン・投稿・論理削除・Gemini生成の本番操作試験は実施していない。今回のAiven接続確認時にパスワードが操作ログへ表示されたため、利用者による認証情報の変更とVercel設定の整合確認が残る。秘密値は本書へ記録しない。
+- 公開入口 `/dokoTsubu/Login` にログイン画面、`/dokoTsubu/Register` に性別・年齢感覚を含む登録画面が表示されることを確認した。登録・ログイン・投稿・論理削除・Gemini生成の本番操作試験は実施していない。今回のAiven接続確認時にパスワードが操作ログへ表示されたため、利用者がAivenのDB利用者 `avnadmin` のパスワードを再設定し、Vercel Productionの `DOKOTSUBU_DB_PASSWORD` とGit管理外のローカル秘密設定を更新した。新しいローカル設定によるAivenへの読み取り接続は成功。Vercelは同じsource commit `0408c49` を新環境変数で再デプロイし、2026-10-31 20:24:15 JSTにReady、公開ドメインへ割当済み。再デプロイ後のログイン画面表示も確認した。秘密値は本書へ記録しない。
 
 ## 3. Confirmed Decisions（確定事項）
 
@@ -133,7 +133,7 @@ Memo: 仕様正本を置き換えず、確認結果と引き継ぎ報告を区�
 ### 2026-10-31 Version 3の現在対象
 
 - 保全ブランチのVersion 3機能だけを現行mainへ取り込み、既存Aiven DBを設計済みTarget Schemaへ移行してVercel本番へ公開する。Version 1.5は授業用サンプルソースであり、本作業の対象外。
-- Version 3のDB移行と本番公開は実施済み。今回の接続確認で操作ログへ表示されたAiven認証情報を利用者が変更し、Vercel Productionの接続設定とローカル秘密設定を同じ新認証情報へ更新する。その後、公開先の接続状態を再確認する。
+- Version 3のDB移行・本番公開・接続パスワードの再設定と反映は実施済み。公開画面の表示とローカルからのDB読み取り接続まで確認した。登録・投稿・Gemini生成などの本番操作試験は今回実施していない。
 
 ### 2026-10-31 Version 1.5の配置記録（過去）
 
