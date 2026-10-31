@@ -3,7 +3,7 @@ Program Name: dokoTsubu-platform CHANGELOG
 Language: Markdown
 Function: dokoTsubu-platformの変更履歴正本
 Created: 2026-09-11
-Last Updated: 2026-10-15
+Last Updated: 2026-10-31
 Author: Takashi Oikawa
 AI: Cursor Grok 4.7
 Memo: Canonical Templateから新設したRepository固有履歴正本。過去Application履歴は推測して追加しない。Runtime側に CHANGELOG_TEMPLATE.md は作成しない。
@@ -12,17 +12,17 @@ Memo: Canonical Templateから新設したRepository固有履歴正本。過去A
 # CHANGELOG
 
 <details>
-<summary>Document Info（文書情報）｜CHANGELOG-001｜0.1｜Draft</summary>
+<summary>Document Info（文書情報）｜CHANGELOG-001｜0.2｜Draft</summary>
 
 <!-- Document Info（文書情報） -->
 
 | Item（項目） | Value（値） |
 |---|---|
 | Document ID（文書ID） | CHANGELOG-001 |
-| Version（バージョン） | 0.1 |
+| Version（バージョン） | 0.2 |
 | Status（ステータス） | Draft |
 | Created Date（作成日） | 2026-09-11 |
-| Last Updated（最終更新日） | 2026-10-15 |
+| Last Updated（最終更新日） | 2026-10-31 |
 | Owner（管理者） | Takashi Oikawa |
 | Related Documents（関連文書） | /CONSTITUTION.md / /AGENTS.md / /docs/design/README.md |
 
@@ -65,6 +65,7 @@ Governance導入Baselineは、Governance導入成功後に記録する。
 
 | Version | Date | Document | Category | Changes | Author |
 |---|---|---|---|---|---|
+| 1.5 | 2026-10-31 | `DokoTsubu1_5/` / `README.md` / `project-notes/CURRENT.md` | Added | 利用者承認によりSpring Boot授業基礎版をVersion 1.5として新規配置。回答.zipの外側を採用し、重複プロジェクトとtargetを除外。原本ソースを保持し、README 0.7・CURRENT 0.8へ更新。Version 1は授業基本版（旧版）、Version 1.5は授業基本版（新版）と明記。READMEの作業記録を整理。ビルド・起動未検証 | Takashi Oikawa |
 | 0.7 | 2026-10-15 | `/project-notes/CURRENT.md` / `/CHANGELOG.md` | Changed | Mac miniの127.0.0.1:3306へ空の `dokotsubu` を新規作成し、ローカル8080で登録・ログイン・投稿・本人論理削除・ログアウトを確認した記録を追加した。Gemini生成成功確認はキー未入手のため保留、Aivenは1045拒否で本番構造・権限は未読取、Vercel秘密値は未取得のまま追加調査を止める。保全15ファイルと `.gitignore` 差分は未commitのまま維持する | Takashi Oikawa |
 | 0.6 | 2026-10-13 | `/project-notes/CURRENT.md` / `/CHANGELOG.md` | Changed | 修正版実行案レビューPASS、設計担当の保全15ファイル実ハッシュ一致、既存証拠とCursor報告の確認範囲を記録した。本番構造・権限と書込み停止維持方法の不足を維持し、次作業を既存Aivenアクセス確保からの最小読取確認へ更新した。GitHub記録は文書2件だけとし、アプリ15ファイルの未commit保全と本番未実施を維持する | Takashi Oikawa |
 | 0.5 | 2026-10-12 | `/project-notes/CURRENT.md` / `/CHANGELOG.md` | Changed | レビューZIP本体の実差分・17ファイルのハッシュ一致と、既存コードのレビューPASS維持を記録した。実行案は構造用dumpのCREATE TABLE拒否等が残るため要修正。本番の未確認事項と次回の開始位置を記録し、GitHub反映対象をこの文書2件に限定した。残る15ファイルはMac miniの未commit作業ツリーに保全する | Takashi Oikawa |

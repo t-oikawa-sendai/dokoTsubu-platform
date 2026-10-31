@@ -1,17 +1,17 @@
 # DokoTsubu（どこつぶ）
 
 <details>
-<summary>Document Info（文書情報）｜PROJECT-README-001｜0.6｜Review</summary>
+<summary>Document Info（文書情報）｜PROJECT-README-001｜0.7｜Review</summary>
 
 <!-- Document Info（文書情報） -->
 
 | Item（項目） | Value（値） |
 |---|---|
 | Document ID（文書ID） | PROJECT-README-001 |
-| Version（バージョン） | 0.6 |
+| Version（バージョン） | 0.7 |
 | Status（ステータス） | Review |
 | Created Date（作成日） | 2024-06-15 |
-| Last Updated（最終更新日） | 2026-10-08 |
+| Last Updated（最終更新日） | 2026-10-31 |
 | Owner（管理者） | Takashi Oikawa |
 | Related Documents（関連文書） | [Design Documents Index（設計書一覧）](./docs/design/README.md) / [API Specification（API仕様書）](./docs/specs/API_SPEC.md) / [Gemini Integration Specification（Gemini連携仕様書）](./docs/specs/GEMINI_INTEGRATION_SPEC.md) / [Environment Setup Guide（環境構築手順書）](./docs/ENVIRONMENT_SETUP_GUIDE.md) / [Deployment and Operation Guide（デプロイ・運用手順書）](./docs/DEPLOYMENT_AND_OPERATION_GUIDE.md) / [CHANGELOG.md](./CHANGELOG.md) |
 
@@ -48,37 +48,34 @@ Java Webアプリケーションの基本的なMVCアーキテクチャを起点
 
 | Version | 位置付け | 対応先 |
 |---|---|---|
-| Version 1 | テキスト教材を基準とする基本版 | 別 Repository [t-oikawa-sendai/dokoTsubu](https://github.com/t-oikawa-sendai/dokoTsubu)（Version 1 の正本） |
+| Version 1 | JSP・サーブレットを使用する授業基本版（旧版） | 別 Repository [t-oikawa-sendai/dokoTsubu](https://github.com/t-oikawa-sendai/dokoTsubu)（Version 1 の正本） |
+| Version 1.5 | Spring Bootを使用する授業基本版（新版） | 本 Repository の `DokoTsubu1_5/` |
 | Version 2 | Version 1を基に機能追加した版 | 本 Repository の `DokoTsubu2/` |
 | Version 3 | Spring Bootへ移行した現行版 | 本 Repository の `DokoTsubu3/` |
-
-- 教材の出発点は H2Database 版である。Version 1 の実コードは MySQL へ移行済みである
-- Version 1 の正本は別 Repository `t-oikawa-sendai/dokoTsubu` である
-- 本 Repository 直下の `dokoTsubu/` は Version 1 本体ではない。Version 2 の JSP 1 ファイルだけが残っている
 
 ### 2.2 Feature Comparison（機能比較）
 
 ○ は実コードで確認済み、― は実装なしを表す。
 
-| 項目 | Version 1 | Version 2 | Version 3 |
-|---|---|---|---|
-| MVC | ○ Servlet / JSP | ○ Servlet / JSP | ○ Spring MVC / JSP |
-| Login | ○ | ○ | ○ |
-| Logout | ○ | ○ | ○ |
-| Mutter List | ○ | ○ | ○ |
-| Mutter Post | ○ | ○ | ○ |
-| User Registration | ○ | ○ | ○ |
-| Search | ○ | ○ | ○ |
-| Update | ○ | ○ | ○ |
-| Delete | ○ | ○ | ○ |
-| JDBC | ○ | ○ | ○ |
-| Database | MySQL | MySQL | MySQL（Development: local MySQL / Production: Aiven MySQL） |
-| Gemini API | ― | ○ | ○ |
-| Spring Boot | ― | ― | ○ |
-| 認可（編集・削除の投稿者本人限定） | ― | ― | ○ |
-| BCrypt | ― | ― | ○ |
-| CSRF | ― | ― | ○ |
-| Spring Session JDBC | ― | ― | ○ |
+| 項目 | Version 1 | Version 1.5 | Version 2 | Version 3 |
+|---|---|---|---|---|
+| MVC | ○ Servlet / JSP | ○ Spring MVC / JSP | ○ Servlet / JSP | ○ Spring MVC / JSP |
+| Login | ○ | ○ | ○ | ○ |
+| Logout | ○ | ○ | ○ | ○ |
+| Mutter List | ○ | ○ | ○ | ○ |
+| Mutter Post | ○ | ○ | ○ | ○ |
+| User Registration | ○ | ○ | ○ | ○ |
+| Search | ○ | ○ | ○ | ○ |
+| Update | ○ | ○ | ○ | ○ |
+| Delete | ○ | ○ | ○ | ○ |
+| JDBC | ○ | ○ | ○ | ○ |
+| Database | MySQL | H2 Database | MySQL | MySQL（Development: local MySQL / Production: Aiven MySQL） |
+| Gemini API | ― | ― | ○ | ○ |
+| Spring Boot | ― | ○ | ― | ○ |
+| 認可（編集・削除の投稿者本人限定） | ― | ― | ― | ○ |
+| BCrypt | ― | ― | ― | ○ |
+| CSRF | ― | ― | ― | ○ |
+| Spring Session JDBC | ― | ― | ― | ○ |
 
 Version 3 で設計確定済み・未実装の項目:
 
@@ -153,5 +150,5 @@ AIはAGENTS.mdのRequired Reading Orderを守り、変更着手前に[CURRENT.md
 
 - **及川 孝志 (Takashi Oikawa)**
 - 作成開始: 2024-06-15
-- 最終更新: 2026-10-08
+- 最終更新: 2026-10-31
 - 設計、実装、レビューは AI が分担した
