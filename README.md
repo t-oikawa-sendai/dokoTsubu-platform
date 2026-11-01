@@ -1,17 +1,17 @@
 # DokoTsubu（どこつぶ）
 
 <details>
-<summary>Document Info（文書情報）｜PROJECT-README-001｜1.1｜Approved</summary>
+<summary>Document Info（文書情報）｜PROJECT-README-001｜1.0｜Approved</summary>
 
 <!-- Document Info（文書情報） -->
 
 | Item（項目） | Value（値） |
 |---|---|
 | Document ID（文書ID） | PROJECT-README-001 |
-| Version（バージョン） | 1.1 |
+| Version（バージョン） | 1.0 |
 | Status（ステータス） | Approved |
 | Created Date（作成日） | 2024-06-15 |
-| Last Updated（最終更新日） | 2026-11-01 |
+| Last Updated（最終更新日） | 2026-10-31 |
 | Owner（管理者） | Takashi Oikawa |
 | Related Documents（関連文書） | [Design Documents Index（設計書一覧）](./docs/design/README.md) / [API Specification（API仕様書）](./docs/specs/API_SPEC.md) / [Gemini Integration Specification（Gemini連携仕様書）](./docs/specs/GEMINI_INTEGRATION_SPEC.md) / [Environment Setup Guide（環境構築手順書）](./docs/ENVIRONMENT_SETUP_GUIDE.md) / [Deployment and Operation Guide（デプロイ・運用手順書）](./docs/DEPLOYMENT_AND_OPERATION_GUIDE.md) / [CHANGELOG.md](./CHANGELOG.md) |
 
@@ -143,11 +143,10 @@ Version 3 のメイン画面（2026-10-31 提供画像の縮小版）。登録�
 | Deployment / Operation（デプロイ・運用） | [docs/DEPLOYMENT_AND_OPERATION_GUIDE.md](./docs/DEPLOYMENT_AND_OPERATION_GUIDE.md) |
 | Student Distribution（生徒向け配布準備） | [docs/STUDENT_DISTRIBUTION_GUIDE.md](./docs/STUDENT_DISTRIBUTION_GUIDE.md)。文書はApproved。配布資材は未作成、導入手順は未検証 |
 | Current State（現在状態・残作業） | [project-notes/CURRENT.md](./project-notes/CURRENT.md) |
-| AI Operating Rules（AI作業規則） | [AGENTS.md](./AGENTS.md)（旧 `SKILL.md` の規則を含む） |
 | Change History（変更履歴） | [CHANGELOG.md](./CHANGELOG.md) |
 | Legacy Documents（旧文書） | `docs/archive/`。DokoTsubu2 時点の文書。現行正本ではない |
 
-AIは[AGENTS.md](./AGENTS.md)のRequired Reading Orderを守り、変更着手前に[CURRENT.md](./project-notes/CURRENT.md)で現在対象・残作業・次作業を確認する。
+AIはAGENTS.mdのRequired Reading Orderを守り、変更着手前に[CURRENT.md](./project-notes/CURRENT.md)で現在対象・残作業・次作業を確認する。
 
 ---
 

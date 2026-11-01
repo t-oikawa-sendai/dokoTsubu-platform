@@ -3,7 +3,7 @@ Program Name: dokoTsubu-platform CHANGELOG
 Language: Markdown
 Function: dokoTsubu-platformの変更履歴正本
 Created: 2026-09-11
-Last Updated: 2026-11-01
+Last Updated: 2026-10-31
 Author: Takashi Oikawa
 AI: Cursor Grok 4.7
 Memo: Canonical Templateから新設したRepository固有履歴正本。過去Application履歴は推測して追加しない。Runtime側に CHANGELOG_TEMPLATE.md は作成しない。
@@ -12,17 +12,17 @@ Memo: Canonical Templateから新設したRepository固有履歴正本。過去A
 # CHANGELOG
 
 <details>
-<summary>Document Info（文書情報）｜CHANGELOG-001｜1.1｜Approved</summary>
+<summary>Document Info（文書情報）｜CHANGELOG-001｜1.0｜Approved</summary>
 
 <!-- Document Info（文書情報） -->
 
 | Item（項目） | Value（値） |
 |---|---|
 | Document ID（文書ID） | CHANGELOG-001 |
-| Version（バージョン） | 1.1 |
+| Version（バージョン） | 1.0 |
 | Status（ステータス） | Approved |
 | Created Date（作成日） | 2026-09-11 |
-| Last Updated（最終更新日） | 2026-11-01 |
+| Last Updated（最終更新日） | 2026-10-31 |
 | Owner（管理者） | Takashi Oikawa |
 | Related Documents（関連文書） | /CONSTITUTION.md / /AGENTS.md / /docs/design/README.md |
 
@@ -65,7 +65,6 @@ Governance導入Baselineは、Governance導入成功後に記録する。
 
 | Version | Date | Document | Category | Changes | Author |
 |---|---|---|---|---|---|
-| 1.1 | 2026-11-01 | `AGENTS.md` / `SKILL.md` / `README.md` / `docs/design/README.md` / `CHANGELOG.md` | Changed | 旧SKILL規則を利用者承認のRepository固有例外としてAGENTSへ移行し、旧SKILLを案内へ変更。READMEと設計書一覧の現行規則参照を更新。F/O/R分類変更なし | Takashi Oikawa |
 | 1.0 | 2026-10-31 | `README.md` | Changed | Version 3文書を完成版として承認。StatusをApprovedへ更新し、生徒向け配布準備の文書承認と配布資材未作成を区別 | Takashi Oikawa |
 | 1.0 | 2026-10-31 | `CHANGELOG.md` | Changed | Version 3現行文書16件の承認履歴を記録し、StatusをApprovedへ更新 | Takashi Oikawa |
 | 1.4 | 2026-10-31 | `project-notes/CURRENT.md` | Changed | StatusをApprovedへ更新。文書16件の承認と、配布資材・個別試験の残作業を区別 | Takashi Oikawa |

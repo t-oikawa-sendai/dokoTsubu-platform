@@ -14,19 +14,19 @@ README Writing Policy（README作成方針）
 -->
 
 <details>
-<summary>Document Info（文書情報）｜README-001｜1.14｜Approved</summary>
+<summary>Document Info（文書情報）｜README-001｜1.13｜Approved</summary>
 
 <!-- Document Info（文書情報） -->
 
 | Item（項目） | Value（値） |
 |---|---|
 | Document ID（文書ID） | README-001 |
-| Version（バージョン） | 1.14 |
+| Version（バージョン） | 1.13 |
 | Status（ステータス） | Approved |
 | Created Date（作成日） | 2026-06-21 |
-| Last Updated（最終更新日） | 2026-11-01 |
+| Last Updated（最終更新日） | 2026-10-31 |
 | Owner（管理者） | Takashi Oikawa |
-| Related Documents（関連文書） | docs/standards/DESIGN_DOCUMENT_STANDARD.md / [Project README](../../README.md) / [AGENTS.md](../../AGENTS.md) / [API_SPEC.md](../specs/API_SPEC.md) / [GEMINI_INTEGRATION_SPEC.md](../specs/GEMINI_INTEGRATION_SPEC.md) / [ENVIRONMENT_SETUP_GUIDE.md](../ENVIRONMENT_SETUP_GUIDE.md) / [DEPLOYMENT_AND_OPERATION_GUIDE.md](../DEPLOYMENT_AND_OPERATION_GUIDE.md) / [CHANGELOG.md](../../CHANGELOG.md)（リポジトリルート） |
+| Related Documents（関連文書） | docs/standards/DESIGN_DOCUMENT_STANDARD.md / [Project README](../../README.md) / [API_SPEC.md](../specs/API_SPEC.md) / [GEMINI_INTEGRATION_SPEC.md](../specs/GEMINI_INTEGRATION_SPEC.md) / [ENVIRONMENT_SETUP_GUIDE.md](../ENVIRONMENT_SETUP_GUIDE.md) / [DEPLOYMENT_AND_OPERATION_GUIDE.md](../DEPLOYMENT_AND_OPERATION_GUIDE.md) / [CHANGELOG.md](../../CHANGELOG.md)（リポジトリルート） |
 
 </details>
 
@@ -97,7 +97,6 @@ Related Specifications and Guides（関連仕様・運用文書）:
 | Environment Setup | [../ENVIRONMENT_SETUP_GUIDE.md](../ENVIRONMENT_SETUP_GUIDE.md) |
 | Deployment / Operation | [../DEPLOYMENT_AND_OPERATION_GUIDE.md](../DEPLOYMENT_AND_OPERATION_GUIDE.md) |
 | Project README | [../../README.md](../../README.md) |
-| AI Operating Rules（AI作業規則） | [../../AGENTS.md](../../AGENTS.md)（旧 `SKILL.md` の規則を含む） |
 | Change History | [../../CHANGELOG.md](../../CHANGELOG.md) |
 | Specification Classification Ledger（仕様分類台帳） | [FOR_LEDGER.md](./FOR_LEDGER.md)（UML-01〜05対象の分類・所在。仕様本文は01〜06を正とする） |
 
